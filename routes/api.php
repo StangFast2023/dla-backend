@@ -9,3 +9,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/data-stats', [CallingDlaController::class, 'getStats']);
+Route::get('/listed-position-detail/{id}', [CallingDlaController::class, 'getPositionDetailByZone']);

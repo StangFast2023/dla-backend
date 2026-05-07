@@ -27,6 +27,7 @@ class CallingDlaController extends Controller
         $Tab1_Part2_Monthly     = $this->Tab1_Part2_Monthly();
         $Tab1_Part3_Cumulative  = $this->Tab1_Part3_Cumulative();
         $Tab1_Part4_OtherStatic = $this->Tab1_Part4_OtherStatic();
+        $Tab1_Part5_Type        = $this->Tab1_Part5_Type();
 
         return response()->json([
             'status' => 'success',
@@ -43,6 +44,7 @@ class CallingDlaController extends Controller
                 'part2' =>  $Tab1_Part2_Monthly,
                 'part3' =>  $Tab1_Part3_Cumulative,
                 'part4' =>  $Tab1_Part4_OtherStatic,
+                'part5' =>  $Tab1_Part5_Type,
             ]
         ]);
     }
@@ -157,6 +159,118 @@ class CallingDlaController extends Controller
             'MostRoundCall_2'   =>  ['name' => 'ทั้งหมด', 'value' => $MostRoundCall->total],
         ];
         return $array;
+    }
+
+    public function Tab1_Part5_Type()
+    {
+        $top10Pos        = db::table('updated_list_dla')
+            ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
+            ->selectRaw('
+                updated_list_dla.id_position as id_pos ,
+                concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
+                sum( total )    as  total
+            ')
+            ->groupBy('id_pos', 'pos_name')
+            ->orderBy('total', 'DESC')
+            ->get()
+            ->toArray();
+        return $top10Pos;
+    }
+
+    public function getPositionDetailByZone($id)
+    {
+        $array = [];
+        $Position = db::table('positions_dla')
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
+            ->selectRaw('
+                concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name
+            ')
+            ->where('positions_dla.id_position', $id)
+            ->first();
+        $array = [
+            'id'    =>  $id,
+            'name'  =>  $Position->pos_name,
+            'data'  =>  []
+        ];
+
+        $Provinces = db::table('provinces_dla')
+            ->selectRaw('
+                provinces_dla.id                    as pro_id           ,
+                provinces_dla.id_main_province      as pro_main_id      ,
+                provinces_dla.main_name_province    as pro_main_name    ,
+                provinces_dla.id_sub_province       as pro_sub_id       ,
+                provinces_dla.sub_name_province     as pro_sub_name     ,
+                concat( provinces_dla.main_name_province , " " , provinces_dla.sub_name_province )  as pro_full_name 
+            ')
+            ->orderBy('pro_id', 'ASC')
+            ->get();
+
+        foreach ($Provinces as $prov) {
+            if (!isset($array['data'][$prov->pro_main_id])) {
+                $array['data'][$prov->pro_main_id] = [
+                    'pro_main_id'       =>  $prov->pro_main_id,
+                    'pro_main_name'     =>  $prov->pro_main_name
+                ];
+            }
+            if (!isset($array['data'][$prov->pro_main_id][$prov->pro_sub_id])) {
+                $array['data'][$prov->pro_main_id][$prov->pro_sub_id] = [
+                    'pro_main_id'       =>  $prov->pro_main_id,
+                    'pro_sub_id'        =>  $prov->pro_sub_id,
+                    'pro_main_name'     =>  $prov->pro_main_name,
+                    'pro_sub_name'      =>  $prov->pro_sub_name,
+                    'pro_full_name'     =>  $prov->pro_full_name,
+                    'total_listed'      =>  0,
+                    'total_called'      =>  0,
+                    'total_remain'      =>  0,
+                    'total_process'     =>  0,
+                    'total_round'       =>  0,
+                    'status_listed'     =>  false,
+                    'status_calling'    =>  false,
+                ];
+            }
+        }
+
+        $Update = db::table('updated_list_dla')
+            ->where('id_position', $id)
+            ->get();
+        foreach ($Update as $update) {
+            if (isset($array['data'][$update->id_main_province][$update->id_sub_province])) {
+                $array['data'][$update->id_main_province][$update->id_sub_province]['total_listed'] = $update->total;
+                $array['data'][$update->id_main_province][$update->id_sub_province]['status_listed'] = true;
+            }
+        }
+
+        $allCalling = db::table('calling_dla')
+            ->where('call_status', 1)
+            ->where('id_position', $id)
+            ->selectRaw('
+                id_main_province        as pro_main_id  ,
+                id_sub_province         as pro_sub_id   ,
+                max( round )            as round ,
+                sum( total )            as total                      
+            ')
+            ->groupBy('pro_main_id', 'pro_sub_id')
+            ->get();
+        foreach ($allCalling as $calling) {
+            if (isset($array['data'][$calling->pro_main_id][$calling->pro_sub_id])) {
+                $array['data'][$calling->pro_main_id][$calling->pro_sub_id]['total_called']     = $calling->total;
+                $array['data'][$calling->pro_main_id][$calling->pro_sub_id]['total_round']      = $calling->round;
+                $array['data'][$calling->pro_main_id][$calling->pro_sub_id]['status_calling']   = true;
+
+                $percentage = 0;
+                $totalListed = $array['data'][$calling->pro_main_id][$calling->pro_sub_id]['total_listed'];
+                $statusl = $array['data'][$calling->pro_main_id][$calling->pro_sub_id]['status_listed'];
+                if ($statusl === true) {
+                    $percentage = (($calling->total / $totalListed) * 100);
+                }
+                $array['data'][$calling->pro_main_id][$calling->pro_sub_id]['total_process'] = $percentage;
+                $array['data'][$calling->pro_main_id][$calling->pro_sub_id]['total_remain'] = $totalListed - $calling->total;
+            }
+        }
+        return response()->json($array);
     }
 
     public function monthYearThai($default, $month, $year)
