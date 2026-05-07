@@ -48,7 +48,7 @@ class CallingDlaController extends Controller
         $CurRound   = CallingDla::max('round');
         $MaxRound   = 25;
         $TotalList  = UpdateListDla::sum('total');
-        $TotalCall  = CallingDla::sum('total');
+        $TotalCall  = CallingDla::where('call_status', 1)->sum('total');
         $array = [
             'CurRound'      =>  (int)$CurRound,
             'MaxRound'      =>  (int)$MaxRound,
@@ -60,7 +60,7 @@ class CallingDlaController extends Controller
 
     public function Tab1_Part2_Monthly()
     {
-        $Monthly = CallingDla::all();
+        $Monthly = CallingDla::all()->where('call_status', 1);
         $array = [];
         foreach ($Monthly as $month) {
 
