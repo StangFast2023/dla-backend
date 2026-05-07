@@ -23,8 +23,10 @@ class CallingDlaController extends Controller
         $type_positions = TypePositionDla::all();
 
         //---- tab 1
-        $Tab1_Part1_Static  = $this->Tab1_Part1_Static();
-        $Tab1_Part2_Monthly = $this->Tab1_Part2_Monthly();
+        $Tab1_Part1_Static      = $this->Tab1_Part1_Static();
+        $Tab1_Part2_Monthly     = $this->Tab1_Part2_Monthly();
+        $Tab1_Part3_Cumulative  = $this->Tab1_Part3_Cumulative();
+        $Tab1_Part4_OtherStatic = $this->Tab1_Part4_OtherStatic();
 
         return response()->json([
             'status' => 'success',
@@ -39,6 +41,8 @@ class CallingDlaController extends Controller
             'tab1'  =>  [
                 'part1' =>  $Tab1_Part1_Static,
                 'part2' =>  $Tab1_Part2_Monthly,
+                'part3' =>  $Tab1_Part3_Cumulative,
+                'part4' =>  $Tab1_Part4_OtherStatic,
             ]
         ]);
     }
@@ -93,6 +97,65 @@ class CallingDlaController extends Controller
                 $array[$curmy]['data'][$cur_r]['total'] += $cur_t;
             }
         }
+        return $array;
+    }
+
+    public function Tab1_Part3_Cumulative()
+    {
+        $Monthly = CallingDla::all()->where('call_status', 1);
+        $array = [];
+        foreach ($Monthly as $month) {
+
+            $cur_m = $month->called_month;
+            $cur_y = $month->called_year;
+            $curmy = $cur_m . '-' . $cur_y;
+            if (!isset($array[$curmy])) {
+                $array[$curmy] = [
+                    'date'              =>  $curmy,
+                    'month'             =>  $cur_m,
+                    'years'             =>  $cur_y,
+                    'name_s'            =>  $this->monthYearThai(false, $cur_m, $cur_y),
+                    'name_l'            =>  $this->monthYearThai(true, $cur_m, $cur_y),
+                    'total_per_month'   =>  0,
+                ];
+            }
+
+            if (isset($array[$curmy])) {
+                $array[$curmy]['total_per_month'] += $month->total;
+            }
+        }
+        return $array;
+    }
+
+    public function Tab1_Part4_OtherStatic()
+    {
+        $CurRound    = CallingDla::max('round');
+        $MaxRound    = 25;
+        $CallProcess = round((($CurRound / $MaxRound) * 100), 2);
+
+        $MostTotalCall = CallingDla::selectRaw('
+            concat( called_month , "-" , called_year ) as month_year    ,
+            sum( total ) as total
+        ')
+            ->groupBy('month_year')
+            ->orderBy('total', 'DESC')
+            ->first();
+
+        $MostRoundCall = CallingDla::selectRaw('
+            round as round    ,
+            sum( total ) as total
+        ')
+            ->groupBy('round')
+            ->orderBy('total', 'DESC')
+            ->first();
+
+        $array = [
+            'CurRound'          =>  ['name' => 'ความคืบหน้าในการเรียกใช้บัญชี', 'value' => $CallProcess],
+            'MostTotalCall_1'   =>  ['name' => 'เดือนที่มีการเรียกรายงานตัวมากที่สุด', 'value' => $this->monthYearThai(true, explode('-', $MostTotalCall->month_year)[0], explode('-', $MostTotalCall->month_year)[1])],
+            'MostTotalCall_2'   =>  ['name' => 'ทั้งหมด', 'value' => $MostTotalCall->total],
+            'MostRoundCall_1'   =>  ['name' => 'รอบที่มีการเรียกรายงานตัวมากที่สุด', 'value' => $MostRoundCall->round],
+            'MostRoundCall_2'   =>  ['name' => 'ทั้งหมด', 'value' => $MostRoundCall->total],
+        ];
         return $array;
     }
 
