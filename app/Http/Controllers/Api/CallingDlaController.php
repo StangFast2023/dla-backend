@@ -29,6 +29,9 @@ class CallingDlaController extends Controller
         $Tab1_Part4_OtherStatic = $this->Tab1_Part4_OtherStatic();
         $Tab1_Part5_Type        = $this->Tab1_Part5_Type();
         $Tab1_Part6_Empty       = $this->Tab1_Part6_Empty();
+        $Tab1_Part7_TypePos     = $this->Tab1_Part7_TypePos();
+
+
 
         return response()->json([
             'status' => 'success',
@@ -47,6 +50,7 @@ class CallingDlaController extends Controller
                 'part4' =>  $Tab1_Part4_OtherStatic,
                 'part5' =>  $Tab1_Part5_Type,
                 'part6' =>  $Tab1_Part6_Empty,
+                'part7' =>  $Tab1_Part7_TypePos,
             ]
         ]);
     }
@@ -249,6 +253,112 @@ class CallingDlaController extends Controller
             ->all();
         return $allPositions;
     }
+
+    public function Tab1_Part7_TypePos()
+    {
+        $array1 = [];
+        $array2 = [];
+        $TypePos = db::table('updated_list_dla')
+            ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
+            ->selectRaw('
+                updated_list_dla.id_main_province as prov_main_id    ,
+                updated_list_dla.id_sub_province  as prov_sub_id    ,
+                updated_list_dla.id_position as id_pos ,
+                concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
+                SUBSTRING(positions_dla.id_position, 1, 1) as pos_type_id,
+                type_positions_dla.name as pos_type , 
+                sum( total )    as  total
+            ')
+            ->groupBy('prov_main_id', 'prov_sub_id', 'id_pos', 'pos_name', 'pos_type_id', 'pos_type')
+            ->orderBy('total', 'DESC')
+            ->get()
+            ->toArray();
+        foreach ($TypePos as $pos) {
+            $pr_m_id        = $pos->prov_main_id;
+            $pr_s_id        = $pos->prov_sub_id;
+            $pos_id         = $pos->id_pos;
+            $pos_type_id    = $pos->pos_type_id;
+            if (!isset($array1[$pr_m_id][$pr_s_id][$pos_id])) {
+                $array1[$pr_m_id][$pr_s_id][$pos_id] = [
+                    'id_pos'        =>  $pos->id_pos,
+                    'pos_name'      =>  $pos->pos_name,
+                    'pos_type_id'   =>  $pos->pos_type_id,
+                    'pos_type'      =>  $pos->pos_type,
+                    'total'         =>  $pos->total,
+                ];
+            }
+            if (!isset($array2[$pos_type_id])) {
+                $array2[$pos_type_id] = [
+                    'type_name'         =>  $pos->pos_type,
+                    'total_count'       =>  0,
+                    'total_person'      =>  0,
+                    'data'              => []
+                ];
+            }
+            if (!isset($array2[$pos_type_id]['data'][$pos_id])) {
+                $array2[$pos_type_id]['total_count'] += 1;
+                $array2[$pos_type_id]['data'][$pos_id] = [
+                    'pos_type_id'   =>  $pos_type_id,
+                    'id_pos'        =>  $pos_id,
+                    'pos_name'      =>  $pos->pos_name,
+                    'data'          =>  $pos->total
+                ];
+            }
+            $array2[$pos_type_id]['total_person'] += $pos->total;
+        }
+        return $array2;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function getPositionDetailByZone($id)
     {
