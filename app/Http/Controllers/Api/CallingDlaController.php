@@ -25,6 +25,7 @@ class CallingDlaController extends Controller
         $Tab1_Part3_Cumulative      =   $this->Tab1_Part3_Cumulative();
         $Tab1_Part4_OtherStatic     =   $this->Tab1_Part4_OtherStatic();
         $Tab1_Part5_PercentRound    =   $this->Tab1_Part5_PercentRound();
+        $Tab1_part6_TableRoundCall  =   $this->Tab1_part6_TableRoundCall();
 
         //---- tab 2
         $Tab2_Part1_Type        = $this->Tab2_Part1_Type();
@@ -40,6 +41,7 @@ class CallingDlaController extends Controller
                 'part3' =>  $Tab1_Part3_Cumulative,
                 'part4' =>  $Tab1_Part4_OtherStatic,
                 'part5' =>  $Tab1_Part5_PercentRound,
+                'part6' =>  $Tab1_part6_TableRoundCall,
             ],
             'tab2'  =>  [
                 'part1' =>  $Tab2_Part1_Type,
@@ -52,13 +54,13 @@ class CallingDlaController extends Controller
 
     public function getAccountTimeline()
     {
-        $start = Carbon::create(2026, 2, 19);
+        $start = Carbon::create(2026, 2, 20);
         $end = $start->copy()->addYears(2);
 
         $timeline = [];
         while ($start->lte($end)) {
             $timeline[] = [
-                'label' => $start->translatedFormat('M Y'), // เช่น ก.พ. 2026
+                'label' => $start->translatedFormat('M Y'),
                 'month' => $start->month,
                 'year'  => $start->year,
             ];
@@ -235,7 +237,66 @@ class CallingDlaController extends Controller
     }
 
 
-    public function Tab1_part6_TableRoundCall() {}
+    public function Tab1_part6_TableRoundCall()
+    {
+        $array = [];
+        $Province = ProvincesDla::all();
+        foreach ($Province as $prov) {
+            $main   = $prov->id_main_province;
+            $sub    = $prov->id_sub_province;
+            if (!isset($array[$main])) {
+                $array[$main] = [
+                    'name'  =>  $prov->main_name_province,
+                    'data'  =>  []
+                ];
+            }
+            if (!isset($array[$main]['data'][$sub])) {
+                $array[$main]['data'][$sub] = [
+                    'full'  =>  $main . $sub,
+                    'name'  =>  $prov->main_name_province . ' ' . $prov->sub_name_province,
+                    'total_listed'  =>  0,
+                    'total_called'  =>  0,
+                    'total_remain'  =>  0,
+                    'total_round'   =>  0,
+                    'data-round'    =>  []
+                ];
+            }
+        }
+
+        $UpdateList = UpdateListDla::all();
+        foreach ($UpdateList as $updt) {
+            $main   = $updt->id_main_province;
+            $sub    = $updt->id_sub_province;
+            $total  = $updt->total;
+            if (isset($array[$main]['data'][$sub])) {
+                $array[$main]['data'][$sub]['total_listed'] += $total;
+                $array[$main]['data'][$sub]['total_remain'] += $total;
+            }
+        }
+
+        $Calling = CallingDla::all();
+        foreach ($Calling as $call) {
+            if ($call->call_status == true) {
+                $main   = $call->id_main_province;
+                $sub    = $call->id_sub_province;
+                $total  = $call->total;
+                if (isset($array[$main]['data'][$sub])) {
+                    $array[$main]['data'][$sub]['total_called'] += $total;
+                }
+                $round  = $call->round;
+                if (!isset($array[$main]['data'][$sub]['data-round'][$round])) {
+                    $array[$main]['data'][$sub]['total_round'] += 1;
+                    $array[$main]['data'][$sub]['data-round'][$round] = [
+                        'round' =>  $round,
+                        'total' =>  0
+                    ];
+                }
+                $array[$main]['data'][$sub]['data-round'][$round]['total'] += $total;
+                $array[$main]['data'][$sub]['total_remain'] -= $total;
+            }
+        }
+        return $array;
+    }
 
 
 
@@ -446,7 +507,6 @@ class CallingDlaController extends Controller
             }
             $array2[$pos_type_id]['total_person'] += $pos->total;
         }
-        // dd($array2);
         return $array2;
     }
 
