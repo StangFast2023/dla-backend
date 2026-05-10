@@ -87,16 +87,24 @@ class CallingDlaController extends Controller
 
     public function Tab1_Part1_Static()
     {
-        $getAccts   = $this->getAccountTimeline();
         $CurRound   = CallingDla::max('round');
         $MaxRound   = 25;
         $TotalList  = UpdateListDla::sum('total');
         $TotalCall  = CallingDla::where('call_status', 1)->sum('total');
+        $AVGCall = CallingDla::where('call_status', 1)
+            ->selectRaw('
+                concat(called_month, "/", called_year) as monthly, 
+                sum(total) as total_per_month
+            ')
+            ->groupBy('monthly', 'called_month', 'called_year')
+            ->get()
+            ->avg('total_per_month');
         $array = [
             'CurRound'      =>  (int)$CurRound,
             'MaxRound'      =>  (int)$MaxRound,
             'TotalList'     =>  (int)$TotalList,
             'TotalCall'     =>  (int)$TotalCall,
+            'AvgCall'       =>  (int)$AVGCall,
         ];
         return $array;
     }
@@ -149,26 +157,30 @@ class CallingDlaController extends Controller
 
     public function Tab1_Part3_Cumulative()
     {
-        $Monthly = CallingDla::all()->where('call_status', 1);
+        $fullMonthly = $this->getAccountTimeline();
         $array = [];
-        foreach ($Monthly as $month) {
-
-            $cur_m = $month->called_month;
-            $cur_y = $month->called_year;
-            $curmy = $cur_m . '-' . $cur_y;
-            if (!isset($array[$curmy])) {
-                $array[$curmy] = [
-                    'date'              =>  $curmy,
-                    'month'             =>  $cur_m,
-                    'years'             =>  $cur_y,
-                    'name_s'            =>  $this->monthYearThai(false, $cur_m, $cur_y),
-                    'name_l'            =>  $this->monthYearThai(true, $cur_m, $cur_y),
-                    'total_per_month'   =>  0,
+        foreach ($fullMonthly as $full) {
+            $key_month_year = $full['month'] . '-' . $full['year'];
+            if (!isset($array[$key_month_year])) {
+                $array[$key_month_year] = [
+                    'month'             =>  $full['month'],
+                    'year'              =>  $full['year'],
+                    'label_eng'         =>  $full['label'],
+                    'label_th_f'        =>  $this->monthYearThai(true, $full['month'], $full['year']),
+                    'label_th_s'        =>  $this->monthYearThai(false, $full['month'], $full['year']),
+                    'call_status'       =>  false,
+                    'total_per_month'   =>  0
                 ];
             }
-
-            if (isset($array[$curmy])) {
-                $array[$curmy]['total_per_month'] += $month->total;
+        }
+        $Monthly    = CallingDla::all()->where('call_status', 1);
+        foreach ($Monthly as $month) {
+            $called_month   = $month->called_month;
+            $called_year    = $month->called_year;
+            $full_month_year = $called_month . '-' . $called_year;
+            if (isset($array[$full_month_year])) {
+                $array[$full_month_year]['total_per_month'] += $month->total;
+                $array[$full_month_year]['call_status'] = true;
             }
         }
         return $array;
@@ -221,6 +233,16 @@ class CallingDlaController extends Controller
         }
         return $array;
     }
+
+
+    public function Tab1_part6_TableRoundCall() {}
+
+
+
+
+
+
+
 
 
     public function Tab2_Part1_Type()
@@ -475,7 +497,9 @@ class CallingDlaController extends Controller
 
 
 
-
+    /**
+     * @param int $id
+     */
     public function getPositionDetailByZone($id)
     {
         $array = [];
@@ -570,7 +594,11 @@ class CallingDlaController extends Controller
         return response()->json($array);
     }
 
-    public function monthYearThai($default, $month, $year)
+    /**
+     * @param int $month
+     * @param int $year
+     */
+    public function monthYearThai($default = true, $month, $year)
     {
         $month = (int)$month;
         $year  = (int)$year + 543;
