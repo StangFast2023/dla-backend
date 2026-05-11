@@ -28,9 +28,10 @@ class CallingDlaController extends Controller
         $Tab1_part6_TableRoundCall  =   $this->Tab1_part6_TableRoundCall();
 
         //---- tab 2
+        $Tab2_Part1_TypePos     = $this->Tab2_Part1_TypePos();
+
         $Tab2_Part1_Type        = $this->Tab2_Part1_Type();
         $Tab2_Part2_Empty       = $this->Tab2_Part2_Empty();
-        $Tab2_Part3_TypePos     = $this->Tab2_Part3_TypePos();
         $Tab2_Part4_TypePos     = $this->Tab2_Part4_TypePos();
 
         return response()->json([
@@ -44,9 +45,11 @@ class CallingDlaController extends Controller
                 'part6' =>  $Tab1_part6_TableRoundCall,
             ],
             'tab2'  =>  [
-                'part1' =>  $Tab2_Part1_Type,
+                'part1' =>  $Tab2_Part1_TypePos,
+
+
+                'part3' =>  $Tab2_Part1_Type,
                 'part2' =>  $Tab2_Part2_Empty,
-                'part3' =>  $Tab2_Part3_TypePos,
                 'part4' =>  $Tab2_Part4_TypePos,
             ]
         ]);
@@ -300,6 +303,72 @@ class CallingDlaController extends Controller
 
 
 
+    public function Tab2_Part1_TypePos()
+    {
+        $array = [
+            't' =>  [
+                'total_count'   =>  0,
+                'total_person'   =>  0,
+            ]
+        ];
+        $TypePos = db::table('updated_list_dla')
+            ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
+            ->selectRaw('
+                updated_list_dla.id_main_province as prov_main_id    ,
+                updated_list_dla.id_sub_province  as prov_sub_id    ,
+                updated_list_dla.id_position as id_pos ,
+                concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
+                SUBSTRING(positions_dla.id_position, 1, 1) as pos_type_id,
+                type_positions_dla.name as pos_type , 
+                sum( total )    as  total
+            ')
+            ->groupBy('prov_main_id', 'prov_sub_id', 'id_pos', 'pos_name', 'pos_type_id', 'pos_type')
+            ->orderBy('total', 'DESC')
+            ->get()
+            ->toArray();
+        foreach ($TypePos as $pos) {
+            $pos_id         = $pos->id_pos;
+            $pos_type_id    = $pos->pos_type_id;
+            if (!isset($array[$pos_type_id])) {
+                $array[$pos_type_id] = [
+                    'pos_type_id'                 =>  $pos_type_id,
+                    'type_name'                 =>  $pos->pos_type,
+                    'total_count'               =>  0,
+                    'total_count_in_percent'    =>  0,
+                    'total_person'              =>  0,
+                    'total_person_in_percent'   =>  0,
+                    'data'                      => []
+                ];
+            }
+            if (!isset($array[$pos_type_id]['data'][$pos_id])) {
+                $array['t']['total_count']  += 1;
+                $array[$pos_type_id]['total_count'] += 1;
+                $array[$pos_type_id]['data'][$pos_id] = [
+                    'pos_type_id'   =>  $pos_type_id,
+                    'id_pos'        =>  $pos_id,
+                    'pos_name'      =>  $pos->pos_name,
+                    'data'          =>  $pos->total
+                ];
+            }
+            $array['t']['total_person'] += $pos->total;
+            $array[$pos_type_id]['total_person'] += $pos->total;
+        }
+        $array = collect($array)->sortKeys()->toArray();
+        foreach ($array as $key => $arr) {
+            $total_count  = $array['t']['total_count'];
+            $total_person = $array['t']['total_person'];
+            if ($key !== 't') {
+                $total_count_div = $array[$key]['total_count'];
+                $array[$key]['total_count_in_percent'] = (($total_count_div / $total_count) * 100);
+
+                $total_person_div = $array[$key]['total_person'];
+                $array[$key]['total_person_in_percent'] = (($total_person_div / $total_person) * 100);
+            }
+        }
+        return $array;
+    }
 
 
 
@@ -395,62 +464,6 @@ class CallingDlaController extends Controller
         return $allPositions;
     }
 
-    public function Tab2_Part3_TypePos()
-    {
-        $array1 = [];
-        $array2 = [];
-        $TypePos = db::table('updated_list_dla')
-            ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
-            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->selectRaw('
-                updated_list_dla.id_main_province as prov_main_id    ,
-                updated_list_dla.id_sub_province  as prov_sub_id    ,
-                updated_list_dla.id_position as id_pos ,
-                concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
-                SUBSTRING(positions_dla.id_position, 1, 1) as pos_type_id,
-                type_positions_dla.name as pos_type , 
-                sum( total )    as  total
-            ')
-            ->groupBy('prov_main_id', 'prov_sub_id', 'id_pos', 'pos_name', 'pos_type_id', 'pos_type')
-            ->orderBy('total', 'DESC')
-            ->get()
-            ->toArray();
-        foreach ($TypePos as $pos) {
-            $pr_m_id        = $pos->prov_main_id;
-            $pr_s_id        = $pos->prov_sub_id;
-            $pos_id         = $pos->id_pos;
-            $pos_type_id    = $pos->pos_type_id;
-            if (!isset($array1[$pr_m_id][$pr_s_id][$pos_id])) {
-                $array1[$pr_m_id][$pr_s_id][$pos_id] = [
-                    'id_pos'        =>  $pos->id_pos,
-                    'pos_name'      =>  $pos->pos_name,
-                    'pos_type_id'   =>  $pos->pos_type_id,
-                    'pos_type'      =>  $pos->pos_type,
-                    'total'         =>  $pos->total,
-                ];
-            }
-            if (!isset($array2[$pos_type_id])) {
-                $array2[$pos_type_id] = [
-                    'type_name'         =>  $pos->pos_type,
-                    'total_count'       =>  0,
-                    'total_person'      =>  0,
-                    'data'              => []
-                ];
-            }
-            if (!isset($array2[$pos_type_id]['data'][$pos_id])) {
-                $array2[$pos_type_id]['total_count'] += 1;
-                $array2[$pos_type_id]['data'][$pos_id] = [
-                    'pos_type_id'   =>  $pos_type_id,
-                    'id_pos'        =>  $pos_id,
-                    'pos_name'      =>  $pos->pos_name,
-                    'data'          =>  $pos->total
-                ];
-            }
-            $array2[$pos_type_id]['total_person'] += $pos->total;
-        }
-        return $array2;
-    }
 
 
     public function Tab2_Part4_TypePos()
