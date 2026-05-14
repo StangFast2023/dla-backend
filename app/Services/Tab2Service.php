@@ -96,9 +96,76 @@ class Tab2Service
         return $array;
     }
 
-    public function Tab2_part2_TypeMonthly() {}
+    public function Tab2_part2_TypeMonthly()
+    {
+        $fullMonthly = $this->getAccountTimeline();
+        $fullMonthly = collect($fullMonthly)->keyBy('date')->toArray();
+        foreach ($fullMonthly as $key => $monthly) {
+            $new_array = ['total_per_month' => 0];
+            $fullMonthly[$key] = array_merge($fullMonthly[$key], $new_array);
+        }
+        $CallingMonthly = db::table('calling_dla')
+            ->leftjoin('positions_dla', 'positions_dla.id_position', 'calling_dla.id_position')
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
+            ->where('calling_dla.call_status', 1)
+            ->selectRaw('
+                concat( calling_dla.called_month , "-" , calling_dla.called_year ) as monthly ,
+                SUBSTRING(positions_dla.id_position, 1, 1)  as pos_type_id ,
+                type_positions_dla.name     as  pos_type , 
+                sum( calling_dla.total )    as  total
+            ')
+            ->groupBy('monthly', 'pos_type_id', 'pos_type')
+            ->get();
+        foreach ($CallingMonthly as $call) {
+            $key = $call->monthly;
+            $type = $call->pos_type_id;
+            if (!isset($fullMonthly[$key]['data'][$type])) {
+                $fullMonthly[$key]['data'][$type] = [
+                    'type'  =>  $type,
+                    'name'  =>  $call->pos_type,
+                    'total' =>  $call->total
+                ];
+                $fullMonthly[$key]['total_per_month'] += $call->total;
+            }
+        }
+        return $fullMonthly;
+    }
 
-    public function Tab2_part3_TypeRoundly() {}
+    public function Tab2_part3_TypeRoundly()
+    {
+
+        $CallingMonthly = db::table('calling_dla')
+            ->leftjoin('positions_dla', 'positions_dla.id_position', 'calling_dla.id_position')
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
+            ->where('calling_dla.call_status', 1)
+            ->selectRaw('
+                calling_dla.round as roundly ,
+                SUBSTRING(positions_dla.id_position, 1, 1)  as pos_type_id ,
+                type_positions_dla.name     as  pos_type , 
+                sum( calling_dla.total )    as  total
+            ')
+            ->groupBy('roundly', 'pos_type_id', 'pos_type')
+            ->get();
+        $array = [];
+        foreach ($CallingMonthly as $call) {
+            $roundly = $call->roundly;
+            if (!isset($array[$roundly]['data'][$call->pos_type_id])) {
+                $array[$roundly]['data'][$call->pos_type_id] = [
+                    'round' =>  $roundly,
+                    'type'  =>  $call->pos_type_id,
+                    'name'  =>  $call->pos_type,
+                    'total' =>  $call->total
+                ];
+            }
+            if (!isset($array[$roundly]['total_per_round'])) {
+                $array[$roundly]['total_per_round'] = 0;
+            }
+            $array[$roundly]['total_per_round'] += $call->total;
+        }
+        return $array;
+    }
 
     public function Tab2_Part4_TypePosTop10()
     {
