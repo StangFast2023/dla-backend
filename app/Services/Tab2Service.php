@@ -25,6 +25,8 @@ class Tab2Service
             'part3' =>  $this->Tab2_part3_TypeRoundly(),
             'part4' =>  $this->Tab2_Part4_TypePosTop10(),
             'part5' =>  $this->Tab2_Part5_Empty(),
+            'part6' =>  $this->Tab2_Part6_TypeCallAll(),
+            'part7' =>  $this->Tab2_Part7_TypeRemainAll(),
         ];
     }
 
@@ -254,6 +256,92 @@ class Tab2Service
             ->values()
             ->all();
         return $allPositions;
+    }
+
+    public function Tab2_Part6_TypeCallAll()
+    {
+        $array = [];
+        $typeCallAll = db::table('calling_dla')
+            ->leftjoin('positions_dla', 'positions_dla.id_position', 'calling_dla.id_position')
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
+            ->where('call_status', 1)
+            ->selectRaw('
+                calling_dla.id_position as id_pos ,
+                concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
+                SUBSTRING(positions_dla.id_position, 1, 1) as pos_type_id,
+                type_positions_dla.name as pos_type , 
+                sum( total ) as  total
+            ')
+            ->groupBy('id_pos', 'pos_name', 'pos_type_id', 'pos_type')
+            ->orderBy('total', 'DESC')
+            ->get()
+            ->toArray();
+        foreach ($typeCallAll as $key => $call) {
+            if (!isset($array[$key])) {
+                $array[$key] = [
+                    'id_pos'            =>  $call->id_pos,
+                    'pos_type_id'       =>  $call->pos_type_id,
+                    'pos_name'          =>  $call->pos_name,
+                    'pos_type'          =>  $call->pos_type,
+                    'total_call'        =>  (int)$call->total
+                ];
+            }
+        }
+        return $array;
+    }
+
+    public function Tab2_Part7_TypeRemainAll()
+    {
+        $array = [];
+        $UpdateListed = db::table('updated_list_dla')
+            ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
+            ->selectRaw('
+                updated_list_dla.id_position as id_pos ,
+                concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
+                SUBSTRING(positions_dla.id_position, 1, 1) as pos_type_id,
+                type_positions_dla.name as pos_type , 
+                sum( total )    as  total
+            ')
+            ->groupBy('id_pos', 'pos_name', 'pos_type_id', 'pos_type')
+            ->orderBy('total', 'DESC')
+            ->get()
+            ->toArray();
+        foreach ($UpdateListed as $fast) {
+            if (!isset($array[$fast->id_pos])) {
+                $array[$fast->id_pos] = [
+                    'id_pos'            =>  $fast->id_pos,
+                    'pos_name'          =>  $fast->pos_name,
+                    'pos_type_id'       =>  $fast->pos_type_id,
+                    'pos_type'          =>  $fast->pos_type,
+                    'total_list'        =>  (int)$fast->total,
+                    'total_call'        =>  0,
+                    'total_remain'      =>  (int)$fast->total,
+                ];
+            }
+        }
+        $CallingDla = db::table('calling_dla')
+            ->where('call_status', 1)
+            ->selectRaw('
+                calling_dla.id_position as id_pos ,
+                sum( total ) as  total
+            ')
+            ->groupBy('id_pos')
+            ->orderBy('total', 'DESC')
+            ->get()
+            ->toArray();
+        foreach ($CallingDla as $call) {
+            if (isset($array[$call->id_pos])) {
+                $array[$call->id_pos]['total_call']     += (int)$call->total;
+                $array[$call->id_pos]['total_remain']   -= (int)$call->total;
+            }
+        }
+        uasort($array, function ($a, $b) {
+            return $b['total_remain'] <=> $a['total_remain'];
+        });
+        return $array;
     }
 
     /**
