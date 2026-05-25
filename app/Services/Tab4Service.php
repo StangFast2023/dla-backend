@@ -198,9 +198,11 @@ class Tab4Service
             $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_listed'] += (int)$total;
             $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_remain'] += (int)$total;
         }
+        $max_round = db::table('calling_dla')->max('round');
         $called_position = db::table('calling_dla')
             ->get()
             ->toArray();
+
         foreach ($called_position as $pos) {
             $prov_main_id   =   $pos->id_main_province;
             $prov_sub_id    =   $pos->id_sub_province;
@@ -223,7 +225,6 @@ class Tab4Service
                 $call_date      =   null;
                 $status         =   $list_status === 1 ? 'not-used' : 'exhaustion';
             }
-
 
             if (!isset($array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['data_call_round'][$round])) {
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_call_round'] += 1;
@@ -297,6 +298,11 @@ class Tab4Service
                 });
             }
         }
-        return $array;
+        $data = [
+            'round' =>  $max_round,
+            'data'  =>  $array
+        ];
+        // dd($data['data'][1]['pro_sub'][2]);
+        return $data;
     }
 }
