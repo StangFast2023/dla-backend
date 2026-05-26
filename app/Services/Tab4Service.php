@@ -113,8 +113,19 @@ class Tab4Service
             ->get()
             ->toArray();
         foreach ($all_Positions as $pos) {
-            if (!isset($all_pos_array[$pos->pos_id])) {
-                $all_pos_array[$pos->pos_id] = [
+            if (!isset($all_pos_array[$pos->pos_type_id])) {
+                $all_pos_array[$pos->pos_type_id] = [
+                    'pos_type_id'       =>  $pos->pos_type_id,
+                    'pos_type_name'     =>  $pos->pos_type_name,
+                    'total_listed'      =>  0,
+                    'total_called'      =>  0,
+                    'total_remain'      =>  0,
+                    'total_each_round'  =>  [],
+                    'data_position'     =>  []
+                ];
+            }
+            if (!isset($all_pos_array[$pos->pos_type_id]['data_position'][$pos->pos_id])) {
+                $all_pos_array[$pos->pos_type_id]['data_position'][$pos->pos_id] = [
                     'pos_id'                =>  $pos->pos_id,
                     'pos_name'              =>  $pos->pref_name . $pos->pos_name . $pos->suff_name,
                     'pos_type_id'           =>  $pos->pos_type_id,
@@ -129,7 +140,6 @@ class Tab4Service
                 ];
             }
         }
-
         $array = [];
         $provinces = db::table('provinces_dla')
             ->selectRaw('
@@ -157,13 +167,13 @@ class Tab4Service
             }
             if (!isset($array[$prov->pro_main_id]['pro_sub'][$prov->pro_sub_id])) {
                 $array[$prov->pro_main_id]['pro_sub'][$prov->pro_sub_id] = [
-                    'pro_sub_id'        =>  $prov->pro_sub_id,
-                    'pro_sub_name'      =>  $prov->pro_full_name,
-                    'total_listed'      =>  0,
-                    'total_called'      =>  0,
-                    'total_remain'      =>  0,
-                    'total_each_round'  =>  [],
-                    'data_position'     =>  $all_pos_array
+                    'pro_sub_id'            =>  $prov->pro_sub_id,
+                    'pro_sub_name'          =>  $prov->pro_full_name,
+                    'total_listed'          =>  0,
+                    'total_called'          =>  0,
+                    'total_remain'          =>  0,
+                    'total_each_round'      =>  [],
+                    'data_type_position'    =>  $all_pos_array
                 ];
             }
         }
@@ -173,39 +183,48 @@ class Tab4Service
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->selectRaw('
-                updated_list_dla.id_main_province           as  prov_main_id    ,
-                updated_list_dla.id_sub_province            as  prov_sub_id     ,
-                positions_dla.id_position                   as  pos_id          ,
-                sum( total )                                as  total
+                updated_list_dla.id_main_province               as  prov_main_id    ,
+                updated_list_dla.id_sub_province                as  prov_sub_id     ,
+                SUBSTRING(updated_list_dla.id_position, 1, 1)   as  pos_type_id     ,
+                positions_dla.id_position                       as  pos_id          ,
+                sum( total )                                    as  total
             ')
-            ->groupBy('prov_main_id', 'prov_sub_id', 'pos_id')
+            ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_id')
             ->orderBy('pos_id', 'asc')
             ->get()
             ->toArray();
         foreach ($listed_position as $pos) {
             $prov_main_id   =   $pos->prov_main_id;
             $prov_sub_id    =   $pos->prov_sub_id;
+            $pos_type_id    =   $pos->pos_type_id;
             $pos_id         =   $pos->pos_id;
             $total          =   $pos->total;
-            if (isset($array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id])) {
-                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['status_open']  = (int)$total !== 0;
-                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_listed'] = (int)$total;
-                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_remain'] = (int)$total;
+            if (isset($array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id])) {
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['status_open'] = (int)$total !== 0;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_listed'] = (int)$total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_remain'] = (int)$total;
             }
             $array[$prov_main_id]['total_listed'] += (int)$total;
             $array[$prov_main_id]['total_remain'] += (int)$total;
 
             $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_listed'] += (int)$total;
             $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_remain'] += (int)$total;
+
+            $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['total_listed'] += (int)$total;
+            $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['total_remain'] += (int)$total;
         }
+
         $max_round = db::table('calling_dla')->max('round');
         $called_position = db::table('calling_dla')
+            ->selectRaw('calling_dla.* , SUBSTRING(calling_dla.id_position, 1, 1)   as  pos_type_id')
             ->get()
             ->toArray();
-
         foreach ($called_position as $pos) {
+
             $prov_main_id   =   $pos->id_main_province;
             $prov_sub_id    =   $pos->id_sub_province;
+
+            $pos_type_id    =   $pos->pos_type_id;
             $pos_id         =   $pos->id_position;
             $round          =   $pos->round;
             $total          =   $pos->total;
@@ -226,9 +245,30 @@ class Tab4Service
                 $status         =   $list_status === 1 ? 'not-used' : 'exhaustion';
             }
 
-            if (!isset($array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['data_call_round'][$round])) {
-                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_call_round'] += 1;
-                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['data_call_round'][$round] = [
+            if (!isset($array[$prov_main_id]['total_each_round'][$round])) {
+                $array[$prov_main_id]['total_each_round'][$round] = [
+                    'round' =>  $round,
+                    'total' =>  0
+                ];
+            }
+
+            if (!isset($array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_each_round'][$round])) {
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_each_round'][$round] = [
+                    'round' =>  $round,
+                    'total' =>  0
+                ];
+            }
+
+            if (!isset($array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['total_each_round'][$round])) {
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['total_each_round'][$round] = [
+                    'round' =>  $round,
+                    'total' =>  0
+                ];
+            }
+
+            if (!isset($array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['data_call_round'][$round])) {
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_call_round'] += 1;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['data_call_round'][$round] = [
                     'round'             =>  $round,
                     'total'             =>  (int)$total,
                     'start'             =>  0,
@@ -244,65 +284,59 @@ class Tab4Service
                 ];
             }
 
-            if (!isset($array[$prov_main_id]['total_each_round'][$round])) {
-                $array[$prov_main_id]['total_each_round'][$round] = [
-                    'round' =>  $round,
-                    'total' =>  0
-                ];
-            }
-
-            if (!isset($array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_each_round'][$round])) {
-                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_each_round'][$round] = [
-                    'round' =>  $round,
-                    'total' =>  0
-                ];
-            }
-
             if ($call_status === 1) {
-                $array[$prov_main_id]['total_each_round'][$round]['total'] += $total;
-                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_each_round'][$round]['total'] += $total;
-
-                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_call'] += $total;
-                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_remain'] -= $total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_call'] += $total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_remain'] -= $total;
 
                 $array[$prov_main_id]['total_called'] += (int)$total;
                 $array[$prov_main_id]['total_remain'] -= (int)$total;
+                $array[$prov_main_id]['total_each_round'][$round]['total'] += $total;
 
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_called'] += (int)$total;
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_remain'] -= (int)$total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_each_round'][$round]['total'] += $total;
+
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['total_called'] += (int)$total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['total_remain'] -= (int)$total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['total_each_round'][$round]['total'] += $total;
             }
         }
+
         foreach ($array as &$prov) {
             foreach ($prov['pro_sub'] as &$prov_sub) {
-                foreach ($prov_sub['data_position'] as &$pos) {
-                    $pos['status_out_of_lits'] = ($pos['total_remain'] === 0);
-                    $last_end = 0;
-                    foreach ($pos['data_call_round'] as &$round) {
-                        $total = (int)$round['total'];
-                        $start = $last_end + 1;
-                        $end = $start + $total - 1;
-                        $round['start'] = $start;
-                        $round['end'] = $end;
-                        if ($total > 0) {
-                            $round['start_end'] = $total > 1 ? $start . ' - ' . $end : $start;
+                foreach ($prov_sub['data_type_position'] as &$data_type) {
+                    foreach ($data_type['data_position'] as &$pos) {
+                        $pos['status_out_of_lits'] = ($pos['total_remain'] === 0);
+                        $last_end = 0;
+                        foreach ($pos['data_call_round'] as &$round) {
+                            $total = (int)$round['total'];
+                            $start = $last_end + 1;
+                            $end = $start + $total - 1;
+                            $round['start'] = $start;
+                            $round['end'] = $end;
+                            if ($total > 0) {
+                                $round['start_end'] = $total > 1 ? $start . ' - ' . $end : $start;
+                            }
+                            $last_end = $end;
                         }
-                        $last_end = $end;
                     }
                 }
             }
         }
         foreach ($array as &$prov) {
             foreach ($prov['pro_sub'] as &$prov_sub) {
-                $prov_sub['data_position'] = array_filter($prov_sub['data_position'], function ($pos) {
-                    return $pos['status_open'] === true;
-                });
+                foreach ($prov_sub['data_type_position'] as &$data_type) {
+                    $data_type['data_position'] = array_filter($data_type['data_position'], function ($pos) {
+                        return $pos['status_open'] === true;
+                    });
+                }
             }
         }
         $data = [
             'round' =>  $max_round,
             'data'  =>  $array
         ];
-        // dd($data['data'][1]['pro_sub'][2]);
+        // dd($data['data']);
         return $data;
     }
 }
