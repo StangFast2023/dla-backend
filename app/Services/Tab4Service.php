@@ -22,7 +22,7 @@ class Tab4Service
         //---- tab 4
         return [
             'part1' =>  $this->Tab4_Part1_Filter(),
-            'part2' =>  $this->Tab4_Part2_ShowData(),
+            'part2' =>  $this->Tab4_Part2_ShowData()
         ];
     }
 
@@ -336,7 +336,6 @@ class Tab4Service
             'round' =>  $max_round,
             'data'  =>  $array
         ];
-        // dd($data['data']);
         return $data;
     }
 }

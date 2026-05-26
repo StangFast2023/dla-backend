@@ -10,3 +10,4 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/data-stats', [CallingDlaController::class, 'getStats']);
 Route::get('/listed-position-detail/{id}', [CallingDlaController::class, 'getPositionDetailByZone']);
+Route::post('/updating-tab4-table', [CallingDlaController::class, 'updateTableForTab4']);
