@@ -24,7 +24,6 @@ class CallingDlaController extends Controller
 {
     public function getStats()
     {
-
         return response()->json([
             'status' => 'success',
             'tab1'  =>  app(Tab1Service::class)->getData(),
