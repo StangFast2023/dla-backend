@@ -216,6 +216,7 @@ class Tab4Service
 
         $max_round = db::table('calling_dla')->max('round');
         $called_position = db::table('calling_dla')
+            ->leftjoin('positions_dla', 'positions_dla.id_position', 'calling_dla.id_position')
             ->selectRaw('calling_dla.* , positions_dla.id_type   as  pos_type_id')
             ->get()
             ->toArray();
