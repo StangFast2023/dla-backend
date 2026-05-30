@@ -42,16 +42,16 @@ class Tab2Service
         ];
         $TypePos = db::table('updated_list_dla')
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->selectRaw('
                 updated_list_dla.id_main_province as prov_main_id    ,
                 updated_list_dla.id_sub_province  as prov_sub_id    ,
                 updated_list_dla.id_position as id_pos ,
                 concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
-                SUBSTRING(positions_dla.id_position, 1, 1) as pos_type_id,
-                type_positions_dla.name as pos_type , 
-                sum( total )    as  total
+                positions_dla.id_type   as  pos_type_id,
+                type_positions_dla.name as  pos_type , 
+                sum( total )            as  total
             ')
             ->groupBy('prov_main_id', 'prov_sub_id', 'id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
@@ -109,12 +109,12 @@ class Tab2Service
         }
         $CallingMonthly = db::table('calling_dla')
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'calling_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->where('calling_dla.call_status', 1)
             ->selectRaw('
                 concat( calling_dla.called_month , "-" , calling_dla.called_year ) as monthly ,
-                SUBSTRING(positions_dla.id_position, 1, 1)  as pos_type_id ,
+                positions_dla.id_type       as pos_type_id ,
                 type_positions_dla.name     as  pos_type , 
                 sum( calling_dla.total )    as  total
             ')
@@ -140,12 +140,12 @@ class Tab2Service
 
         $CallingMonthly = db::table('calling_dla')
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'calling_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->where('calling_dla.call_status', 1)
             ->selectRaw('
                 calling_dla.round as roundly ,
-                SUBSTRING(positions_dla.id_position, 1, 1)  as pos_type_id ,
+                positions_dla.id_type       as pos_type_id ,
                 type_positions_dla.name     as  pos_type , 
                 sum( calling_dla.total )    as  total
             ')
@@ -174,12 +174,12 @@ class Tab2Service
     {
         $top10Pos        = db::table('updated_list_dla')
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->selectRaw('
                 updated_list_dla.id_position as id_pos ,
                 concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
-                SUBSTRING(positions_dla.id_position, 1, 1) as pos_type_id,
+                positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
                 sum( total )    as  total
             ')
@@ -195,14 +195,14 @@ class Tab2Service
         $array = [];
         $fastEmpty = db::table('updated_list_dla')
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->selectRaw('
                 updated_list_dla.id_main_province as prov_main_id    ,
                 updated_list_dla.id_sub_province  as prov_sub_id    ,
                 updated_list_dla.id_position as id_pos ,
                 concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
-                SUBSTRING(positions_dla.id_position, 1, 1) as pos_type_id,
+                positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
                 sum( total )    as  total
             ')
@@ -264,13 +264,13 @@ class Tab2Service
         $array = [];
         $typeCallAll = db::table('calling_dla')
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'calling_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->where('call_status', 1)
             ->selectRaw('
                 calling_dla.id_position as id_pos ,
                 concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
-                SUBSTRING(positions_dla.id_position, 1, 1) as pos_type_id,
+                positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
                 sum( total ) as  total
             ')
@@ -297,12 +297,12 @@ class Tab2Service
         $array = [];
         $UpdateListed = db::table('updated_list_dla')
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->selectRaw('
                 updated_list_dla.id_position as id_pos ,
                 concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
-                SUBSTRING(positions_dla.id_position, 1, 1) as pos_type_id,
+                positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
                 sum( total )    as  total
             ')
@@ -350,11 +350,11 @@ class Tab2Service
         $array = [];
         $AllType = db::table('updated_list_dla')
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->selectRaw('
                 updated_list_dla.id_main_province           as  prov_main_id    ,
-                SUBSTRING(positions_dla.id_position, 1, 1)  as  pos_type_id     ,
+                positions_dla.id_type                       as  pos_type_id     ,
                 type_positions_dla.name                     as  pos_type        , 
                 sum( total )                                as  total
             ')
@@ -389,13 +389,13 @@ class Tab2Service
         }
         $typeCallAll = db::table('calling_dla')
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'calling_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->where('call_status', 1)
             ->selectRaw('
                 calling_dla.id_main_province                as  id_main_province    ,
                 calling_dla.round                           as  round               ,
-                SUBSTRING(positions_dla.id_position, 1, 1)  as  pos_type_id         ,
+                positions_dla.id_type                       as  pos_type_id         ,
                 type_positions_dla.name                     as  pos_type            , 
                 sum( total )                                as  total
             ')
@@ -440,7 +440,7 @@ class Tab2Service
     {
         $array = [];
         $Position = db::table('positions_dla')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->selectRaw('
                 concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name

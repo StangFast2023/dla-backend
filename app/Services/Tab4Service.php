@@ -99,7 +99,7 @@ class Tab4Service
         $all_pos_array = [];
         $all_Positions = db::table('positions_dla')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->selectRaw('
                 positions_dla.id_position                   as  pos_id          ,
                 positions_dla.name                          as  pos_name        ,
@@ -107,7 +107,7 @@ class Tab4Service
                 prefixes_dla.name                           as  pref_name       ,
                 type_positions_dla.type_position            as  suff_name       ,
 
-                SUBSTRING(positions_dla.id_position, 1, 1)  as  pos_type_id     ,
+                positions_dla.id_type                       as  pos_type_id     ,
                 type_positions_dla.name                     as  pos_type_name
             ')
             ->get()
@@ -180,12 +180,12 @@ class Tab4Service
 
         $listed_position = db::table('updated_list_dla')
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->selectRaw('
                 updated_list_dla.id_main_province               as  prov_main_id    ,
                 updated_list_dla.id_sub_province                as  prov_sub_id     ,
-                SUBSTRING(updated_list_dla.id_position, 1, 1)   as  pos_type_id     ,
+                positions_dla.id_type                           as  pos_type_id     ,
                 positions_dla.id_position                       as  pos_id          ,
                 sum( total )                                    as  total
             ')
@@ -216,7 +216,7 @@ class Tab4Service
 
         $max_round = db::table('calling_dla')->max('round');
         $called_position = db::table('calling_dla')
-            ->selectRaw('calling_dla.* , SUBSTRING(calling_dla.id_position, 1, 1)   as  pos_type_id')
+            ->selectRaw('calling_dla.* , positions_dla.id_type   as  pos_type_id')
             ->get()
             ->toArray();
         foreach ($called_position as $pos) {
