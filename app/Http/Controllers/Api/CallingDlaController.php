@@ -46,7 +46,7 @@ class CallingDlaController extends Controller
     }
 
 
-    public function updateTableForTab4(Request $request, Tab4Service $tab4Service)
+    public function updateTableForTab4(Request $request)
     {
         $regions    =   $request->input('cleanRegions');
         $positions  =   $request->input('cleanPositions');
@@ -263,7 +263,8 @@ class CallingDlaController extends Controller
                         'total'             =>  (int)$total,
                         'start'             =>  0,
                         'end'               =>  0,
-                        'start_end'         =>  0,
+                        'start_end_2'       =>  0,
+                        'percent_change'    =>  null,
                         'status_call'       =>  $call_status === 1,
                         'status_list'       =>  $list_status === 1,
                         'status_cross'      =>  $is_cross_region === 1,
@@ -299,22 +300,33 @@ class CallingDlaController extends Controller
                     foreach ($data_type['data_position'] as &$pos) {
                         $pos['status_out_of_lits'] = ($pos['total_remain'] === 0);
                         $last_end = 0;
+                        $prev_total = null;
                         foreach ($pos['data_call_round'] as &$round) {
-                            $total = (int)$round['total'];
+                            $total = (int)($round['total'] ?? 0);
                             $start = $last_end + 1;
                             $end = $start + $total - 1;
                             $round['start'] = $start;
                             $round['end'] = $end;
+
                             if ($total > 0) {
                                 $round['start_end'] = $total > 1 ? $start . ' - ' . $end : $start;
                             }
-                            $last_end = $end;
+                            $last_end = ($total > 0) ? $end : $last_end;
+                            if ($total > 0) {
+                                if ($prev_total !== null && $prev_total > 0) {
+                                    $round['percent_change'] = (($total - $prev_total) / $prev_total) * 100;
+                                } else {
+                                    $round['percent_change'] = 0;
+                                }
+                                $prev_total = $total;
+                            } else {
+                                $round['percent_change'] = null;
+                            }
                         }
                     }
                 }
             }
         }
-
 
         $showEmpty = $request->input('showEmpty') == '1' || $request->input('showEmpty') === true;
         if ($showEmpty === false) {
