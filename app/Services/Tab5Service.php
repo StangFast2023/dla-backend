@@ -237,4 +237,190 @@ class Tab5Service
         }
         return $array;
     }
+
+    //--- api data of Tab 5
+    /**
+     * @param int $regionId
+     * @param int $areaId
+     * @param int $positionId
+     * @param int $sequence
+     */
+    public function predictionUserDetail($regionId, $areaId, $positionId, $sequence)
+    {
+
+        // total_listed , total_remain
+        $updateLisedTotal = db::table('updated_list_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->first();
+
+        $data = [
+            'rank'              =>  (int)$sequence,
+            'total_listed'      =>  $updateLisedTotal->total,
+            'total_called'      =>  0,
+            'total_remain'      =>  $updateLisedTotal->total,
+            'total_round'       =>  0,
+            'process_bars'      =>  0,
+            'avg_call'          =>  0,
+            'status_work'       =>  0,
+            'remain_before'     =>  0,
+            'rank_risk'         =>  0,
+            'probabilitys'      =>  0,
+            'next_round'        =>  0,
+            'status_out_list'   =>  false,
+            'chart_1_round'     =>  [],
+            'chart_2_region'    =>  [],
+        ];
+
+        // total_round , total_called , total_remain
+        $calledData = db::table('calling_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->get();
+
+        $round = 1;
+        foreach ($calledData as $call) {
+            $total = $call->total;
+            $data['total_round']  += $round;
+            $data['total_called'] += ($call->list_status === 1 ? $total : 0);
+            $data['total_remain'] -= ($call->list_status === 1 ? $total : 0);
+        }
+
+        //-- avg_call
+        $avgCalled = db::table('calling_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->where('call_status', 1)
+            ->where('list_status', 1)
+            ->selectRaw('avg(total) as avg')
+            ->first();
+        $data['avg_call'] = $avgCalled->avg;
+
+        //-- process_bars , status_work , remain_before , rank_risk , probabilitys , next_round , status_out_list
+        $rank           = $data['rank'];
+        $total_listed   = $data['total_listed'];
+        $total_called   = $data['total_called'];
+        $total_remain   = $data['total_remain'];
+        $total_round    = $data['total_round'];
+
+        $data['process_bars']   =   ($total_called / $total_listed) * 100;
+        $data['status_work']    =    $rank <= $total_called ? 'completed' : 'waiting';
+
+        $status_work    = $data['status_work'];
+
+        $data['remain_before']  =   ($rank - $total_called) > 0 ? $rank - $total_called : 0;
+        $data['rank_risk']      =    $total_remain > 0 ? min(100, (($rank - $total_called) / $total_remain) * 100) : 0;
+
+        $getAccountDaysStatus   =   $this->getAccountDaysStatus();
+        $days_passed            =   $getAccountDaysStatus['days_passed'];
+        $days_remaining         =   $getAccountDaysStatus['days_remaining'];
+        $daily_rates            =   $total_called / $days_passed;
+        $expected_rotal         =   $total_called + ($daily_rates * $days_remaining);
+        $probabilitys           =   min(100, ($expected_rotal / $rank) * 100);
+        $data['probabilitys']   =   $probabilitys;
+
+        $distanc    =   $rank - $total_called;
+        $avg_per    =   $total_called / $total_round;
+        $next_rate  =   $distanc > 0 ? (($avg_per / $distanc) * 100) : 0;
+        $data['next_round'] = $next_rate;
+
+        $empty = $total_called - $total_listed;
+        $data['status_out_list'] = $empty === 0 ? true : false;
+
+        //  chart_1_round_monthly
+        //  chart_2_round_table 
+        $date_chart1_2 = [];
+        $getAccountTimeline = $this->getAccountTimeline();
+        foreach ($getAccountTimeline as $timeline) {
+            $date = $timeline['date'];
+            if (!isset($date_chart1_2[$date])) {
+                $date_chart1_2[$date] = [
+                    'date_thai_s'       =>  null,
+                    'date_that_f'       =>  null,
+                    'round'             =>  0,
+                    'total'             =>  0,
+                    'start'             =>  0,
+                    'end'               =>  0,
+                    'start_end'         =>  0,
+                    'call'              =>  false,
+                    'list'              =>  false,
+                    'work'              =>  false,
+                    'change'            =>  0,
+                    'proportion'        =>  0,
+                    'is_cross_region'   =>  false,
+                    'crossed_region'    =>  null,
+                    'crossed_zone'      =>  null,
+                ];
+            }
+        }
+
+        $calledDataChart1 = db::table('calling_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->get();
+
+        $last_end = 0;
+        $current_date = Carbon::today();
+        foreach ($calledDataChart1 as $key => $called) {
+            $d = $called->called_day;
+            $m = $called->called_month;
+            $y = $called->called_year;
+            $date = $m . '-' . $y;
+            if (isset($date_chart1_2[$date])) {
+                $date_numb   = Carbon::createFromDate($y, $m, $d);
+                $date_thai_s = $this->monthYearThai(false, $m, $y);
+                $date_that_f = $d . ' ' . $this->monthYearThai(true, $m, $y);
+                $date_chart1_2[$date]['date_thai_s'] = $date_thai_s;
+                $date_chart1_2[$date]['date_that_f'] = $date_that_f;
+
+                $work = $date_numb->greaterThan($current_date) ? 'waiting' : 'completed';
+                $date_chart1_2[$date]['work'] = $work;
+
+                $total  = (int)$called->total;
+                $calls  = $called->call_status === 1 ? true : false;
+                $lists  = $called->list_status === 1 ? true : false;
+                $cross  = $called->is_cross_region === 1 ? true : false;
+                $region = $called->crossed_region;
+                $zone   = $called->crossed_zone;
+
+                $date_chart1_2[$date]['round'] += ($key + 1);
+                $date_chart1_2[$date]['total'] = $total;
+                $date_chart1_2[$date]['call']  = $calls;
+                $date_chart1_2[$date]['list']  = $lists;
+                $date_chart1_2[$date]['is_cross_region'] = $cross;
+                $date_chart1_2[$date]['crossed_region'] = $cross ? $region : null;
+                $date_chart1_2[$date]['crossed_zone'] = $cross ? $zone : null;
+
+                $start = $last_end + 1;
+                $end   = $start + $total - 1;
+                $date_chart1_2[$date]['start']      = $start;
+                $date_chart1_2[$date]['end']        = $end;
+                $date_chart1_2[$date]['start_end']  = $total > 1 ? $start . ' - ' . $end : $start;
+
+                $date_chart1_2[$date]['proportion'] = $total > 0 ? (($total / $total_listed) * 100) : '-';
+            }
+        }
+
+        $chart_data = array_values($date_chart1_2);
+        $previous_total = null;
+        foreach ($chart_data as $index => &$item) {
+            if ($index > 0 && $previous_total !== null && $previous_total > 0) {
+                $current_total = $item['total'];
+                $growth = (($current_total - $previous_total) / $previous_total) * 100;
+                $item['change'] = round($growth, 2);
+            } else {
+                $item['change'] = 'first';
+            }
+            $previous_total = $item['total'];
+        }
+        $data['chart_1_round'] = $chart_data;
+        dd($data);
+        //  chart_3_region_monthly
+        //  chart_4_region_table
+        return $data;
+    }
 }

@@ -34,7 +34,6 @@ class CallingDlaController extends Controller
         ]);
     }
 
-
     //--- api data of Tab 2
     /**
      * @param int $id
@@ -49,6 +48,19 @@ class CallingDlaController extends Controller
     public function updateTableForTab4(Request $request, Tab4Service $Tab4Service)
     {
         $data = $Tab4Service->updateTableForTab4($request);
+        return response()->json($data);
+    }
+
+    //--- api data of Tab 5
+    /**
+     * @param int $regionId
+     * @param int $areaId
+     * @param int $positionId
+     * @param int $sequence
+     */
+    public function predictionUserDetail($regionId, $areaId, $positionId, $sequence, Tab5Service $tab5Service)
+    {
+        $data = $tab5Service->predictionUserDetail($regionId, $areaId, $positionId, $sequence);
         return response()->json($data);
     }
 }
