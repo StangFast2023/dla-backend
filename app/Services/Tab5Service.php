@@ -322,9 +322,21 @@ class Tab5Service
         $probabilitys           =   min(100, ($expected_rotal / $rank) * 100);
         $data['probabilitys']   =   $probabilitys;
 
-        $distanc    =   $rank - $total_called;
+        $today      =   $getAccountDaysStatus['current_date'];
+        $final      =   $getAccountDaysStatus['final_date'];
+        $interval   =   $today->diff($final);
+        $m_remains  =   ($interval->y * 12) + $interval->m;
+        $r_remains  =   ceil($m_remains / 1);
         $avg_per    =   $total_called / $total_round;
-        $next_rate  =   $distanc > 0 ? (($avg_per / $distanc) * 100) : 0;
+        $distanc    =   $rank - $total_called;
+        $total_capacity = $avg_per * $r_remains;
+        if ($distanc <= 0) {
+            $next_rate = 100;
+        } elseif ($distanc <= $avg_per) {
+            $next_rate = 100;
+        } else {
+            $next_rate = max(0, 100 - (($distanc / $total_capacity) * 100));
+        }
         $data['next_round'] = $next_rate;
 
         $empty = $total_called - $total_listed;
@@ -418,7 +430,7 @@ class Tab5Service
             $previous_total = $item['total'];
         }
         $data['chart_1_round'] = $chart_data;
-        dd($data);
+        // dd($data);
         //  chart_3_region_monthly
         //  chart_4_region_table
         return $data;

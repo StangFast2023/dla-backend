@@ -39,8 +39,10 @@ trait DateCalculatable
         $daysRemaining = $today->lessThan($expiryDate) ? $today->diffInDays($expiryDate) : 0;
         $percentage = ($daysPassed / $totalDays) * 100;
         return [
-            'total_days' => $totalDays,
-            'days_passed' => $daysPassed,
+            'total_days'   => $totalDays,
+            'current_date' => $today,
+            'final_date'   => $expiryDate,
+            'days_passed'  => $daysPassed,
             'days_remaining' => $daysRemaining,
             'percentage' => round($percentage, 2),
             'is_expired' => $today->greaterThanOrEqualTo($expiryDate),
