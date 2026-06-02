@@ -60,41 +60,39 @@ class Tab1Service
     public function Tab1_Part2_Monthly()
     {
         $fullMonthly = $this->getAccountTimeline();
+
+        $MonthlyRaw = CallingDla::where('call_status', 1)->get();
+        $minMonth = $MonthlyRaw->min(fn($m) => $m->called_year * 12 + $m->called_month);
+        $maxMonth = $MonthlyRaw->max(fn($m) => $m->called_year * 12 + $m->called_month);
+
         $array = [];
         foreach ($fullMonthly as $full) {
-            $key_month_year = $full['month'] . '-' . $full['year'];
-            if (!isset($array[$key_month_year])) {
+            $currentMonthValue = $full['year'] * 12 + $full['month'];
+            if ($currentMonthValue >= $minMonth && $currentMonthValue <= $maxMonth) {
+                $key_month_year = $full['month'] . '-' . $full['year'];
                 $array[$key_month_year] = [
-                    'month'             =>  $full['month'],
-                    'year'              =>  $full['year'],
-                    'label_eng'         =>  $full['label'],
-                    'label_th_f'        =>  $this->monthYearThai(true, $full['month'], $full['year']),
-                    'label_th_s'        =>  $this->monthYearThai(false, $full['month'], $full['year']),
-                    'call_status'       =>  false,
-                    'total_per_month'   =>  0,
-                    'total_round'       =>  0,
-                    'data'              =>  []
+                    'month'           => $full['month'],
+                    'year'            => $full['year'],
+                    'label_eng'       => $full['label'],
+                    'label_th_f'      => $this->monthYearThai(true, $full['month'], $full['year']),
+                    'label_th_s'      => $this->monthYearThai(false, $full['month'], $full['year']),
+                    'call_status'     => false,
+                    'total_per_month' => 0,
+                    'total_round'     => 0,
+                    'data'            => []
                 ];
             }
         }
 
-        $Monthly = CallingDla::all()->where('call_status', 1);
-        foreach ($Monthly as $month) {
-            $cur_m = $month->called_month;
-            $cur_y = $month->called_year;
-            $key_month_year = $cur_m . '-' . $cur_y;
-
-            $round = $month->round;
-            $total = $month->total;
-            if (!isset($array[$key_month_year]['data'][$round])) {
-                $array[$key_month_year]['total_round'] += 1;
-                $array[$key_month_year]['data'][$round] = [
-                    'round' =>  $round,
-                    'total' =>  0
-                ];
-            }
-
-            if (isset($array[$key_month_year]['data'][$round])) {
+        foreach ($MonthlyRaw as $month) {
+            $key_month_year = $month->called_month . '-' . $month->called_year;
+            if (isset($array[$key_month_year])) {
+                $round = $month->round;
+                $total = $month->total;
+                if (!isset($array[$key_month_year]['data'][$round])) {
+                    $array[$key_month_year]['total_round'] += 1;
+                    $array[$key_month_year]['data'][$round] = ['round' => $round, 'total' => 0];
+                }
                 $array[$key_month_year]['call_status'] = true;
                 $array[$key_month_year]['total_per_month'] += $total;
                 $array[$key_month_year]['data'][$round]['total'] += $total;
@@ -107,21 +105,27 @@ class Tab1Service
     {
         $fullMonthly = $this->getAccountTimeline();
         $array = [];
+        $Monthly    = CallingDla::all()->where('call_status', 1);
+        $minMonth = $Monthly->min(fn($m) => $m->called_year * 12 + $m->called_month);
+        $maxMonth = $Monthly->max(fn($m) => $m->called_year * 12 + $m->called_month);
         foreach ($fullMonthly as $full) {
-            $key_month_year = $full['month'] . '-' . $full['year'];
-            if (!isset($array[$key_month_year])) {
+            $currentMonthValue = $full['year'] * 12 + $full['month'];
+            if ($currentMonthValue >= $minMonth && $currentMonthValue <= $maxMonth) {
+                $key_month_year = $full['month'] . '-' . $full['year'];
                 $array[$key_month_year] = [
-                    'month'             =>  $full['month'],
-                    'year'              =>  $full['year'],
-                    'label_eng'         =>  $full['label'],
-                    'label_th_f'        =>  $this->monthYearThai(true, $full['month'], $full['year']),
-                    'label_th_s'        =>  $this->monthYearThai(false, $full['month'], $full['year']),
-                    'call_status'       =>  false,
-                    'total_per_month'   =>  0
+                    'month'           => $full['month'],
+                    'year'            => $full['year'],
+                    'label_eng'       => $full['label'],
+                    'label_th_f'      => $this->monthYearThai(true, $full['month'], $full['year']),
+                    'label_th_s'      => $this->monthYearThai(false, $full['month'], $full['year']),
+                    'call_status'     => false,
+                    'total_per_month' => 0,
+                    'total_round'     => 0,
+                    'data'            => []
                 ];
             }
         }
-        $Monthly    = CallingDla::all()->where('call_status', 1);
+
         foreach ($Monthly as $month) {
             $called_month   = $month->called_month;
             $called_year    = $month->called_year;

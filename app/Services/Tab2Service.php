@@ -116,19 +116,39 @@ class Tab2Service
                 concat( calling_dla.called_month , "-" , calling_dla.called_year ) as monthly ,
                 positions_dla.id_type       as pos_type_id ,
                 type_positions_dla.name     as  pos_type , 
+                calling_dla.called_month,
+                calling_dla.called_year,
                 sum( calling_dla.total )    as  total
             ')
-            ->groupBy('monthly', 'pos_type_id', 'pos_type')
+            ->groupBy('monthly', 'pos_type_id', 'pos_type', 'called_month', 'called_year')
             ->get();
+        $lastCall = $CallingMonthly->sortByDesc(fn($m) => $m->called_year * 12 + $m->called_month)->first();
+        $lastMonthKey = $lastCall ? ($lastCall->called_month . '-' . $lastCall->called_year) : null;
+        if ($lastMonthKey) {
+            $shouldKeep = true;
+            foreach ($fullMonthly as $key => $value) {
+                if (!$shouldKeep) {
+                    unset($fullMonthly[$key]);
+                    continue;
+                }
+
+                if ($key === $lastMonthKey) {
+                    $shouldKeep = false;
+                }
+            }
+        }
         foreach ($CallingMonthly as $call) {
             $key = $call->monthly;
-            $type = $call->pos_type_id;
-            if (!isset($fullMonthly[$key]['data'][$type])) {
-                $fullMonthly[$key]['data'][$type] = [
-                    'type'  =>  $type,
-                    'name'  =>  $call->pos_type,
-                    'total' =>  $call->total
-                ];
+            if (isset($fullMonthly[$key])) {
+                $type = $call->pos_type_id;
+                if (!isset($fullMonthly[$key]['data'][$type])) {
+                    $fullMonthly[$key]['data'][$type] = [
+                        'type'  => $type,
+                        'name'  => $call->pos_type,
+                        'total' => 0
+                    ];
+                }
+                $fullMonthly[$key]['data'][$type]['total'] += $call->total;
                 $fullMonthly[$key]['total_per_month'] += $call->total;
             }
         }

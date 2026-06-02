@@ -3,30 +3,54 @@
 namespace App\Traits;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 trait DateCalculatable
 {
 
 
-    public function getAccountTimeline()
+    public function getAccountTimeline($isFullTimeline = false)
     {
         $start = Carbon::create(2026, 4, 15);
-        $end = $start->copy()->addYears(2);
-
         $timeline = [];
-        while ($start->lte($end)) {
+        if ($isFullTimeline) {
+            $end = $start->copy()->addYears(2);
+        } else {
+            $lastRecord = DB::table('calling_dla')
+                ->orderBy('called_year', 'desc')
+                ->orderBy('called_month', 'desc')
+                ->first();
+            $end = $lastRecord
+                ? Carbon::create($lastRecord->called_year, $lastRecord->called_month, 1)->endOfMonth()
+                : Carbon::now()->endOfMonth();
+        }
+        $current = $start->copy();
+        while ($current->lte($end)) {
             $timeline[] = [
-                'label'     =>  $start->translatedFormat('M Y'),
-                'month'     =>  $start->month,
-                'year'      =>  $start->year,
-                'date'      =>  $start->month . '-' . $start->year,
-                'name_s'    =>  $this->monthYearThai(false, $start->month, $start->year),
-                'name_l'    =>  $this->monthYearThai(true, $start->month, $start->year),
-                'data'      =>  []
+                'label'     => $current->translatedFormat('M Y'),
+                'month'     => $current->month,
+                'year'      => $current->year,
+                'date'      => $current->month . '-' . $current->year,
+                'name_s'    => $this->monthYearThai(false, $current->month, $current->year),
+                'name_l'    => $this->monthYearThai(true, $current->month, $current->year),
+                'data'      => []
             ];
-            $start->addMonth();
+            $current->addMonth();
         }
         return $timeline;
+    }
+
+    private function formatTimelineItem($date)
+    {
+        return [
+            'label'    => $date->translatedFormat('M Y'),
+            'month'    => $date->month,
+            'year'     => $date->year,
+            'date'     => $date->month . '-' . $date->year,
+            'name_s'   => $this->monthYearThai(false, $date->month, $date->year),
+            'name_l'   => $this->monthYearThai(true, $date->month, $date->year),
+            'data'     => []
+        ];
     }
 
     public function getAccountDaysStatus()

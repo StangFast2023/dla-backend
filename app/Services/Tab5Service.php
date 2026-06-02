@@ -28,6 +28,7 @@ class Tab5Service
 
     public function Tab5_Part1_FilterData()
     {
+        $fullMonthly = $this->getAccountTimeline(false);
         $all_pos_array = [];
         $all_Positions = db::table('positions_dla')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
@@ -312,7 +313,16 @@ class Tab5Service
         $status_work    = $data['status_work'];
 
         $data['remain_before']  =   ($rank - $total_called) > 0 ? $rank - $total_called : 0;
-        $data['rank_risk']      =    $total_remain > 0 ? min(100, (($rank - $total_called) / $total_remain) * 100) : 0;
+        if ($rank <= $total_called) {
+            $data['rank_risk'] = 0;
+        } else {
+            $safe_total_remain = max(0, $total_remain);
+            if ($safe_total_remain <= 0) {
+                $data['rank_risk'] = 100;
+            } else {
+                $data['rank_risk'] = min(100, (($rank - $total_called) / $safe_total_remain) * 100);
+            }
+        }
 
         $getAccountDaysStatus   =   $this->getAccountDaysStatus();
         $days_passed            =   $getAccountDaysStatus['days_passed'];
