@@ -310,8 +310,6 @@ class Tab5Service
         $data['process_bars']   =   ($total_called / $total_listed) * 100;
         $data['status_work']    =    $rank <= $total_called ? 'completed' : 'waiting';
 
-        $status_work    = $data['status_work'];
-
         $data['remain_before']  =   ($rank - $total_called) > 0 ? $rank - $total_called : 0;
         if ($rank <= $total_called) {
             $data['rank_risk'] = 0;
@@ -360,10 +358,11 @@ class Tab5Service
             $date = $timeline['date'];
             if (!isset($date_chart1_2[$date])) {
                 $date_chart1_2[$date] = [
-                    'date_thai_s'       =>  null,
-                    'date_that_f'       =>  null,
+                    'date_thai_s'       =>  $timeline['name_s'],
+                    'date_that_f'       =>  $timeline['name_l'],
                     'round'             =>  0,
                     'total'             =>  0,
+                    'total_per_month'   =>  0,
                     'start'             =>  0,
                     'end'               =>  0,
                     'start_end'         =>  0,
@@ -387,17 +386,15 @@ class Tab5Service
 
         $last_end = 0;
         $current_date = Carbon::today();
+
         foreach ($calledDataChart1 as $key => $called) {
             $d = $called->called_day;
             $m = $called->called_month;
             $y = $called->called_year;
             $date = $m . '-' . $y;
+            $date_numb   = Carbon::createFromDate($y, $m, $d);
+
             if (isset($date_chart1_2[$date])) {
-                $date_numb   = Carbon::createFromDate($y, $m, $d);
-                $date_thai_s = $this->monthYearThai(false, $m, $y);
-                $date_that_f = $d . ' ' . $this->monthYearThai(true, $m, $y);
-                $date_chart1_2[$date]['date_thai_s'] = $date_thai_s;
-                $date_chart1_2[$date]['date_that_f'] = $date_that_f;
 
                 $work = $date_numb->greaterThan($current_date) ? 'waiting' : 'completed';
                 $date_chart1_2[$date]['work'] = $work;
@@ -411,6 +408,7 @@ class Tab5Service
 
                 $date_chart1_2[$date]['round'] += ($key + 1);
                 $date_chart1_2[$date]['total'] = $total;
+                $date_chart1_2[$date]['total_per_month'] += $total;
                 $date_chart1_2[$date]['call']  = $calls;
                 $date_chart1_2[$date]['list']  = $lists;
                 $date_chart1_2[$date]['is_cross_region'] = $cross;
@@ -426,7 +424,6 @@ class Tab5Service
                 $date_chart1_2[$date]['proportion'] = $total > 0 ? (($total / $total_listed) * 100) : '-';
             }
         }
-
         $chart_data = array_values($date_chart1_2);
         $previous_total = null;
         foreach ($chart_data as $index => &$item) {
@@ -440,7 +437,7 @@ class Tab5Service
             $previous_total = $item['total'];
         }
         $data['chart_1_round'] = $chart_data;
-        // dd($data);
+
         //  chart_3_region_monthly
         //  chart_4_region_table
         return $data;
