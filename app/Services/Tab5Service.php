@@ -256,6 +256,7 @@ class Tab5Service
             ->first();
 
         $data = [
+            //---- part 1
             'rank'              =>  (int)$sequence,
             'total_listed'      =>  $updateLisedTotal->total,
             'total_called'      =>  0,
@@ -265,15 +266,18 @@ class Tab5Service
             'avg_call'          =>  0,
             'status_work'       =>  0,
             'remain_before'     =>  0,
-            'rank_risk'         =>  0,
-            'probabilitys'      =>  0,
-            'next_round'        =>  0,
             'status_out_list'   =>  false,
             'chart_1_round'     =>  [],
             'chart_2_round'     =>  [],
             'chart_3_region'    =>  [],
-            'chart_4_region'    =>  [],
+
+            //---- part 2
+            'rank_risk'         =>  0,
+            'probabilitys'      =>  0,
+            'next_round'        =>  0,
         ];
+
+
 
         // total_round , total_called , total_remain
         $calledData = db::table('calling_dla')
@@ -290,7 +294,7 @@ class Tab5Service
             $data['total_remain'] -= ($call->list_status === 1 ? $total : 0);
         }
 
-        //-- avg_call
+        // avg_call
         $avgCalled = db::table('calling_dla')
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
@@ -301,7 +305,7 @@ class Tab5Service
             ->first();
         $data['avg_call'] = $avgCalled->avg;
 
-        //-- process_bars , status_work , remain_before , rank_risk , probabilitys , next_round , status_out_list
+        // process_bars , status_work , remain_before , rank_risk , probabilitys , next_round , status_out_list
         $rank           = $data['rank'];
         $total_listed   = $data['total_listed'];
         $total_called   = $data['total_called'];
@@ -312,55 +316,28 @@ class Tab5Service
         $data['status_work']    =    $rank <= $total_called ? 'completed' : 'waiting';
 
         $data['remain_before']  =   ($rank - $total_called) > 0 ? $rank - $total_called : 0;
-        if ($rank <= $total_called) {
-            $data['rank_risk'] = 0;
-        } else {
-            $safe_total_remain = max(0, $total_remain);
-            if ($safe_total_remain <= 0) {
-                $data['rank_risk'] = 100;
-            } else {
-                $data['rank_risk'] = min(100, (($rank - $total_called) / $safe_total_remain) * 100);
-            }
-        }
-
-        $getAccountDaysStatus   =   $this->getAccountDaysStatus();
-        $days_passed            =   $getAccountDaysStatus['days_passed'];
-        $days_remaining         =   $getAccountDaysStatus['days_remaining'];
-        $daily_rates            =   $total_called / $days_passed;
-        $expected_rotal         =   $total_called + ($daily_rates * $days_remaining);
-        $probabilitys           =   min(100, ($expected_rotal / $rank) * 100);
-        $data['probabilitys']   =   $probabilitys;
-
-        $today      =   $getAccountDaysStatus['current_date'];
-        $final      =   $getAccountDaysStatus['final_date'];
-        $interval   =   $today->diff($final);
-        $m_remains  =   ($interval->y * 12) + $interval->m;
-        $r_remains  =   ceil($m_remains / 1);
-        $avg_per    =   $total_called / $total_round;
-        $distanc    =   $rank - $total_called;
-        $total_capacity = $avg_per * $r_remains;
-        if ($distanc <= 0) {
-            $next_rate = 100;
-        } elseif ($distanc <= $avg_per) {
-            $next_rate = 100;
-        } else {
-            $next_rate = max(0, 100 - (($distanc / $total_capacity) * 100));
-        }
-        $data['next_round'] = $next_rate;
 
         $empty = $total_called - $total_listed;
         $data['status_out_list'] = $empty === 0 ? true : false;
 
         //  chart_1_round_monthly
         //  chart_2_round_table 
-        $date_chart1 = $this->data_chart1($regionId, $areaId, $positionId);
-        $data['chart_1_round'] = $date_chart1;
+        $data_chart1 = $this->data_part1_chart1($regionId, $areaId, $positionId);
+        $data['chart_1_round'] = $data_chart1;
 
-        $date_chart2 = $this->date_chart2($regionId, $areaId, $positionId);
-        $data['chart_2_round'] = $date_chart2;
+        $data_chart2 = $this->data_part1_chart2($regionId, $areaId, $positionId);
+        $data['chart_2_round'] = $data_chart2;
 
         //  chart_3_region_monthly
         //  chart_4_region_table
+        $data_chart3 = $this->data_part1_chart3($positionId);
+        $data['chart_3_region'] = $data_chart3;
+
+        //  predictions
+        $data_chart5 = $this->data_part2_chart1($total_called, $total_remain, $total_round, $sequence);
+        $data['rank_risk']      = $data_chart5['rank_risk'];
+        $data['probabilitys']   = $data_chart5['probabilitys'];
+        $data['next_round']     = $data_chart5['next_round'];
 
         return $data;
     }
@@ -371,7 +348,7 @@ class Tab5Service
      * @param int $areaId
      * @param int $positionId
      */
-    public function data_chart1($regionId, $areaId, $positionId)
+    public function data_part1_chart1($regionId, $areaId, $positionId)
     {
         $date_chart1 = [];
         $total_listed = db::table('updated_list_dla')
@@ -410,7 +387,6 @@ class Tab5Service
 
         $last_end = 0;
         $current_date = Carbon::today();
-
         foreach ($calledDataChart1 as $key => $called) {
             $d = $called->called_day;
             $m = $called->called_month;
@@ -441,9 +417,13 @@ class Tab5Service
 
                 $start = $last_end + 1;
                 $end   = $start + $total - 1;
+
                 $date_chart1[$date]['start']      = $start;
                 $date_chart1[$date]['end']        = $end;
-                $date_chart1[$date]['start_end']  = $total > 1 ? $start . ' - ' . $end : $start;
+                if ($total > 0) {
+                    $date_chart1[$date]['start_end'] = $total > 1 ? $start . ' - ' . $end : $start;
+                }
+                $last_end = ($total > 0) ? $end : $last_end;
 
                 $date_chart1[$date]['proportion'] = $total > 0 ? (($total / $total_listed) * 100) : '-';
             }
@@ -452,13 +432,12 @@ class Tab5Service
         return $chart_data;
     }
 
-
     /**
      * @param int $regionId
      * @param int $areaId
      * @param int $positionId
      */
-    public function date_chart2($regionId, $areaId, $positionId)
+    public function data_part1_chart2($regionId, $areaId, $positionId)
     {
         //  chart_2_round_table
         $date_chart2 = [];
@@ -510,6 +489,12 @@ class Tab5Service
             $end = $start + $curr_total - 1;
             $item['start'] = $start;
             $item['end'] = $end;
+
+            if ($curr_total > 0) {
+                $item['start_end'] = $curr_total > 1 ? $start . ' - ' . $end : $start;
+            }
+            $last_end = ($curr_total > 0) ? $end : $last_end;
+
             if ($index === 0) {
                 $item['change'] = 'first';
             } else {
@@ -527,5 +512,221 @@ class Tab5Service
             }
         }
         return $date_chart2;
+    }
+
+    /**
+     * @param int $positionId
+     */
+    public function data_part1_chart3($positionId)
+    {
+        $getAccountTimeline = $this->getAccountTimeline();
+        foreach ($getAccountTimeline as &$get) {
+            unset($get['data']);
+            $get['round']  =   null;
+            $get['total']  =   null;
+            $get['calls']  =   false;
+            $get['lists']  =   false;
+        }
+        $getAccountTimeline = collect($getAccountTimeline)->keyBy('date')->toArray();
+        $updated_list_dla = db::table('updated_list_dla')
+            ->where('id_position', $positionId)
+            ->get();
+        $chart3 = [];
+        $provData = db::table('provinces_dla')
+            ->get();
+
+
+        foreach ($provData as $prov) {
+            $main  = $prov->id_main_province;
+            $subs  = $prov->id_sub_province;
+            if (!isset($chart3[$main])) {
+                $chart3[$main] = [
+                    'main'              =>  $main,
+                    'name'              =>  $prov->main_name_province,
+                    'total_listed'      =>  0,
+                    'total_called'      =>  0,
+                    'total_remaining'   =>  0,
+                    'total_rounds'      =>  0,
+                    'processing'        =>  0,
+                    'sub_province'      =>  []
+                ];
+            }
+            if (!isset($chart3[$main]['sub_province'][$subs])) {
+                $chart3[$main]['sub_province'][$subs] = [
+                    'sum'               =>  $subs,
+                    'name'              =>  $prov->sub_name_province,
+                    'total_listed'     =>  0,
+                    'total_called'      =>  0,
+                    'total_remaining'   =>  0,
+                    'total_rounds'      =>  0,
+                    'processing'        =>  0,
+                    'status_open'       =>  false,
+                    'data_monthly'      =>  $getAccountTimeline,
+                    'data_rounds'       =>  []
+                ];
+            }
+        }
+
+        foreach ($updated_list_dla as $update) {
+            $main  = $update->id_main_province;
+            $subs  = $update->id_sub_province;
+            $total = $update->total;
+
+            $chart3[$main]['total_listed'] += $total;
+            $chart3[$main]['total_remaining'] += $total;
+
+            $chart3[$main]['sub_province'][$subs]['status_open'] = true;
+            $chart3[$main]['sub_province'][$subs]['total_listed'] += $total;
+            $chart3[$main]['sub_province'][$subs]['total_remaining'] += $total;
+        }
+
+        $calling_dla = db::table('calling_dla')
+            ->where('id_position', $positionId)
+            ->get();
+
+        foreach ($calling_dla as $call) {
+            $main  = $call->id_main_province;
+            $subs  = $call->id_sub_province;
+            $total = $call->total;
+            $called = $call->call_status === 1 ? true : false;
+            $listed = $call->list_status === 1 ? true : false;
+
+            //--- monthly
+            if ($called === true && $listed === true) {
+                $chart3[$main]['total_rounds'] += 1;
+                $chart3[$main]['total_called'] += $total;
+                $chart3[$main]['total_remaining'] -= $total;
+
+                $chart3[$main]['sub_province'][$subs]['total_rounds'] += 1;
+                $chart3[$main]['sub_province'][$subs]['total_called'] += $total;
+                $chart3[$main]['sub_province'][$subs]['total_remaining'] -= $total;
+            }
+
+            $day    = $call->called_day;
+            $month  = $call->called_month;
+            $years  = $call->called_year;
+            $date = $month . '-' . $years;
+            if (isset($chart3[$main]['sub_province'][$subs]['data_monthly'][$date])) {
+                $chart3[$main]['sub_province'][$subs]['data_monthly'][$date]['round'] = $call->round;
+                $chart3[$main]['sub_province'][$subs]['data_monthly'][$date]['total'] = $call->total;
+                $chart3[$main]['sub_province'][$subs]['data_monthly'][$date]['calls'] = $called;
+                $chart3[$main]['sub_province'][$subs]['data_monthly'][$date]['lists'] = $listed;
+            }
+
+            //--- roundly
+            $round  = $call->round;
+            $current_date = Carbon::today();
+            $date_numb    = Carbon::createFromDate($years, $month, $day);
+            if (!isset($chart3[$main]['sub_province'][$subs]['data_rounds'][$round])) {
+                $chart3[$main]['sub_province'][$subs]['data_rounds'][$round] = [
+                    'round'             =>  $round,
+                    'total'             =>  $total,
+                    'called'            =>  $called,
+                    'listed'            =>  $listed,
+                    'date'              =>  $day . ' ' . $this->monthYearThai(true, $month, $years),
+                    'status'            =>  $date_numb->greaterThan($current_date) ? 'waiting' : 'completed',
+                    'start'             =>  0,
+                    'end'               =>  0,
+                    'start_end'         =>  0,
+                    'change'            =>  0,
+                    'proportion'        =>  0,
+                    'is_cross_region'   =>  $call->is_cross_region === 0 ? false : true,
+                    'crossed_region'    =>  $call->crossed_region,
+                    'crossed_zone'      =>  $call->crossed_zone,
+                ];
+            }
+        }
+
+        foreach ($chart3 as &$ch3) {
+            $ch3['processing'] = $ch3['total_listed'] > 0 ? ($ch3['total_called'] / $ch3['total_listed']) * 100 : 0;
+            foreach ($ch3['sub_province'] as &$sub) {
+                $total_listed = $sub['total_listed'];
+                $total_called = $sub['total_called'];
+                $sub['processing'] = $total_listed > 0 ? ($total_called / $total_listed) * 100 : 0;
+                $last_end = 0;
+                $prev_total = null;
+                foreach ($sub['data_rounds'] as &$rds) {
+                    $total  = (int)($rds['total'] ?? 0);
+                    $start  = $last_end + 1;
+                    $end    = $start + $total - 1;
+                    $rds['start'] = $start;
+                    $rds['end']   = $end;
+
+                    //--- proportion
+                    $called = $rds['called'];
+                    $listed = $rds['listed'];
+                    if ($called === true && $listed === true) {
+                        $rds['proportion'] = $total_listed > 0 ? ($total / $total_listed) * 100 : 0;
+                    }
+
+                    //--- start end
+                    if ($total > 0) {
+                        $rds['start_end'] = $total > 1 ? $start . ' - ' . $end : $start;
+                    }
+                    $last_end = ($total > 0) ? $end : $last_end;
+
+                    //--- change
+                    if ($total > 0) {
+                        if ($prev_total !== null && $prev_total > 0) {
+                            $rds['change'] = (($total - $prev_total) / $prev_total) * 100;
+                        } else {
+                            $rds['change'] = 0;
+                        }
+                        $prev_total = $total;
+                    } else {
+                        $rds['change'] = null;
+                    }
+                }
+            }
+        }
+        return $chart3;
+    }
+
+    /**
+     * @param int $total_called
+     * @param int $total_remain
+     * @param int $total_round
+     * @param int $sequence
+     */
+    public function data_part2_chart1($total_called, $total_remain, $total_round, $sequence)
+    {
+        $data = [];
+        $rank = $sequence;
+        if ($rank <= $total_called) {
+            $data['rank_risk'] = 0;
+        } else {
+            $safe_total_remain = max(0, $total_remain);
+            if ($safe_total_remain <= 0) {
+                $data['rank_risk'] = 100;
+            } else {
+                $data['rank_risk'] = min(100, (($rank - $total_called) / $safe_total_remain) * 100);
+            }
+        }
+
+        $getAccountDaysStatus   =   $this->getAccountDaysStatus();
+        $days_passed            =   $getAccountDaysStatus['days_passed'];
+        $days_remaining         =   $getAccountDaysStatus['days_remaining'];
+        $daily_rates            =   $total_called / $days_passed;
+        $expected_rotal         =   $total_called + ($daily_rates * $days_remaining);
+        $probabilitys           =   min(100, ($expected_rotal / $rank) * 100);
+        $data['probabilitys']   =   $probabilitys;
+
+        $today      =   $getAccountDaysStatus['current_date'];
+        $final      =   $getAccountDaysStatus['final_date'];
+        $interval   =   $today->diff($final);
+        $m_remains  =   ($interval->y * 12) + $interval->m;
+        $r_remains  =   ceil($m_remains / 1);
+        $avg_per    =   $total_called / $total_round;
+        $distanc    =   $rank - $total_called;
+        $total_capacity = $avg_per * $r_remains;
+        if ($distanc <= 0) {
+            $next_rate = 100;
+        } elseif ($distanc <= $avg_per) {
+            $next_rate = 100;
+        } else {
+            $next_rate = max(0, 100 - (($distanc / $total_capacity) * 100));
+        }
+        $data['next_round'] = $next_rate;
+        return $data;
     }
 }

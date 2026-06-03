@@ -11,7 +11,7 @@ trait DateCalculatable
 
     public function getAccountTimeline($isFullTimeline = false)
     {
-        $start = Carbon::create(2026, 4, 15);
+        $start = Carbon::create(2026, 4, 1);
         $timeline = [];
         if ($isFullTimeline) {
             $end = $start->copy()->addYears(2);
@@ -55,7 +55,7 @@ trait DateCalculatable
 
     public function getAccountDaysStatus()
     {
-        $startDate = Carbon::create(2026, 4, 15);
+        $startDate = Carbon::create(2026, 2, 20);
         $expiryDate = $startDate->copy()->addYears(2);
         $today = Carbon::now();
         $totalDays = $startDate->diffInDays($expiryDate);
