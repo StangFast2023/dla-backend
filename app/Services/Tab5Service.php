@@ -248,7 +248,6 @@ class Tab5Service
      */
     public function predictionUserDetail($regionId, $areaId, $positionId, $sequence)
     {
-
         // total_listed , total_remain
         $updateLisedTotal = db::table('updated_list_dla')
             ->where('id_main_province', $regionId)
@@ -271,7 +270,9 @@ class Tab5Service
             'next_round'        =>  0,
             'status_out_list'   =>  false,
             'chart_1_round'     =>  [],
-            'chart_2_region'    =>  [],
+            'chart_2_round'     =>  [],
+            'chart_3_region'    =>  [],
+            'chart_4_region'    =>  [],
         ];
 
         // total_round , total_called , total_remain
@@ -352,12 +353,37 @@ class Tab5Service
 
         //  chart_1_round_monthly
         //  chart_2_round_table 
-        $date_chart1_2 = [];
+        $date_chart1 = $this->data_chart1($regionId, $areaId, $positionId);
+        $data['chart_1_round'] = $date_chart1;
+
+        $date_chart2 = $this->date_chart2($regionId, $areaId, $positionId);
+        $data['chart_2_round'] = $date_chart2;
+
+        //  chart_3_region_monthly
+        //  chart_4_region_table
+
+        return $data;
+    }
+
+
+    /**
+     * @param int $regionId
+     * @param int $areaId
+     * @param int $positionId
+     */
+    public function data_chart1($regionId, $areaId, $positionId)
+    {
+        $date_chart1 = [];
+        $total_listed = db::table('updated_list_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->sum('total');
         $getAccountTimeline = $this->getAccountTimeline();
         foreach ($getAccountTimeline as $timeline) {
             $date = $timeline['date'];
-            if (!isset($date_chart1_2[$date])) {
-                $date_chart1_2[$date] = [
+            if (!isset($date_chart1[$date])) {
+                $date_chart1[$date] = [
                     'date_thai_s'       =>  $timeline['name_s'],
                     'date_that_f'       =>  $timeline['name_l'],
                     'round'             =>  0,
@@ -369,8 +395,6 @@ class Tab5Service
                     'call'              =>  false,
                     'list'              =>  false,
                     'work'              =>  false,
-                    'change'            =>  0,
-                    'proportion'        =>  0,
                     'is_cross_region'   =>  false,
                     'crossed_region'    =>  null,
                     'crossed_zone'      =>  null,
@@ -394,10 +418,10 @@ class Tab5Service
             $date = $m . '-' . $y;
             $date_numb   = Carbon::createFromDate($y, $m, $d);
 
-            if (isset($date_chart1_2[$date])) {
+            if (isset($date_chart1[$date])) {
 
                 $work = $date_numb->greaterThan($current_date) ? 'waiting' : 'completed';
-                $date_chart1_2[$date]['work'] = $work;
+                $date_chart1[$date]['work'] = $work;
 
                 $total  = (int)$called->total;
                 $calls  = $called->call_status === 1 ? true : false;
@@ -406,40 +430,102 @@ class Tab5Service
                 $region = $called->crossed_region;
                 $zone   = $called->crossed_zone;
 
-                $date_chart1_2[$date]['round'] += ($key + 1);
-                $date_chart1_2[$date]['total'] = $total;
-                $date_chart1_2[$date]['total_per_month'] += $total;
-                $date_chart1_2[$date]['call']  = $calls;
-                $date_chart1_2[$date]['list']  = $lists;
-                $date_chart1_2[$date]['is_cross_region'] = $cross;
-                $date_chart1_2[$date]['crossed_region'] = $cross ? $region : null;
-                $date_chart1_2[$date]['crossed_zone'] = $cross ? $zone : null;
+                $date_chart1[$date]['round'] += ($key + 1);
+                $date_chart1[$date]['total'] = $total;
+                $date_chart1[$date]['total_per_month'] += $total;
+                $date_chart1[$date]['call']  = $calls;
+                $date_chart1[$date]['list']  = $lists;
+                $date_chart1[$date]['is_cross_region'] = $cross;
+                $date_chart1[$date]['crossed_region'] = $cross ? $region : null;
+                $date_chart1[$date]['crossed_zone'] = $cross ? $zone : null;
 
                 $start = $last_end + 1;
                 $end   = $start + $total - 1;
-                $date_chart1_2[$date]['start']      = $start;
-                $date_chart1_2[$date]['end']        = $end;
-                $date_chart1_2[$date]['start_end']  = $total > 1 ? $start . ' - ' . $end : $start;
+                $date_chart1[$date]['start']      = $start;
+                $date_chart1[$date]['end']        = $end;
+                $date_chart1[$date]['start_end']  = $total > 1 ? $start . ' - ' . $end : $start;
 
-                $date_chart1_2[$date]['proportion'] = $total > 0 ? (($total / $total_listed) * 100) : '-';
+                $date_chart1[$date]['proportion'] = $total > 0 ? (($total / $total_listed) * 100) : '-';
             }
         }
-        $chart_data = array_values($date_chart1_2);
-        $previous_total = null;
-        foreach ($chart_data as $index => &$item) {
-            if ($index > 0 && $previous_total !== null && $previous_total > 0) {
-                $current_total = $item['total'];
-                $growth = (($current_total - $previous_total) / $previous_total) * 100;
-                $item['change'] = round($growth, 2);
-            } else {
+        $chart_data = array_values($date_chart1);
+        return $chart_data;
+    }
+
+
+    /**
+     * @param int $regionId
+     * @param int $areaId
+     * @param int $positionId
+     */
+    public function date_chart2($regionId, $areaId, $positionId)
+    {
+        //  chart_2_round_table
+        $date_chart2 = [];
+
+        $total_listed = db::table('updated_list_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->sum('total');
+
+        $calledDataChart1 = db::table('calling_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->get();
+
+        $current_date = Carbon::today();
+        foreach ($calledDataChart1 as $call) {
+            $round = $call->round;
+            if (!isset($date_chart2[$round])) {
+                $d = $call->called_day;
+                $m = $call->called_month;
+                $y = $call->called_year;
+                $date_numb   = Carbon::createFromDate($y, $m, $d);
+                $date_chart2[$round] = [
+                    'round'             =>  $round,
+                    'total'             =>  $call->total,
+                    'call_status'       =>  $call->call_status,
+                    'list_status'       =>  $call->list_status,
+                    'date'              =>  $d . ' ' . $this->monthYearThai(true, $m, $y),
+                    'start'             =>  0,
+                    'end'               =>  0,
+                    'start_end'         =>  0,
+                    'change'            =>  0,
+                    'proportion'        =>  $call->call_status === 1 ? (($call->total / $total_listed) * 100) : 0,
+                    'status'            =>  $date_numb->greaterThan($current_date) ? 'waiting' : 'completed',
+                    'is_cross_region'   =>  $call->is_cross_region,
+                    'crossed_region'    =>  $call->crossed_region,
+                    'crossed_zone'      =>  $call->crossed_zone,
+                ];
+            }
+        }
+        $last_end = 0;
+        $prev_total = null;
+        foreach ($date_chart2 as $index => &$item) {
+            $curr_total  = (int)$item['total'];
+            $call_status = (bool)$item['call_status'];
+            $start = $last_end + 1;
+            $end = $start + $curr_total - 1;
+            $item['start'] = $start;
+            $item['end'] = $end;
+            if ($index === 0) {
                 $item['change'] = 'first';
+            } else {
+                if ($call_status && $curr_total > 0) {
+                    if ($prev_total !== null && $prev_total > 0) {
+                        $item['change'] = round((($curr_total - $prev_total) / $prev_total) * 100, 2);
+                    } else {
+                        $item['change'] = 'first';
+                    }
+                    $prev_total = $curr_total;
+                    $item['start_end'] = $curr_total > 1 ? $start . ' - ' . $end : $start;
+                } else {
+                    $item['change'] = 0;
+                }
             }
-            $previous_total = $item['total'];
         }
-        $data['chart_1_round'] = $chart_data;
-
-        //  chart_3_region_monthly
-        //  chart_4_region_table
-        return $data;
+        return $date_chart2;
     }
 }

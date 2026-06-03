@@ -198,7 +198,7 @@ class Tab2Service
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->selectRaw('
                 updated_list_dla.id_position as id_pos ,
-                concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
+                concat( case when prefixes_dla.name is not null then prefixes_dla.name else " " end , positions_dla.name , case when type_positions_dla.type_position is not null then type_positions_dla.type_position else " " end ) as pos_name ,
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
                 sum( total )    as  total
@@ -221,7 +221,7 @@ class Tab2Service
                 updated_list_dla.id_main_province as prov_main_id    ,
                 updated_list_dla.id_sub_province  as prov_sub_id    ,
                 updated_list_dla.id_position as id_pos ,
-                concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
+                concat( case when prefixes_dla.name is not null then prefixes_dla.name else " " end , positions_dla.name , case when type_positions_dla.type_position is not null then type_positions_dla.type_position else " " end ) as pos_name ,
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
                 sum( total )    as  total
@@ -289,7 +289,7 @@ class Tab2Service
             ->where('call_status', 1)
             ->selectRaw('
                 calling_dla.id_position as id_pos ,
-                concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
+                concat( case when prefixes_dla.name is not null then prefixes_dla.name else " " end , positions_dla.name , case when type_positions_dla.type_position is not null then type_positions_dla.type_position else " " end ) as pos_name ,
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
                 sum( total ) as  total
@@ -321,7 +321,7 @@ class Tab2Service
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->selectRaw('
                 updated_list_dla.id_position as id_pos ,
-                concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
+                concat( case when prefixes_dla.name is not null then prefixes_dla.name else " " end , positions_dla.name , case when type_positions_dla.type_position is not null then type_positions_dla.type_position else " " end ) as pos_name ,
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
                 sum( total )    as  total
