@@ -341,7 +341,13 @@ class Tab5Service
         $data['next_round']     = $data_chart5['next_round'];
 
         // predictions / probabilitys of exhaustion / projection / total of next round
-        $data_chart3 = $this->data_part2_chart2($regionId, $areaId, $positionId, $sequence, $frequency);
+        $data_chart6 = $this->data_part2_chart2($regionId, $areaId, $positionId, $sequence, $frequency);
+        $data['probability_percent']    =   $data_chart6['probability_percent'];
+        $data['start_rank_2y']          =   $data_chart6['start_rank_2y'];
+        $data['end_rank_2y']            =   $data_chart6['end_rank_2y'];
+        $data['next_round_count']       =   $data_chart6['next_round_count'];
+        $data['next_round_start']       =   $data_chart6['next_round_start'];
+        $data['next_round_end']         =   $data_chart6['next_round_end'];
 
         return $data;
     }
@@ -720,17 +726,14 @@ class Tab5Service
         $final      =   $getAccountDaysStatus['final_date'];
         $interval   =   $today->diff($final);
         $m_remains  =   ($interval->y * 12) + $interval->m;
-
         $r_remains  =   ceil($m_remains / $frequency);
         $avg_per    =   $total_called / $total_round;
-        $distanc    =   $rank - $total_called;
-        $total_capacity = $avg_per * $r_remains;
-        if ($distanc <= 0) {
-            $next_rate = 100;
-        } elseif ($distanc <= $avg_per) {
+        $round_size = $avg_per * $frequency;
+        $end_of_next_round = $total_called + $round_size;
+        if ($end_of_next_round >= $rank) {
             $next_rate = 100;
         } else {
-            $next_rate = max(0, 100 - (($distanc / $total_capacity) * 100));
+            $next_rate = ($end_of_next_round / $rank) * 100;
         }
         $data['next_round'] = $next_rate;
         return $data;
@@ -746,6 +749,116 @@ class Tab5Service
     public function data_part2_chart2($regionId, $areaId, $positionId, $sequence, $frequency)
     {
         $data = [];
+        //---- probability of exhaustion
+        $total_rank = db::table('updated_list_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->first()
+            ->total;
+        $last_call_rank = db::table('calling_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->where('call_status', 1)
+            ->get()
+            ->sum('total');
+        $avg_call_per_month = db::table('calling_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->selectRaw('avg(calling_dla.total) as avg_call')
+            ->first()
+            ->avg_call;
+        $current_round = db::table('calling_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->max('round');
+        $DaysStatus     =   $this->getAccountDaysStatus();
+        $today          =   $DaysStatus['current_date'];
+        $final          =   $DaysStatus['final_date'];
+        $interval       =   $today->diff($final);
+        $month_remains  =   ($interval->y * 12) + $interval->m;
+
+        $remaining_rank  =  $total_rank - $last_call_rank;
+        $potential_calls =  $avg_call_per_month * $month_remains;
+        $probability_percent = $remaining_rank > 0 ? min(round(($potential_calls / $remaining_rank) * 100), 100) : 100;
+        $data['probability_percent'] = $probability_percent;
+
+        $start_rank_2y = $last_call_rank + 1;
+        $end_rank_2y   = min($last_call_rank + ($avg_call_per_month * 24), $total_rank);
+        $data['start_rank_2y']  = $start_rank_2y;
+        $data['end_rank_2y']    = $end_rank_2y;
+
+        $next_round_count = floor($avg_call_per_month * $frequency);
+        $next_round_start = $last_call_rank + 1;
+        $next_round_end   = min($last_call_rank + $next_round_count, $total_rank);
+        $data['next_round_count']   = $next_round_count;
+        $data['next_round_start']   = $next_round_start;
+        $data['next_round_end']     = $next_round_end;
+
+        $rounds_chart = [];
+        $rank_tracker = $last_call_rank;
+        $round_size   = $avg_call_per_month * $frequency;
+        $total_rounds = ceil($month_remains / $frequency);
+
+        for ($i = $current_round + 1; $i <= ($current_round + $total_rounds); $i++) {
+            $start_of_round = $rank_tracker + 1;
+            $end_of_round = min($rank_tracker + $round_size, $total_rank);
+            $percent = ($end_of_round >= $sequence) ? 100 : round(($end_of_round / $sequence) * 100, 2);
+
+            $rounds_chart[] = [
+                'round'   => "รอบที่ $i",
+                'start'   => $start_of_round,
+                'end'     => $end_of_round,
+                'percent' => $percent
+            ];
+            $rank_tracker = $end_of_round;
+            if ($rank_tracker >= $sequence || $rank_tracker >= $total_rank) break;
+        }
+        $data['rounds_chart']     = $rounds_chart;
+
+        $last_call_rank = db::table('calling_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->where('call_status', 1)
+            ->get()
+            ->sum('total');
+        $last_call_date = db::table('calling_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->where('round', $current_round)
+            ->first();
+        $rank_tracker = $last_call_rank;
+        $target_date  = $final;
+        $next_date    = Carbon::create($last_call_date->called_year, $last_call_date->called_month, $last_call_date->called_day);
+        $total_months = $next_date->diffInMonths($target_date);
+
+        $months_chart = [];
+        for ($m = 1; $m <= $total_months; $m++) {
+
+            $date_label = $today->copy()->addMonths($m)->format('m Y');
+            $part_date  = explode(' ', $date_label);
+            $date_thai_l  = $this->monthYearThai(true, (int)$part_date[0], (int)$part_date[1]);
+            $date_thai_s  = $this->monthYearThai(false, (int)$part_date[0], (int)$part_date[1]);
+
+
+            $rank_tracker += $avg_call_per_month;
+            $end_of_month = min(floor($rank_tracker), $total_rank);
+
+            $percent = ($end_of_month >= $sequence) ? 100 : round(($end_of_month / $sequence) * 100, 2);
+            $months_chart[] = [
+                'date_thai_l'   => $date_thai_l,
+                'date_thai_s'   => $date_thai_s,
+                'rank'          => $end_of_month,
+                'percent'       => $percent
+            ];
+            if ($end_of_month >= $sequence) break;
+        }
+        $data['months_chart']     = $months_chart;
         return $data;
     }
 }
