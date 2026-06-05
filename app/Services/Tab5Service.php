@@ -335,7 +335,7 @@ class Tab5Service
         $data['chart_3_region'] = $data_chart3;
 
         //  predictions / rank_risk / probabilitys / next_round
-        $data_chart5 = $this->data_part2_chart1($total_called, $total_remain, $total_round, $sequence, $frequency);
+        $data_chart5 = $this->data_part2_chart1($total_called, $total_round, $avgCalled->avg, $sequence, $frequency);
         $data['rank_risk']      = $data_chart5['rank_risk'];
         $data['probabilitys']   = $data_chart5['probabilitys'];
         $data['next_round']     = $data_chart5['next_round'];
@@ -694,26 +694,15 @@ class Tab5Service
 
     /**
      * @param int $total_called
-     * @param int $total_remain
      * @param int $total_round
+     * @param int $average
      * @param int $sequence
      * @param int $frequency
      */
-    public function data_part2_chart1($total_called, $total_remain, $total_round, $sequence, $frequency)
+    public function data_part2_chart1($total_called, $total_round, $average, $sequence, $frequency)
     {
         $data = [];
         $rank = $sequence;
-        if ($rank <= $total_called) {
-            $data['rank_risk'] = 0;
-        } else {
-            $safe_total_remain = max(0, $total_remain);
-            if ($safe_total_remain <= 0) {
-                $data['rank_risk'] = 100;
-            } else {
-                $data['rank_risk'] = min(100, (($rank - $total_called) / $safe_total_remain) * 100);
-            }
-        }
-
         $getAccountDaysStatus   =   $this->getAccountDaysStatus();
         $days_passed            =   $getAccountDaysStatus['days_passed'];
         $days_remaining         =   $getAccountDaysStatus['days_remaining'];
@@ -726,9 +715,8 @@ class Tab5Service
         $final      =   $getAccountDaysStatus['final_date'];
         $interval   =   $today->diff($final);
         $m_remains  =   ($interval->y * 12) + $interval->m;
-        $r_remains  =   ceil($m_remains / $frequency);
         $avg_per    =   $total_called / $total_round;
-        $round_size = $avg_per * $frequency;
+        $round_size =   $avg_per * $frequency;
         $end_of_next_round = $total_called + $round_size;
         if ($end_of_next_round >= $rank) {
             $next_rate = 100;
@@ -736,6 +724,21 @@ class Tab5Service
             $next_rate = ($end_of_next_round / $rank) * 100;
         }
         $data['next_round'] = $next_rate;
+
+        if ($rank <= $total_called) {
+            $data['rank_risk'] = 0;
+        } else {
+            $distanc = $rank - $total_called;
+
+            $avg_per_month = ($average > 0) ? $average : 0.1;
+            $months_needed = $distanc / $avg_per_month;
+            if ($months_needed <= $m_remains) {
+                $data['rank_risk'] = round(($months_needed / ($m_remains > 0 ? $m_remains : 1)) * 50, 2);
+            } else {
+                $data['rank_risk'] = min(100, 50 + (($months_needed - $m_remains) * 2));
+            }
+        }
+
         return $data;
     }
 
@@ -786,10 +789,9 @@ class Tab5Service
         $probability_percent = $remaining_rank > 0 ? min(round(($potential_calls / $remaining_rank) * 100), 100) : 100;
         $data['probability_percent'] = $probability_percent;
 
-        $start_rank_2y = $last_call_rank + 1;
         $end_rank_2y   = min($last_call_rank + ($avg_call_per_month * 24), $total_rank);
-        $data['start_rank_2y']  = $start_rank_2y;
-        $data['end_rank_2y']    = $end_rank_2y;
+        $data['start_rank_2y']  = floor($end_rank_2y * 0.9);
+        $data['end_rank_2y']    = min($total_rank, ceil($end_rank_2y * 1.2));
 
         $next_round_count = floor($avg_call_per_month * $frequency);
         $next_round_start = $last_call_rank + 1;
