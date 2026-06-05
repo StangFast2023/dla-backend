@@ -245,8 +245,9 @@ class Tab5Service
      * @param int $areaId
      * @param int $positionId
      * @param int $sequence
+     * @param int $frequency
      */
-    public function predictionUserDetail($regionId, $areaId, $positionId, $sequence)
+    public function predictionUserDetail($regionId, $areaId, $positionId, $sequence, $frequency)
     {
         // total_listed , total_remain
         $updateLisedTotal = db::table('updated_list_dla')
@@ -333,11 +334,14 @@ class Tab5Service
         $data_chart3 = $this->data_part1_chart3($positionId);
         $data['chart_3_region'] = $data_chart3;
 
-        //  predictions
-        $data_chart5 = $this->data_part2_chart1($total_called, $total_remain, $total_round, $sequence);
+        //  predictions / rank_risk / probabilitys / next_round
+        $data_chart5 = $this->data_part2_chart1($total_called, $total_remain, $total_round, $sequence, $frequency);
         $data['rank_risk']      = $data_chart5['rank_risk'];
         $data['probabilitys']   = $data_chart5['probabilitys'];
         $data['next_round']     = $data_chart5['next_round'];
+
+        // predictions / probabilitys of exhaustion / projection / total of next round
+        $data_chart3 = $this->data_part2_chart2($regionId, $areaId, $positionId, $sequence, $frequency);
 
         return $data;
     }
@@ -687,8 +691,9 @@ class Tab5Service
      * @param int $total_remain
      * @param int $total_round
      * @param int $sequence
+     * @param int $frequency
      */
-    public function data_part2_chart1($total_called, $total_remain, $total_round, $sequence)
+    public function data_part2_chart1($total_called, $total_remain, $total_round, $sequence, $frequency)
     {
         $data = [];
         $rank = $sequence;
@@ -715,7 +720,8 @@ class Tab5Service
         $final      =   $getAccountDaysStatus['final_date'];
         $interval   =   $today->diff($final);
         $m_remains  =   ($interval->y * 12) + $interval->m;
-        $r_remains  =   ceil($m_remains / 1);
+
+        $r_remains  =   ceil($m_remains / $frequency);
         $avg_per    =   $total_called / $total_round;
         $distanc    =   $rank - $total_called;
         $total_capacity = $avg_per * $r_remains;
@@ -727,6 +733,19 @@ class Tab5Service
             $next_rate = max(0, 100 - (($distanc / $total_capacity) * 100));
         }
         $data['next_round'] = $next_rate;
+        return $data;
+    }
+
+    /**
+     * @param int $regionId
+     * @param int $areaId
+     * @param int $positionId
+     * @param int $sequence
+     * @param int $frequency
+     */
+    public function data_part2_chart2($regionId, $areaId, $positionId, $sequence, $frequency)
+    {
+        $data = [];
         return $data;
     }
 }

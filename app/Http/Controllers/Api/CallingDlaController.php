@@ -57,10 +57,11 @@ class CallingDlaController extends Controller
      * @param int $areaId
      * @param int $positionId
      * @param int $sequence
+     * @param int $frequency
      */
-    public function predictionUserDetail($regionId, $areaId, $positionId, $sequence, Tab5Service $tab5Service)
+    public function predictionUserDetail($regionId, $areaId, $positionId, $sequence, $frequency, Tab5Service $tab5Service)
     {
-        $data = $tab5Service->predictionUserDetail($regionId, $areaId, $positionId, $sequence);
+        $data = $tab5Service->predictionUserDetail($regionId, $areaId, $positionId, $sequence, $frequency);
         return response()->json($data);
     }
 }
