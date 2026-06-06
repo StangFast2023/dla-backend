@@ -348,6 +348,8 @@ class Tab5Service
         $data['next_round_count']       =   $data_chart6['next_round_count'];
         $data['next_round_start']       =   $data_chart6['next_round_start'];
         $data['next_round_end']         =   $data_chart6['next_round_end'];
+        $data['heatmap_matrix']         =   $data_chart6['heatmap_matrix'];
+        $data['rounds_header']          =   $data_chart6['rounds_header'];
 
         return $data;
     }
@@ -545,7 +547,6 @@ class Tab5Service
         $provData = db::table('provinces_dla')
             ->get();
 
-
         foreach ($provData as $prov) {
             $main  = $prov->id_main_province;
             $subs  = $prov->id_sub_province;
@@ -556,7 +557,6 @@ class Tab5Service
                     'total_listed'      =>  0,
                     'total_called'      =>  0,
                     'total_remaining'   =>  0,
-                    'total_rounds'      =>  0,
                     'processing'        =>  0,
                     'sub_province'      =>  []
                 ];
@@ -565,7 +565,7 @@ class Tab5Service
                 $chart3[$main]['sub_province'][$subs] = [
                     'sum'               =>  $subs,
                     'name'              =>  $prov->sub_name_province,
-                    'total_listed'     =>  0,
+                    'total_listed'      =>  0,
                     'total_called'      =>  0,
                     'total_remaining'   =>  0,
                     'total_rounds'      =>  0,
@@ -593,7 +593,6 @@ class Tab5Service
         $calling_dla = db::table('calling_dla')
             ->where('id_position', $positionId)
             ->get();
-
         foreach ($calling_dla as $call) {
             $main  = $call->id_main_province;
             $subs  = $call->id_sub_province;
@@ -603,7 +602,6 @@ class Tab5Service
 
             //--- monthly
             if ($called === true && $listed === true) {
-                $chart3[$main]['total_rounds'] += 1;
                 $chart3[$main]['total_called'] += $total;
                 $chart3[$main]['total_remaining'] -= $total;
 
@@ -615,7 +613,7 @@ class Tab5Service
             $day    = $call->called_day;
             $month  = $call->called_month;
             $years  = $call->called_year;
-            $date = $month . '-' . $years;
+            $date   = $month . '-' . $years;
             if (isset($chart3[$main]['sub_province'][$subs]['data_monthly'][$date])) {
                 $chart3[$main]['sub_province'][$subs]['data_monthly'][$date]['round'] = $call->round;
                 $chart3[$main]['sub_province'][$subs]['data_monthly'][$date]['total'] = $call->total;
@@ -804,12 +802,13 @@ class Tab5Service
         $rank_tracker = $last_call_rank;
         $round_size   = $avg_call_per_month * $frequency;
         $total_rounds = ceil($month_remains / $frequency);
-
         for ($i = $current_round + 1; $i <= ($current_round + $total_rounds); $i++) {
+            if ($rank_tracker >= $sequence) {
+                break;
+            }
             $start_of_round = $rank_tracker + 1;
             $end_of_round = min($rank_tracker + $round_size, $total_rank);
             $percent = ($end_of_round >= $sequence) ? 100 : round(($end_of_round / $sequence) * 100, 2);
-
             $rounds_chart[] = [
                 'round'   => "รอบที่ $i",
                 'start'   => $start_of_round,
@@ -817,10 +816,8 @@ class Tab5Service
                 'percent' => $percent
             ];
             $rank_tracker = $end_of_round;
-            if ($rank_tracker >= $sequence || $rank_tracker >= $total_rank) break;
+            if ($rank_tracker >= $total_rank) break;
         }
-        $data['rounds_chart']     = $rounds_chart;
-
         $last_call_rank = db::table('calling_dla')
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
@@ -834,33 +831,49 @@ class Tab5Service
             ->where('id_position', $positionId)
             ->where('round', $current_round)
             ->first();
-        $rank_tracker = $last_call_rank;
+        $rank_tracker = max($last_call_rank, $sequence);
         $target_date  = $final;
         $next_date    = Carbon::create($last_call_date->called_year, $last_call_date->called_month, $last_call_date->called_day);
         $total_months = $next_date->diffInMonths($target_date);
 
         $months_chart = [];
+        $rank_tracker = $last_call_rank;
+        $monthly_increment = ($frequency > 0) ? ($avg_call_per_month / $frequency) : $avg_call_per_month;
         for ($m = 1; $m <= $total_months; $m++) {
-
+            $rank_tracker += $monthly_increment;
+            $end_of_month = min(floor($rank_tracker), $total_rank);
+            if ($end_of_month <= $last_call_rank) {
+                continue;
+            }
+            $percent = ($end_of_month >= $sequence) ? 100 : round(($end_of_month / $sequence) * 100, 2);
             $date_label = $today->copy()->addMonths($m)->format('m Y');
             $part_date  = explode(' ', $date_label);
-            $date_thai_l  = $this->monthYearThai(true, (int)$part_date[0], (int)$part_date[1]);
-            $date_thai_s  = $this->monthYearThai(false, (int)$part_date[0], (int)$part_date[1]);
-
-
-            $rank_tracker += $avg_call_per_month;
-            $end_of_month = min(floor($rank_tracker), $total_rank);
-
-            $percent = ($end_of_month >= $sequence) ? 100 : round(($end_of_month / $sequence) * 100, 2);
             $months_chart[] = [
-                'date_thai_l'   => $date_thai_l,
-                'date_thai_s'   => $date_thai_s,
-                'rank'          => $end_of_month,
-                'percent'       => $percent
+                'date_thai_l' => $this->monthYearThai(true, (int)$part_date[0], (int)$part_date[1]),
+                'date_thai_s' => $this->monthYearThai(false, (int)$part_date[0], (int)$part_date[1]),
+                'rank'        => $end_of_month,
+                'percent'     => $percent
             ];
-            if ($end_of_month >= $sequence) break;
+            if ($end_of_month >= $total_rank) break;
         }
-        $data['months_chart']     = $months_chart;
+        $rounds_header = array_column($rounds_chart, 'round');
+        $heatmap_matrix = [];
+        foreach ($months_chart as $m_index => $m_data) {
+            $row = [];
+            foreach ($rounds_chart as $r_index => $r_data) {
+                $combined_percent = ($m_data['percent'] * 0.4) + ($r_data['percent'] * 0.6);
+                $combined_percent = min(100, round($combined_percent, 2));
+                $row[$r_data['round']] = [
+                    'percent' => $combined_percent,
+                ];
+            }
+            $heatmap_matrix[] = [
+                'date'  => $m_data['date_thai_l'],
+                'round' => $row
+            ];
+        }
+        $data['heatmap_matrix'] = $heatmap_matrix;
+        $data['rounds_header']  = $rounds_header;
         return $data;
     }
 }
