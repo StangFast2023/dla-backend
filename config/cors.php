@@ -19,8 +19,11 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000'],
-
+    // 'allowed_origins' => ['http://localhost:3000'],
+    'allowed_origins' => [
+        'https://st-dla-dashboard-2568-7ry6eerpr-stangfast2023s-projects.vercel.app', // เพิ่ม URL ของคุณตรงนี้
+        'http://localhost:3000',
+    ],
     'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
