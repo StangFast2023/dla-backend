@@ -70,7 +70,7 @@ class Tab5Service
                 provinces_dla.main_name_province    as pro_main_name    ,
                 provinces_dla.id_sub_province       as pro_sub_id       ,
                 provinces_dla.sub_name_province     as pro_sub_name     ,
-                concat( provinces_dla.main_name_province , ' ', provinces_dla.sub_name_province )  as pro_full_name 
+                concat( provinces_dla.main_name_province || ' ' || provinces_dla.sub_name_province )  as pro_full_name 
             "))
             ->orderBy('pro_id', 'ASC')
             ->get();
@@ -108,7 +108,7 @@ class Tab5Service
                 updated_list_dla.id_sub_province                as  prov_sub_id     ,
                 positions_dla.id_type                           as  pos_type_id     ,
                 positions_dla.id_position                       as  pos_id          ,
-                sum( total )                                    as  total
+                sum( total::integer )                                    as  total
             '))
             ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_id')
             ->orderBy('pos_id', 'asc')

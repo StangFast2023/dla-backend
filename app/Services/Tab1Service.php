@@ -37,14 +37,14 @@ class Tab1Service
     {
         $CurRound   = CallingDla::max('round');
         $MaxRound   = 25;
-        $TotalList  = UpdateListDla::sum('total');
+        $TotalList  = UpdateListDla::sum(DB::raw('total::integer'));
         $TotalCall  = CallingDla::where('call_status', 1)->sum(DB::raw('total::integer'));
         $AVGCall = CallingDla::where('call_status', 1)
             ->select(DB::raw("
-                concat(called_month, '/', called_year) as monthly, 
-                sum(total) as total_per_month
+                concat(called_month || '/' || called_year) as monthly, 
+                sum(total::integer) as total_per_month
             "))
-            ->groupBy('monthly', 'called_month', 'called_year')
+            ->groupBy('monthly')
             ->get()
             ->avg('total_per_month');
         $array = [
@@ -145,8 +145,8 @@ class Tab1Service
         $CallProcess = round((($CurRound / $MaxRound) * 100), 2);
 
         $MostTotalCall = CallingDla::select(db::raw("
-            concat( called_month , '-' , called_year ) as month_year    ,
-            sum( total ) as total
+            concat( called_month || '-' || called_year ) as month_year    ,
+            sum( total::integer ) as total
         "))
             ->groupBy('month_year')
             ->orderBy('total', 'DESC')
@@ -154,7 +154,7 @@ class Tab1Service
 
         $MostRoundCall = CallingDla::select(db::raw('
             round as round    ,
-            sum( total ) as total
+            sum( total::integer ) as total
         '))
             ->groupBy('round')
             ->orderBy('total', 'DESC')
