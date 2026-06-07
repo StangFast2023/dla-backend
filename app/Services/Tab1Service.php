@@ -144,18 +144,20 @@ class Tab1Service
         $MaxRound    = 25;
         $CallProcess = round((($CurRound / $MaxRound) * 100), 2);
 
-        $MostTotalCall = CallingDla::select(db::raw("
-            concat( called_month || '-' || called_year ) as month_year    ,
-            sum( total::integer ) as total
-        "))
+        $MostTotalCall = CallingDla::where('call_status', 1)
+            ->select(db::raw("
+                concat( called_month || '-' || called_year ) as month_year    ,
+                sum( total::integer ) as total
+            "))
             ->groupBy('month_year')
             ->orderBy('total', 'DESC')
             ->first();
 
-        $MostRoundCall = CallingDla::select(db::raw('
-            round as round    ,
-            sum( total::integer ) as total
-        '))
+        $MostRoundCall = CallingDla::where('call_status', 1)
+            ->select(db::raw('
+                round as round    ,
+                sum( total::integer ) as total
+            '))
             ->groupBy('round')
             ->orderBy('total', 'DESC')
             ->first();
