@@ -367,7 +367,7 @@ class Tab5Service
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
             ->where('id_position', $positionId)
-            ->sum('total');
+            ->sum(DB::raw('total::integer'));
         $getAccountTimeline = $this->getAccountTimeline();
         foreach ($getAccountTimeline as $timeline) {
             $date = $timeline['date'];
@@ -458,7 +458,7 @@ class Tab5Service
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
             ->where('id_position', $positionId)
-            ->sum('total');
+            ->sum(DB::raw('total::integer'));
 
         $calledDataChart1 = db::table('calling_dla')
             ->where('id_main_province', $regionId)
@@ -763,7 +763,7 @@ class Tab5Service
             ->where('id_position', $positionId)
             ->where('call_status', 1)
             ->get()
-            ->sum('total');
+            ->sum(DB::raw('total::integer'));
         $avg_call_per_month = db::table('calling_dla')
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
@@ -824,7 +824,7 @@ class Tab5Service
             ->where('id_position', $positionId)
             ->where('call_status', 1)
             ->get()
-            ->sum('total');
+            ->sum(DB::raw('total::integer'));
         $last_call_date = db::table('calling_dla')
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)

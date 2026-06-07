@@ -38,7 +38,7 @@ class Tab1Service
         $CurRound   = CallingDla::max('round');
         $MaxRound   = 25;
         $TotalList  = UpdateListDla::sum('total');
-        $TotalCall  = CallingDla::where('call_status', 1)->sum('total');
+        $TotalCall  = CallingDla::where('call_status', 1)->sum(DB::raw('total::integer'));
         $AVGCall = CallingDla::where('call_status', 1)
             ->selectRaw('
                 concat(called_month, "/", called_year) as monthly, 
