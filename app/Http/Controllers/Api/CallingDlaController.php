@@ -24,6 +24,7 @@ class CallingDlaController extends Controller
 {
     public function getStats()
     {
+        ini_set('max_execution_time', 300);
         return response()->json([
             'status' => 'success',
             'tab1'  =>  app(Tab1Service::class)->getData(),
