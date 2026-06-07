@@ -28,10 +28,10 @@ class CallingDlaController extends Controller
         return response()->json([
             'status' => 'success',
             'tab1'  =>  app(Tab1Service::class)->getData(),
-            'tab2'  =>  app(Tab2Service::class)->getData(),
-            'tab3'  =>  app(Tab3Service::class)->getData(),
-            'tab4'  =>  app(Tab4Service::class)->getData(),
-            'tab5'  =>  app(Tab5Service::class)->getData(),
+            // 'tab2'  =>  app(Tab2Service::class)->getData(),
+            // 'tab3'  =>  app(Tab3Service::class)->getData(),
+            // 'tab4'  =>  app(Tab4Service::class)->getData(),
+            // 'tab5'  =>  app(Tab5Service::class)->getData(),
         ]);
     }
 
