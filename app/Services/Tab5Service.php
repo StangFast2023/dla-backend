@@ -108,7 +108,7 @@ class Tab5Service
                 updated_list_dla.id_sub_province                as  prov_sub_id     ,
                 positions_dla.id_type                           as  pos_type_id     ,
                 positions_dla.id_position                       as  pos_id          ,
-                sum( total::integer )                                    as  total
+                sum( total::integer )                           as  total
             '))
             ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_id')
             ->orderBy('pos_id', 'asc')
@@ -302,7 +302,7 @@ class Tab5Service
             ->where('id_position', $positionId)
             ->where('call_status', 1)
             ->where('list_status', 1)
-            ->select(db::raw('avg(total) as avg'))
+            ->select(db::raw('avg(total::integer) as avg'))
             ->first();
         $data['avg_call'] = $avgCalled->avg;
 
@@ -762,13 +762,14 @@ class Tab5Service
             ->where('id_sub_province', $areaId)
             ->where('id_position', $positionId)
             ->where('call_status', 1)
-            ->get()
-            ->sum(DB::raw('total::integer'));
+            ->select(db::raw('sum(total::integer) as total'))
+            ->first()
+            ->total;
         $avg_call_per_month = db::table('calling_dla')
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
             ->where('id_position', $positionId)
-            ->select(db::raw('avg(calling_dla.total) as avg_call'))
+            ->select(db::raw('avg(calling_dla.total::integer) as avg_call'))
             ->first()
             ->avg_call;
         $current_round = db::table('calling_dla')
@@ -823,8 +824,9 @@ class Tab5Service
             ->where('id_sub_province', $areaId)
             ->where('id_position', $positionId)
             ->where('call_status', 1)
-            ->get()
-            ->sum(DB::raw('total::integer'));
+            ->select(db::raw('sum(total::integer) as total'))
+            ->first()
+            ->total;
         $last_call_date = db::table('calling_dla')
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)

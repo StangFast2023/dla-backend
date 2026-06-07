@@ -187,7 +187,7 @@ class Tab4Service
                 updated_list_dla.id_sub_province                as  prov_sub_id     ,
                 positions_dla.id_type                           as  pos_type_id     ,
                 positions_dla.id_position                       as  pos_id          ,
-                sum( total::integer )                                    as  total
+                sum( total::integer )                           as  total
             '))
             ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_id')
             ->orderBy('pos_id', 'asc')
@@ -471,7 +471,7 @@ class Tab4Service
                 updated_list_dla.id_sub_province                as  prov_sub_id     ,
                 SUBSTRING(updated_list_dla.id_position, 1, 1)   as  pos_type_id     ,
                 positions_dla.id_position                       as  pos_id          ,
-                sum( total::integer )                                    as  total
+                sum( total::integer )                           as  total
             '))
             ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_id')
             ->orderBy('pos_id', 'asc')

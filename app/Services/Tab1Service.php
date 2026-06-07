@@ -146,17 +146,17 @@ class Tab1Service
 
         $MostTotalCall = CallingDla::where('call_status', 1)
             ->select(db::raw("
-                concat( called_month || '-' || called_year ) as month_year    ,
-                sum( total::integer ) as total
+            called_month , called_year ,
+                sum(total::integer ) as total
             "))
-            ->groupBy('month_year')
+            ->groupBy('called_month', 'called_year')
             ->orderBy('total', 'DESC')
             ->first();
 
         $MostRoundCall = CallingDla::where('call_status', 1)
             ->select(db::raw('
                 round as round    ,
-                sum( total::integer ) as total
+                sum(total::integer) as total
             '))
             ->groupBy('round')
             ->orderBy('total', 'DESC')
@@ -164,7 +164,7 @@ class Tab1Service
 
         $array = [
             'CurRound'          =>  ['name' => 'ความคืบหน้าในการเรียกใช้บัญชี', 'value' => $CallProcess],
-            'MostTotalCall_1'   =>  ['name' => 'เดือนที่มีการเรียกรายงานตัวมากที่สุด', 'value' => $this->monthYearThai(true, explode('-', $MostTotalCall->month_year)[0], explode('-', $MostTotalCall->month_year)[1])],
+            'MostTotalCall_1'   =>  ['name' => 'เดือนที่มีการเรียกรายงานตัวมากที่สุด', 'value' => $this->monthYearThai(true, $MostTotalCall->called_month, $MostTotalCall->called_year)],
             'MostTotalCall_2'   =>  ['name' => 'ทั้งหมด', 'value' => $MostTotalCall->total],
             'MostRoundCall_1'   =>  ['name' => 'รอบที่มีการเรียกรายงานตัวมากที่สุด', 'value' => $MostRoundCall->round],
             'MostRoundCall_2'   =>  ['name' => 'ทั้งหมด', 'value' => $MostRoundCall->total],

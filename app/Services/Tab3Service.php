@@ -37,7 +37,7 @@ class Tab3Service
                 updated_list_dla.id_sub_province  as prov_sub_id    ,
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
-                sum( total::integer )    as  total
+                sum( total::integer ) as  total
             '))
             ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
@@ -85,7 +85,7 @@ class Tab3Service
                 calling_dla.round                           as  round               ,
                 positions_dla.id_type                       as  pos_type_id         ,
                 type_positions_dla.name                     as  pos_type            , 
-                sum( total::integer )                                as  total
+                sum( total::integer )                       as  total
             '))
             ->groupBy('id_main_province', 'id_sub_province', 'round', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')

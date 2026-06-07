@@ -51,7 +51,7 @@ class Tab2Service
                 concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name ,
                 positions_dla.id_type   as  pos_type_id,
                 type_positions_dla.name as  pos_type , 
-                sum( total::integer )            as  total
+                sum(total::integer) as  total
             "))
             ->groupBy('prov_main_id', 'prov_sub_id', 'id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
@@ -118,7 +118,7 @@ class Tab2Service
                 type_positions_dla.name     as  pos_type , 
                 calling_dla.called_month,
                 calling_dla.called_year,
-                sum( calling_dla.total::integer )    as  total
+                sum(calling_dla.total::integer)    as  total
             "))
             ->groupBy('monthly', 'pos_type_id', 'pos_type', 'called_month', 'called_year')
             ->get();
@@ -167,7 +167,7 @@ class Tab2Service
                 calling_dla.round as roundly ,
                 positions_dla.id_type       as pos_type_id ,
                 type_positions_dla.name     as  pos_type , 
-                sum( calling_dla.total::integer )    as  total
+                sum(calling_dla.total::integer)    as  total
             '))
             ->groupBy('roundly', 'pos_type_id', 'pos_type')
             ->get();
@@ -201,7 +201,7 @@ class Tab2Service
                 concat( case when prefixes_dla.name is not null then prefixes_dla.name else ' ' end , positions_dla.name , case when type_positions_dla.type_position is not null then type_positions_dla.type_position else ' ' end ) as pos_name ,
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
-                sum( total::integer )    as  total
+                sum(total::integer)    as  total
             "))
             ->groupBy('id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
@@ -224,7 +224,7 @@ class Tab2Service
                 concat( case when prefixes_dla.name is not null then prefixes_dla.name else ' ' end , positions_dla.name , case when type_positions_dla.type_position is not null then type_positions_dla.type_position else ' ' end ) as pos_name ,
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
-                sum( total::integer )    as  total
+                sum(total::integer)    as  total
             "))
             ->groupBy('prov_main_id', 'prov_sub_id', 'id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
@@ -292,7 +292,7 @@ class Tab2Service
                 concat( case when prefixes_dla.name is not null then prefixes_dla.name else ' ' end , positions_dla.name , case when type_positions_dla.type_position is not null then type_positions_dla.type_position else ' ' end ) as pos_name ,
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
-                sum( total::integer ) as  total
+                sum(total::integer) as  total
             "))
             ->groupBy('id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
@@ -324,7 +324,7 @@ class Tab2Service
                 concat( case when prefixes_dla.name is not null then prefixes_dla.name else ' ' end , positions_dla.name , case when type_positions_dla.type_position is not null then type_positions_dla.type_position else ' '  end ) as pos_name ,
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
-                sum( total::integer )    as  total
+                sum(total::integer) as  total
             "))
             ->groupBy('id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
@@ -347,7 +347,7 @@ class Tab2Service
             ->where('call_status', 1)
             ->select(db::raw('
                 calling_dla.id_position as id_pos ,
-                sum( total::integer ) as  total
+                sum(total::integer) as  total
             '))
             ->groupBy('id_pos')
             ->orderBy('total', 'DESC')
@@ -376,7 +376,7 @@ class Tab2Service
                 updated_list_dla.id_main_province           as  prov_main_id    ,
                 positions_dla.id_type                       as  pos_type_id     ,
                 type_positions_dla.name                     as  pos_type        , 
-                sum( total::integer )                                as  total
+                sum( total::integer )                       as  total
             '))
             ->groupBy('prov_main_id', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
@@ -417,7 +417,7 @@ class Tab2Service
                 calling_dla.round                           as  round               ,
                 positions_dla.id_type                       as  pos_type_id         ,
                 type_positions_dla.name                     as  pos_type            , 
-                sum( total::integer )                                as  total
+                sum(total::integer)                         as  total
             '))
             ->groupBy('id_main_province', 'round', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
@@ -531,7 +531,7 @@ class Tab2Service
                 id_main_province        as pro_main_id  ,
                 id_sub_province         as pro_sub_id   ,
                 max( round )            as round ,
-                sum( total::integer )            as total                      
+                sum(total::integer)     as total                      
             '))
             ->groupBy('pro_main_id', 'pro_sub_id')
             ->get();
