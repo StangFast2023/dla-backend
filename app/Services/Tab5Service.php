@@ -64,14 +64,14 @@ class Tab5Service
         }
         $array = [];
         $provinces = db::table('provinces_dla')
-            ->select(db::raw('
+            ->select(db::raw("
                 provinces_dla.id                    as pro_id           ,
                 provinces_dla.id_main_province      as pro_main_id      ,
                 provinces_dla.main_name_province    as pro_main_name    ,
                 provinces_dla.id_sub_province       as pro_sub_id       ,
                 provinces_dla.sub_name_province     as pro_sub_name     ,
-                concat( provinces_dla.main_name_province , " " , provinces_dla.sub_name_province )  as pro_full_name 
-            '))
+                concat( provinces_dla.main_name_province , ' ', provinces_dla.sub_name_province )  as pro_full_name 
+            "))
             ->orderBy('pro_id', 'ASC')
             ->get();
         foreach ($provinces as $prov) {
