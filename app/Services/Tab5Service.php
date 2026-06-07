@@ -33,7 +33,7 @@ class Tab5Service
         $all_Positions = db::table('positions_dla')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
-            ->selectRaw('
+            ->select(db::raw('
                 positions_dla.id_position                   as  pos_id          ,
                 positions_dla.name                          as  pos_name        ,
 
@@ -42,7 +42,7 @@ class Tab5Service
 
                 positions_dla.id_type                       as  pos_type_id     ,
                 type_positions_dla.name                     as  pos_type_name
-            ')
+            '))
             ->get()
             ->toArray();
         foreach ($all_Positions as $pos) {
@@ -64,14 +64,14 @@ class Tab5Service
         }
         $array = [];
         $provinces = db::table('provinces_dla')
-            ->selectRaw('
+            ->select(db::raw('
                 provinces_dla.id                    as pro_id           ,
                 provinces_dla.id_main_province      as pro_main_id      ,
                 provinces_dla.main_name_province    as pro_main_name    ,
                 provinces_dla.id_sub_province       as pro_sub_id       ,
                 provinces_dla.sub_name_province     as pro_sub_name     ,
                 concat( provinces_dla.main_name_province , " " , provinces_dla.sub_name_province )  as pro_full_name 
-            ')
+            '))
             ->orderBy('pro_id', 'ASC')
             ->get();
         foreach ($provinces as $prov) {
@@ -103,13 +103,13 @@ class Tab5Service
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->selectRaw('
+            ->select(db::raw('
                 updated_list_dla.id_main_province               as  prov_main_id    ,
                 updated_list_dla.id_sub_province                as  prov_sub_id     ,
                 positions_dla.id_type                           as  pos_type_id     ,
                 positions_dla.id_position                       as  pos_id          ,
                 sum( total )                                    as  total
-            ')
+            '))
             ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_id')
             ->orderBy('pos_id', 'asc')
             ->get()
@@ -135,7 +135,7 @@ class Tab5Service
         $max_round = db::table('calling_dla')->max('round');
         $called_position = db::table('calling_dla')
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'calling_dla.id_position')
-            ->selectRaw('calling_dla.* , positions_dla.id_type   as  pos_type_id')
+            ->select(db::raw('calling_dla.* , positions_dla.id_type   as  pos_type_id'))
             ->get()
             ->toArray();
         foreach ($called_position as $pos) {
@@ -302,7 +302,7 @@ class Tab5Service
             ->where('id_position', $positionId)
             ->where('call_status', 1)
             ->where('list_status', 1)
-            ->selectRaw('avg(total) as avg')
+            ->select(db::raw('avg(total) as avg'))
             ->first();
         $data['avg_call'] = $avgCalled->avg;
 
@@ -768,7 +768,7 @@ class Tab5Service
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
             ->where('id_position', $positionId)
-            ->selectRaw('avg(calling_dla.total) as avg_call')
+            ->select(db::raw('avg(calling_dla.total) as avg_call'))
             ->first()
             ->avg_call;
         $current_round = db::table('calling_dla')

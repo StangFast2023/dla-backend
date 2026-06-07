@@ -32,13 +32,13 @@ class Tab3Service
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->selectRaw('
+            ->select(db::raw('
                 updated_list_dla.id_main_province as prov_main_id    ,
                 updated_list_dla.id_sub_province  as prov_sub_id    ,
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
                 sum( total )    as  total
-            ')
+            '))
             ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
             ->get()
@@ -79,14 +79,14 @@ class Tab3Service
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->where('call_status', 1)
-            ->selectRaw('
+            ->select(db::raw('
                 calling_dla.id_main_province                as  id_main_province    ,
                 calling_dla.id_sub_province                 as  id_sub_province     ,
                 calling_dla.round                           as  round               ,
                 positions_dla.id_type                       as  pos_type_id         ,
                 type_positions_dla.name                     as  pos_type            , 
                 sum( total )                                as  total
-            ')
+            '))
             ->groupBy('id_main_province', 'id_sub_province', 'round', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
             ->get()

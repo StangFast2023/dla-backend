@@ -44,7 +44,7 @@ class Tab2Service
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->selectRaw('
+            ->select(db::raw('
                 updated_list_dla.id_main_province as prov_main_id    ,
                 updated_list_dla.id_sub_province  as prov_sub_id    ,
                 updated_list_dla.id_position as id_pos ,
@@ -52,7 +52,7 @@ class Tab2Service
                 positions_dla.id_type   as  pos_type_id,
                 type_positions_dla.name as  pos_type , 
                 sum( total )            as  total
-            ')
+            '))
             ->groupBy('prov_main_id', 'prov_sub_id', 'id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
             ->get()
@@ -112,14 +112,14 @@ class Tab2Service
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->where('calling_dla.call_status', 1)
-            ->selectRaw('
+            ->select(db::raw('
                 concat( calling_dla.called_month , "-" , calling_dla.called_year ) as monthly ,
                 positions_dla.id_type       as pos_type_id ,
                 type_positions_dla.name     as  pos_type , 
                 calling_dla.called_month,
                 calling_dla.called_year,
                 sum( calling_dla.total )    as  total
-            ')
+            '))
             ->groupBy('monthly', 'pos_type_id', 'pos_type', 'called_month', 'called_year')
             ->get();
         $lastCall = $CallingMonthly->sortByDesc(fn($m) => $m->called_year * 12 + $m->called_month)->first();
@@ -163,12 +163,12 @@ class Tab2Service
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->where('calling_dla.call_status', 1)
-            ->selectRaw('
+            ->select(db::raw('
                 calling_dla.round as roundly ,
                 positions_dla.id_type       as pos_type_id ,
                 type_positions_dla.name     as  pos_type , 
                 sum( calling_dla.total )    as  total
-            ')
+            '))
             ->groupBy('roundly', 'pos_type_id', 'pos_type')
             ->get();
         $array = [];
@@ -196,13 +196,13 @@ class Tab2Service
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->selectRaw('
+            ->select(db::raw('
                 updated_list_dla.id_position as id_pos ,
                 concat( case when prefixes_dla.name is not null then prefixes_dla.name else " " end , positions_dla.name , case when type_positions_dla.type_position is not null then type_positions_dla.type_position else " " end ) as pos_name ,
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
                 sum( total )    as  total
-            ')
+            '))
             ->groupBy('id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
             ->get()
@@ -217,7 +217,7 @@ class Tab2Service
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->selectRaw('
+            ->select(db::raw('
                 updated_list_dla.id_main_province as prov_main_id    ,
                 updated_list_dla.id_sub_province  as prov_sub_id    ,
                 updated_list_dla.id_position as id_pos ,
@@ -225,7 +225,7 @@ class Tab2Service
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
                 sum( total )    as  total
-            ')
+            '))
             ->groupBy('prov_main_id', 'prov_sub_id', 'id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
             ->get()
@@ -287,13 +287,13 @@ class Tab2Service
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->where('call_status', 1)
-            ->selectRaw('
+            ->select(db::raw('
                 calling_dla.id_position as id_pos ,
                 concat( case when prefixes_dla.name is not null then prefixes_dla.name else " " end , positions_dla.name , case when type_positions_dla.type_position is not null then type_positions_dla.type_position else " " end ) as pos_name ,
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
                 sum( total ) as  total
-            ')
+            '))
             ->groupBy('id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
             ->get()
@@ -319,13 +319,13 @@ class Tab2Service
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->selectRaw('
+            ->select(db::raw('
                 updated_list_dla.id_position as id_pos ,
                 concat( case when prefixes_dla.name is not null then prefixes_dla.name else " " end , positions_dla.name , case when type_positions_dla.type_position is not null then type_positions_dla.type_position else " " end ) as pos_name ,
                 positions_dla.id_type as pos_type_id,
                 type_positions_dla.name as pos_type , 
                 sum( total )    as  total
-            ')
+            '))
             ->groupBy('id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
             ->get()
@@ -345,10 +345,10 @@ class Tab2Service
         }
         $CallingDla = db::table('calling_dla')
             ->where('call_status', 1)
-            ->selectRaw('
+            ->select(db::raw('
                 calling_dla.id_position as id_pos ,
                 sum( total ) as  total
-            ')
+            '))
             ->groupBy('id_pos')
             ->orderBy('total', 'DESC')
             ->get()
@@ -372,12 +372,12 @@ class Tab2Service
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->selectRaw('
+            ->select(db::raw('
                 updated_list_dla.id_main_province           as  prov_main_id    ,
                 positions_dla.id_type                       as  pos_type_id     ,
                 type_positions_dla.name                     as  pos_type        , 
                 sum( total )                                as  total
-            ')
+            '))
             ->groupBy('prov_main_id', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
             ->get()
@@ -412,13 +412,13 @@ class Tab2Service
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->where('call_status', 1)
-            ->selectRaw('
+            ->select(db::raw('
                 calling_dla.id_main_province                as  id_main_province    ,
                 calling_dla.round                           as  round               ,
                 positions_dla.id_type                       as  pos_type_id         ,
                 type_positions_dla.name                     as  pos_type            , 
                 sum( total )                                as  total
-            ')
+            '))
             ->groupBy('id_main_province', 'round', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
             ->get()
@@ -462,9 +462,9 @@ class Tab2Service
         $Position = db::table('positions_dla')
             ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->selectRaw('
+            ->select(db::raw('
                 concat( prefixes_dla.name , positions_dla.name , type_positions_dla.type_position ) as pos_name
-            ')
+            '))
             ->where('positions_dla.id_position', $id)
             ->first();
         $array = [
@@ -478,14 +478,14 @@ class Tab2Service
             ]
         ];
         $Provinces = db::table('provinces_dla')
-            ->selectRaw('
+            ->select(db::raw('
                 provinces_dla.id                    as pro_id           ,
                 provinces_dla.id_main_province      as pro_main_id      ,
                 provinces_dla.main_name_province    as pro_main_name    ,
                 provinces_dla.id_sub_province       as pro_sub_id       ,
                 provinces_dla.sub_name_province     as pro_sub_name     ,
                 concat( provinces_dla.main_name_province , " " , provinces_dla.sub_name_province )  as pro_full_name 
-            ')
+            '))
             ->orderBy('pro_id', 'ASC')
             ->get();
 
@@ -527,12 +527,12 @@ class Tab2Service
         $allCalling = db::table('calling_dla')
             ->where('call_status', 1)
             ->where('id_position', $id)
-            ->selectRaw('
+            ->select(db::raw('
                 id_main_province        as pro_main_id  ,
                 id_sub_province         as pro_sub_id   ,
                 max( round )            as round ,
                 sum( total )            as total                      
-            ')
+            '))
             ->groupBy('pro_main_id', 'pro_sub_id')
             ->get();
         foreach ($allCalling as $calling) {
