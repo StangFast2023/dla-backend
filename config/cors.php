@@ -23,6 +23,7 @@ return [
     'allowed_origins' => [
         'https://st-dla-dashboard-2568-7ry6eerpr-stangfast2023s-projects.vercel.app', // เพิ่ม URL ของคุณตรงนี้
         'http://localhost:3000',
+        'https://dla-backend-production.up.railway.app'
     ],
     'allowed_origins_patterns' => [],
 
