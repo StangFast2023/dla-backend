@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Models\CallingDla;
 use App\Models\UpdateListDla;
@@ -156,12 +157,12 @@ class Tab5Service
             $list_status        =   $pos->list_status;
             $current_date       =   Carbon::today();
 
-            if ($call_status === 1) {
+            if ($call_status === true) {
                 $call_date      =   Carbon::createFromDate($pos->called_year, $pos->called_month, $pos->called_day);
                 $status         =   $call_date->greaterThan($current_date) ? 'waiting' : 'completed';
             } else {
                 $call_date      =   null;
-                $status         =   $list_status === 1 ? 'not-used' : 'exhaustion';
+                $status         =   $list_status === true ? 'not-used' : 'exhaustion';
             }
 
             if (!isset($array[$prov_main_id]['total_each_round'][$round])) {
@@ -197,7 +198,7 @@ class Tab5Service
                 ];
             }
 
-            if ($call_status === 1) {
+            if ($call_status === true) {
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_call'] += $total;
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_remain'] -= $total;
 
@@ -249,13 +250,11 @@ class Tab5Service
      */
     public function predictionUserDetail($regionId, $areaId, $positionId, $sequence, $frequency)
     {
-        // total_listed , total_remain
         $updateLisedTotal = db::table('updated_list_dla')
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
             ->where('id_position', $positionId)
             ->first();
-
         $data = [
             //---- part 1
             'rank'              =>  (int)$sequence,
@@ -291,8 +290,8 @@ class Tab5Service
         foreach ($calledData as $call) {
             $total = $call->total;
             $data['total_round']  += $round;
-            $data['total_called'] += ($call->list_status === 1 ? $total : 0);
-            $data['total_remain'] -= ($call->list_status === 1 ? $total : 0);
+            $data['total_called'] += ($call->list_status === true ? $total : 0);
+            $data['total_remain'] -= ($call->list_status === true ? $total : 0);
         }
 
         // avg_call
@@ -310,7 +309,6 @@ class Tab5Service
         $rank           = $data['rank'];
         $total_listed   = $data['total_listed'];
         $total_called   = $data['total_called'];
-        $total_remain   = $data['total_remain'];
         $total_round    = $data['total_round'];
 
         $data['process_bars']   =   ($total_called / $total_listed) * 100;
@@ -350,6 +348,12 @@ class Tab5Service
         $data['next_round_end']         =   $data_chart6['next_round_end'];
         $data['heatmap_matrix']         =   $data_chart6['heatmap_matrix'];
         $data['rounds_header']          =   $data_chart6['rounds_header'];
+
+        // probability of crossing region
+        $data_chart7 = $this->data_part2_chart3($regionId, $areaId, $positionId, $sequence, $frequency);
+        $data['summary']    =   $data_chart7['summary'];
+        $data['max_round']  =   $data_chart7['max_round'];
+        $data['sim_state']  =   $data_chart7['sim_state'];
 
         return $data;
     }
@@ -476,17 +480,17 @@ class Tab5Service
                 $date_numb   = Carbon::createFromDate($y, $m, $d);
                 $date_chart2[$round] = [
                     'round'             =>  $round,
-                    'total'             =>  $call->total,
-                    'call_status'       =>  $call->call_status,
-                    'list_status'       =>  $call->list_status,
+                    'total'             =>  (bool)$call->list_status ? (int)$call->total : $call->total,
+                    'call_status'       =>  (bool)$call->call_status,
+                    'list_status'       =>  (bool)$call->list_status,
                     'date'              =>  $d . ' ' . $this->monthYearThai(true, $m, $y),
                     'start'             =>  0,
                     'end'               =>  0,
                     'start_end'         =>  0,
                     'change'            =>  0,
-                    'proportion'        =>  $call->call_status === 1 ? (($call->total / $total_listed) * 100) : 0,
+                    'proportion'        =>  (bool)$call->call_status === true ? (($call->total / $total_listed) * 100) : 0,
                     'status'            =>  $date_numb->greaterThan($current_date) ? 'waiting' : 'completed',
-                    'is_cross_region'   =>  $call->is_cross_region,
+                    'is_cross_region'   =>  (bool)$call->is_cross_region,
                     'crossed_region'    =>  $call->crossed_region,
                     'crossed_zone'      =>  $call->crossed_zone,
                 ];
@@ -543,6 +547,7 @@ class Tab5Service
         $updated_list_dla = db::table('updated_list_dla')
             ->where('id_position', $positionId)
             ->get();
+
         $chart3 = [];
         $provData = db::table('provinces_dla')
             ->get();
@@ -597,8 +602,8 @@ class Tab5Service
             $main  = $call->id_main_province;
             $subs  = $call->id_sub_province;
             $total = $call->total;
-            $called = $call->call_status === 1 ? true : false;
-            $listed = $call->list_status === 1 ? true : false;
+            $called = (bool)$call->call_status;
+            $listed = (bool)$call->list_status;
 
             //--- monthly
             if ($called === true && $listed === true) {
@@ -769,6 +774,7 @@ class Tab5Service
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
             ->where('id_position', $positionId)
+            ->where('call_status', 1)
             ->select(db::raw('avg(calling_dla.total::integer) as avg_call'))
             ->first()
             ->avg_call;
@@ -863,7 +869,7 @@ class Tab5Service
         foreach ($months_chart as $m_index => $m_data) {
             $row = [];
             foreach ($rounds_chart as $r_index => $r_data) {
-                $combined_percent = ($m_data['percent'] * 0.4) + ($r_data['percent'] * 0.6);
+                $combined_percent = ($m_data['percent'] * 0.5) + ($r_data['percent'] * 0.5);
                 $combined_percent = min(100, round($combined_percent, 2));
                 $row[$r_data['round']] = [
                     'percent' => $combined_percent,
@@ -876,6 +882,295 @@ class Tab5Service
         }
         $data['heatmap_matrix'] = $heatmap_matrix;
         $data['rounds_header']  = $rounds_header;
+        return $data;
+    }
+
+    /**
+     * @param int $regionId
+     * @param int $areaId
+     * @param int $positionId
+     * @param int $sequence
+     * @param int $frequency
+     */
+    //  ตรรกะการยืม (Priority):
+    //  เหนือ (1): ยืม -> อีสาน(3) -> กลาง(2) -> ใต้(4)
+    //  กลาง (2): ยืม -> ใต้(4) -> อีสาน(3) -> เหนือ(1)
+    //  อีสาน (3): ยืม -> เหนือ(1) -> ใต้(4) -> กลาง(2)
+    //  ใต้ (4): ยืม -> กลาง(2) -> เหนือ(1) -> อีสาน(3)
+    public function data_part2_chart3($regionId, $areaId, $positionId, $sequence, $frequency)
+    {
+        $data = [];
+        $lending_priority = [
+            1 => [
+                3 => ['priority' => 1, 'target_region_id' => 3],
+                2 => ['priority' => 2, 'target_region_id' => 2],
+                4 => ['priority' => 3, 'target_region_id' => 4],
+            ],
+            2 => [
+                4 => ['priority' => 1, 'target_region_id' => 4],
+                3 => ['priority' => 2, 'target_region_id' => 3],
+                1 => ['priority' => 3, 'target_region_id' => 1],
+            ],
+            3 => [
+                1 => ['priority' => 1, 'target_region_id' => 1],
+                4 => ['priority' => 2, 'target_region_id' => 4],
+                2 => ['priority' => 3, 'target_region_id' => 2],
+            ],
+            4 => [
+                2 => ['priority' => 1, 'target_region_id' => 2],
+                1 => ['priority' => 2, 'target_region_id' => 1],
+                3 => ['priority' => 3, 'target_region_id' => 3],
+            ]
+        ];
+        $all_provinces = db::table('provinces_dla')
+            ->get();
+        foreach ($all_provinces as $prov) {
+            if (!isset($data[$prov->id_main_province])) {
+                $data[$prov->id_main_province] = [
+                    'id_main_province'      =>  $prov->id_main_province,
+                    'main_name_province'    =>  $prov->main_name_province,
+                    'sub_prov'              =>  []
+                ];
+            }
+            if (!isset($data[$prov->id_main_province]['sub_prov'][$prov->id_sub_province])) {
+                $data[$prov->id_main_province]['sub_prov'][$prov->id_sub_province] = [
+                    'id_sub_province'       =>  $prov->id_sub_province,
+                    'sub_name_province'     =>  $prov->sub_name_province,
+                    'full_name'             =>  $prov->main_name_province . ' ' . $prov->sub_name_province,
+                    'owner_zone'            =>  (int)$prov->id_main_province === (int)$regionId && (int)$prov->id_sub_province === (int)$areaId,
+                    'status_open'           =>  false,
+                    'total_listed'          =>  0,
+                    'total_called'          =>  0,
+                    'total_remain'          =>  0,
+                    'average_called'        =>  0,
+                    'lasted_round'          =>  0,
+                    'probability'           =>  0,
+                    'exhaustion'            =>  false,
+                    'next_lending_region'   =>  $lending_priority[$prov->id_main_province],
+                    'data_round'            =>  []
+                ];
+            }
+        }
+        $update_listed = db::table('updated_list_dla')
+            ->where('id_position', $positionId)
+            ->get();
+        foreach ($update_listed as $listed) {
+            $m_prov = (int)$listed->id_main_province;
+            $s_prov = (int)$listed->id_sub_province;
+            $totals = (int)$listed->total;
+            if (isset($data[$m_prov]['sub_prov'][$s_prov])) {
+                $data[$m_prov]['sub_prov'][$s_prov]['status_open'] = true;
+                $data[$m_prov]['sub_prov'][$s_prov]['total_listed'] = $totals;
+                $data[$m_prov]['sub_prov'][$s_prov]['total_remain'] = $totals;
+            }
+        }
+        $calling = db::table('calling_dla')
+            ->where('id_position', $positionId)
+            ->get();
+        foreach ($calling as $call) {
+            $m_prov = (int)$call->id_main_province;
+            $s_prov = (int)$call->id_sub_province;
+            $call_status = (bool)$call->call_status;
+            if (isset($data[$m_prov]['sub_prov'][$s_prov])) {
+                $data[$m_prov]['sub_prov'][$s_prov]['lasted_round'] += 1;
+                $data[$m_prov]['sub_prov'][$s_prov]['total_called'] += ($call_status === true ? (int)$call->total : 0);
+                $data[$m_prov]['sub_prov'][$s_prov]['total_remain'] -= ($call_status === true ? (int)$call->total : 0);
+            }
+        }
+
+        foreach ($data as $m_id => $dt) {
+            foreach ($dt['sub_prov'] as $s_id => $sub) {
+                if ($sub['status_open'] === true) {
+                    $total_called = $data[$m_id]['sub_prov'][$s_id]['total_called'];
+                    $lasted_round = $data[$m_id]['sub_prov'][$s_id]['lasted_round'];
+                    $total_remain = $data[$m_id]['sub_prov'][$s_id]['total_remain'];
+                    $data[$m_id]['sub_prov'][$s_id]['average_called'] = $total_called > 0 ? floor($total_called / $lasted_round) : 0;
+                    $data[$m_id]['sub_prov'][$s_id]['exhaustion'] = $total_remain === 0;
+                }
+            }
+        }
+
+        $sim_state = [];
+        foreach ($data as $region) {
+            foreach ($region['sub_prov'] as $sub) {
+                $m_prov = $region['id_main_province'];
+                $s_prov = $sub['id_sub_province'];
+                if (!isset($sim_state[$m_prov][$s_prov])) {
+                    $sim_state[$m_prov][$s_prov] = [
+                        'main_id' => $region['id_main_province'],
+                        'sub_id' => $sub['id_sub_province'],
+                        'full_name' => $sub['full_name'],
+                        'status_open' => $sub['status_open'],
+                        'owner_zone' => $sub['owner_zone'],
+                        'total_listed' => $sub['total_listed'],
+                        'total_called' => $sub['total_called'],
+                        'total_remain' => $sub['total_remain'],
+                        'avg' => $sub['average_called'],
+                        'round' => $sub['lasted_round'],
+                        'priority' => $sub['next_lending_region'],
+                        'data_round' => []
+                    ];
+                }
+            }
+        }
+        $getAccountDaysStatus   =   $this->getAccountDaysStatus();
+        $today  = $getAccountDaysStatus['current_date'];
+        $final  = $getAccountDaysStatus['final_date'];
+        $interval = $today->diff($final);
+        $remaining_months  = ($interval->y * 12) + $interval->m;
+        $remaining_rounds = ceil($remaining_months / $frequency);
+
+        foreach ($sim_state as $main_id => &$sub_regions) {
+            foreach ($sub_regions as $sub_id => &$sub) {
+                $sub['working_remain'] = $sub['total_remain'];
+                $sub['remain_after_2_years'] = max(0, $sub['total_remain'] - ($sub['avg'] * $remaining_rounds));
+            }
+        }
+
+        for ($r = 1; $r <= $remaining_rounds; $r++) {
+            foreach ($sim_state as $main_id => &$sub_regions) {
+                foreach ($sub_regions as $sub_id => &$sub) {
+
+                    $round = (int)$sub['round'] + 1;
+                    $called_count = 0;
+                    $is_borrowed = false;
+
+                    if ($sub['status_open']) {
+                        $called_count = min($sub['working_remain'], $sub['avg']);
+                        $sub['working_remain'] -= $called_count;
+                    } else {
+                        foreach ($lending_priority[$main_id] as $p) {
+                            $target_region_id = $p['target_region_id'];
+                            foreach ($sim_state[$target_region_id] as $t_sub_id => &$target_sub) {
+                                if ($target_sub['working_remain'] > 0) {
+                                    $take = min($target_sub['working_remain'], $sub['avg']);
+                                    $target_sub['working_remain'] -= $take;
+                                    $called_count = $take;
+                                    $is_borrowed = true;
+                                    break 2;
+                                }
+                            }
+                        }
+                    }
+                    $sim_state[$main_id][$sub_id]['data_round'][$r] = [
+                        'round' => $round,
+                        'called' => $called_count,
+                        'remain' => $sub['working_remain'],
+                        'is_borrowed' => $is_borrowed,
+                    ];
+                }
+            }
+        }
+        foreach ($sim_state as $main_id => &$sub_regions) {
+            foreach ($sub_regions as $sub_id => &$sub) {
+                $already_called = $sub['total_called'];
+                $total_rounds = count($sub['data_round']);
+                $borrow_count = 0;
+                $cumulative_called = 0;
+                foreach ($sub['data_round'] as $r => &$data) {
+                    $cumulative_called += $data['called'];
+                    $total_reached = $already_called + $cumulative_called;
+                    if ($sub['owner_zone']) {
+                        $reach_probability = ($sequence > 0) ? min(100, ($total_reached / $sequence) * 100) : 100;
+                    } else {
+                        $reach_probability = 0;
+                    }
+                    $cross_zone_effect = 0;
+                    if (!$sub['owner_zone']) {
+                        $used_ratio = 0;
+                        if ($sub['total_remain'] > 0) {
+                            $used_ratio = (($sub['total_remain'] - $data['remain']) / $sub['total_remain']) * 100;
+                        }
+                        $cross_zone_effect += $used_ratio;
+                        if ($data['is_borrowed']) {
+                            $cross_zone_effect += ($data['called'] / max(1, $sequence)) * 100;
+                            $borrow_count++;
+                        }
+                        if (!$sub['status_open']) {
+                            $cross_zone_effect += ($data['called'] / max(1, $sequence)) * 100;
+                        }
+                        if (isset($sub['remain_after_2_years']) && $sub['remain_after_2_years'] <= 0) {
+                            $cross_zone_effect += ($data['called'] / max(1, $sequence)) * 100;
+                        }
+                        $cross_zone_effect = min(100, $cross_zone_effect);
+                    }
+
+                    if ($sub['owner_zone']) {
+                        $final_probability = $reach_probability;
+                    } else {
+                        $final_probability = $cross_zone_effect;
+                    }
+                    $data['reach_probability'] = round($reach_probability, 2);
+                    $data['cross_zone_effect'] = round($cross_zone_effect, 2);
+                    $data['final_probability'] = round($final_probability, 2);
+                }
+            }
+        }
+
+        foreach ($sim_state as $main_id => &$sub_regions) {
+            foreach ($sub_regions as $sub_id => &$sub) {
+                if ($sub['owner_zone']) {
+                    $future_called = 0;
+                    foreach ($sub['data_round'] as $row) {
+                        $future_called += $row['called'];
+                    }
+                    $total_reached = $sub['total_called'] + $future_called;
+                    $probability = ($sequence > 0) ? ($total_reached / $sequence) * 100 : 100;
+                    $probability = min(100, $probability);
+                    $sub['probability'] = round($probability, 2);
+                    continue;
+                }
+                $score = 0;
+                if (!$sub['status_open']) {
+                    $score += 25;
+                }
+                if (isset($sub['remain_after_2_years']) && $sub['remain_after_2_years'] <= 0) {
+                    $shortage_rounds = abs($sub['remain_after_2_years']) / max(1, $sub['avg']);
+                    $score += min(30, $shortage_rounds * 5);
+                }
+                $borrow_rounds = 0;
+                foreach ($sub['data_round'] as $row) {
+                    if (!empty($row['is_borrowed'])) {
+                        $borrow_rounds++;
+                    }
+                }
+                if ($borrow_rounds > 0) {
+                    $score += min(20, ($borrow_rounds / max(1, count($sub['data_round']))));
+                }
+                $sub['probability'] = round($score, 2);
+            }
+        }
+        $backup_data = json_decode(json_encode($sim_state), true);
+        $all_subs = [];
+        foreach ($backup_data as $round_data) {
+            if (is_array($round_data)) {
+                foreach ($round_data as $sub) {
+                    if (is_array($sub) && isset($sub['owner_zone'])) {
+                        $all_subs[] = array_diff_key($sub, ['sim_state' => '']);
+                    }
+                }
+            }
+        }
+        $owners = array_filter($all_subs, fn($s) => !empty($s['owner_zone']));
+        $owner = reset($owners) ?: null;
+        $others = array_filter($all_subs, fn($s) => empty($s['owner_zone']));
+        usort($others, fn($a, $b) => $b['probability'] <=> $a['probability']);
+        $top_other = reset($others) ?: null;
+
+        $summary = [
+            'owner_probability' => $owner['probability'] ?? 0,
+            'highest_other_probability' => $top_other ? [
+                'status'      => true,
+                'region'      => $top_other['full_name'] ?? 'ไม่ระบุ',
+                'probability' => (float)($top_other['probability'] ?? 0),
+            ] : null
+        ];
+        $round_counts = array_map(fn($sub) => count($sub['data_round']), array_merge(...$sim_state));
+        $data = [
+            'summary' =>  $summary,
+            'max_round' => !empty($round_counts) ? max($round_counts) : 0,
+            'sim_state' =>  $sim_state,
+        ];
         return $data;
     }
 }

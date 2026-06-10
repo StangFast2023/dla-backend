@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Models\CallingDla;
 use App\Models\UpdateListDla;
@@ -11,6 +12,7 @@ use App\Models\PositionDla;
 use App\Models\TypePositionDla;
 use App\Traits\DateCalculatable;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class Tab4Service
 {
@@ -238,12 +240,12 @@ class Tab4Service
             $list_status        =   $pos->list_status;
             $current_date       =   Carbon::today();
 
-            if ($call_status === 1) {
+            if ($call_status === true) {
                 $call_date      =   Carbon::createFromDate($pos->called_year, $pos->called_month, $pos->called_day);
                 $status         =   $call_date->greaterThan($current_date) ? 'waiting' : 'completed';
             } else {
                 $call_date      =   null;
-                $status         =   $list_status === 1 ? 'not-used' : 'exhaustion';
+                $status         =   $list_status === true ? 'not-used' : 'exhaustion';
             }
 
             if (!isset($array[$prov_main_id]['total_each_round'][$round])) {
@@ -275,17 +277,17 @@ class Tab4Service
                     'start'             =>  0,
                     'end'               =>  0,
                     'start_end'         =>  0,
-                    'status_call'       =>  $call_status === 1,
-                    'status_list'       =>  $list_status === 1,
-                    'status_cross'      =>  $is_cross_region === 1,
-                    'crossed_region'    =>  $is_cross_region === 1 ? $crossed_region    : null,
-                    'crossed_zone'      =>  $is_cross_region === 1 ? $crossed_zone      : null,
+                    'status_call'       =>  $call_status,
+                    'status_list'       =>  $list_status,
+                    'status_cross'      =>  $is_cross_region,
+                    'crossed_region'    =>  $is_cross_region === true ? $crossed_region    : null,
+                    'crossed_zone'      =>  $is_cross_region === true ? $crossed_zone      : null,
                     'date'              =>  $call_date ? $call_date->format('d-m-Y')    : null,
                     'status'            =>  $status,
                 ];
             }
 
-            if ($call_status === 1) {
+            if ($call_status === true) {
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_call'] += $total;
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_remain'] -= $total;
 
@@ -340,37 +342,25 @@ class Tab4Service
         return $data;
     }
 
-
-    public function updateTableForTab4($request)
+    public function updateTableForTab4(array $array_position, array $array_province, bool $showEmpty)
     {
-
-        $regions    =   $request->input('cleanRegions');
-        $positions  =   $request->input('cleanPositions');
-
-        $array_position = [];
-        foreach ($positions as $pos) {
-            $part = explode('-', $pos);
-            if (count($part) === 3) {
-                $array_position[] = $part[2];
-            }
-        }
-        $all_pos_array = [];
         $all_Positions = db::table('positions_dla')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->whereIn('positions_dla.id_position', $array_position)
             ->select(db::raw('
-                positions_dla.id_position                   as  pos_id          ,
-                positions_dla.name                          as  pos_name        ,
+                positions_dla.id_position           as  pos_id          ,
+                positions_dla.name                  as  pos_name        ,
 
-                prefixes_dla.name                           as  pref_name       ,
-                type_positions_dla.type_position            as  suff_name       ,
+                prefixes_dla.name                   as  pref_name       ,
+                type_positions_dla.type_position    as  suff_name       ,
 
-                SUBSTRING(positions_dla.id_position, 1, 1)  as  pos_type_id     ,
-                type_positions_dla.name                     as  pos_type_name
+                type_positions_dla.id               as  pos_type_id     ,
+                type_positions_dla.name             as  pos_type_name
             '))
             ->get()
             ->toArray();
+        $all_pos_array = [];
         foreach ($all_Positions as $pos) {
             if (!isset($all_pos_array[$pos->pos_type_id])) {
                 $all_pos_array[$pos->pos_type_id] = [
@@ -397,16 +387,6 @@ class Tab4Service
                     'status_out_of_lits'    =>  false,
                     'data_call_round'       =>  []
                 ];
-            }
-        }
-
-        $array_province = [];
-        foreach ($regions as $reg) {
-            $parts = explode('-', $reg);
-            if (count($parts) === 3) {
-                $main = $parts[1];
-                $subs = $parts[2];
-                $array_province[$main]['sub'][] = $subs;
             }
         }
         $array = [];
@@ -464,12 +444,12 @@ class Tab4Service
 
         $listed_position = db::table('updated_list_dla')
             ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', DB::raw('SUBSTRING(positions_dla.id_position, 1, 1)'))
+            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
             ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
             ->select(db::raw('
                 updated_list_dla.id_main_province               as  prov_main_id    ,
                 updated_list_dla.id_sub_province                as  prov_sub_id     ,
-                SUBSTRING(updated_list_dla.id_position, 1, 1)   as  pos_type_id     ,
+                type_positions_dla.id                           as  pos_type_id     ,
                 positions_dla.id_position                       as  pos_id          ,
                 sum( total::integer )                           as  total
             '))
@@ -477,7 +457,6 @@ class Tab4Service
             ->orderBy('pos_id', 'asc')
             ->get()
             ->toArray();
-
         foreach ($listed_position as $pos) {
             $prov_main_id   =   $pos->prov_main_id;
             $prov_sub_id    =   $pos->prov_sub_id;
@@ -499,8 +478,9 @@ class Tab4Service
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['total_remain'] += (int)$total;
             }
         }
+
         $called_position = db::table('calling_dla')
-            ->select(db::raw('calling_dla.* , SUBSTRING(calling_dla.id_position, 1, 1)   as  pos_type_id'))
+            ->select(db::raw('calling_dla.* , SUBSTRING(calling_dla.id_position::text , 1, 1)   as  pos_type_id'))
             ->get()
             ->toArray();
         foreach ($called_position as $pos) {
@@ -523,12 +503,12 @@ class Tab4Service
 
             if (isset($array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id])) {
 
-                if ($call_status === 1) {
+                if ($call_status === true) {
                     $call_date      =   Carbon::createFromDate($pos->called_year, $pos->called_month, $pos->called_day);
                     $status         =   $call_date->greaterThan($current_date) ? 'waiting' : 'completed';
                 } else {
                     $call_date      =   null;
-                    $status         =   $list_status === 1 ? 'not-used' : 'exhaustion';
+                    $status         =   $list_status === true ? 'not-used' : 'exhaustion';
                 }
 
                 if (!isset($array[$prov_main_id]['total_each_round'][$round])) {
@@ -561,17 +541,17 @@ class Tab4Service
                         'end'               =>  0,
                         'start_end_2'       =>  0,
                         'percent_change'    =>  null,
-                        'status_call'       =>  $call_status === 1,
-                        'status_list'       =>  $list_status === 1,
-                        'status_cross'      =>  $is_cross_region === 1,
-                        'crossed_region'    =>  $is_cross_region === 1 ? $crossed_region    : null,
-                        'crossed_zone'      =>  $is_cross_region === 1 ? $crossed_zone      : null,
+                        'status_call'       =>  $call_status,
+                        'status_list'       =>  $list_status,
+                        'status_cross'      =>  $is_cross_region,
+                        'crossed_region'    =>  $is_cross_region === true ? $crossed_region    : null,
+                        'crossed_zone'      =>  $is_cross_region === true ? $crossed_zone      : null,
                         'date'              =>  $call_date ? $call_date->format('d-m-Y')    : null,
                         'status'            =>  $status,
                     ];
                 }
 
-                if ($call_status === 1) {
+                if ($call_status === true) {
                     $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_call'] += $total;
                     $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_remain'] -= $total;
 
@@ -624,18 +604,18 @@ class Tab4Service
             }
         }
 
-        $showEmpty = $request->input('showEmpty') == '1' || $request->input('showEmpty') === true;
-        if ($showEmpty === false) {
-            foreach ($array as &$prov) {
-                foreach ($prov['pro_sub'] as &$prov_sub) {
-                    foreach ($prov_sub['data_type_position'] as &$data_type) {
-                        $data_type['data_position'] = array_filter($data_type['data_position'], function ($pos) {
-                            return $pos['status_open'] === true;
-                        });
-                    }
+        foreach ($array as &$prov) {
+            foreach ($prov['pro_sub'] as &$prov_sub) {
+                foreach ($prov_sub['data_type_position'] as &$data_type) {
+                    $data_type['data_position'] = array_filter($data_type['data_position'], function ($pos) use ($showEmpty) {
+                        $isPassEmpty = ($showEmpty === false) ? ($pos['status_open'] === true) : true;
+                        return $isPassEmpty;
+                    });
+                    $data_type['data_position'] = array_values($data_type['data_position']);
                 }
             }
         }
+
         foreach ($array as &$fil) {
             foreach ($fil['pro_sub'] as $subId => &$sub) {
                 $sub['data_type_position'] = array_filter($sub['data_type_position'], function ($type) {

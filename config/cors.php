@@ -21,9 +21,9 @@ return [
 
     // 'allowed_origins' => ['http://localhost:3000'],
     'allowed_origins' => [
-        'https://st-dla-dashboard-2568.vercel.app/',
+        // 'https://st-dla-dashboard-2568.vercel.app/',
         'http://localhost:3000',
-        'https://dla-backend-production.up.railway.app'
+        // 'https://dla-backend-production.up.railway.app'
     ],
     'allowed_origins_patterns' => [],
 
@@ -33,6 +33,6 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];

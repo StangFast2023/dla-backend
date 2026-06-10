@@ -22,19 +22,42 @@ use Illuminate\Support\Facades\Log;
 
 class CallingDlaController extends Controller
 {
-    public function getStats()
+
+    public function getDataTab1()
     {
-        ini_set('max_execution_time', 300);
         return response()->json([
             'status' => 'success',
             'tab1'  =>  app(Tab1Service::class)->getData(),
+        ]);
+    }
+    public function getDataTab2()
+    {
+        return response()->json([
+            'status' => 'success',
             'tab2'  =>  app(Tab2Service::class)->getData(),
+        ]);
+    }
+    public function getDataTab3()
+    {
+        return response()->json([
+            'status' => 'success',
             'tab3'  =>  app(Tab3Service::class)->getData(),
+        ]);
+    }
+    public function getDataTab4()
+    {
+        return response()->json([
+            'status' => 'success',
             'tab4'  =>  app(Tab4Service::class)->getData(),
+        ]);
+    }
+    public function getDataTab5()
+    {
+        return response()->json([
+            'status' => 'success',
             'tab5'  =>  app(Tab5Service::class)->getData(),
         ]);
     }
-
     //--- api data of Tab 2
     /**
      * @param int $id
@@ -48,7 +71,29 @@ class CallingDlaController extends Controller
 
     public function updateTableForTab4(Request $request, Tab4Service $Tab4Service)
     {
-        $data = $Tab4Service->updateTableForTab4($request);
+
+        $positions = $request->input('cleanPositions');
+        $array_position = [];
+        foreach ($positions as $pos) {
+            $part = explode('-', $pos);
+            if (count($part) === 3) {
+                $array_position[] = (int)$part[2];
+            }
+        }
+
+        $regions = $request->input('cleanRegions');
+        $array_province = [];
+        foreach ($regions as $reg) {
+            $parts = explode('-', $reg);
+            if (count($parts) === 3) {
+                $main = (int)$parts[1];
+                $subs = (int)$parts[2];
+                $array_province[$main]['sub'][] = $subs;
+            }
+        }
+
+        $showEmpty = $request->input('showEmpty') == '1' || $request->input('showEmpty') === true;
+        $data = $Tab4Service->updateTableForTab4($array_position, $array_province, $showEmpty);
         return response()->json($data);
     }
 
