@@ -229,7 +229,6 @@ class Tab2Service
             "))
             ->groupBy('prov_main_id', 'prov_sub_id', 'id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
-            ->limit(10)
             ->get()
             ->toArray();
         foreach ($fastEmpty as $fast) {
