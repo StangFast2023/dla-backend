@@ -275,6 +275,7 @@ class Tab2Service
                 return $item['status_empty'] === true;
             })
             ->sortByDesc('total_list')
+            ->take(10)
             ->values()
             ->all();
         return $allPositions;
