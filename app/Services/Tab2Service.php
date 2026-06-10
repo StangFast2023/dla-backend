@@ -214,71 +214,72 @@ class Tab2Service
     public function Tab2_Part5_Empty()
     {
         $array = [];
-        $fastEmpty = db::table('updated_list_dla')
-            ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
-            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->select(db::raw("
-                updated_list_dla.id_main_province as prov_main_id    ,
-                updated_list_dla.id_sub_province  as prov_sub_id    ,
-                updated_list_dla.id_position as id_pos ,
-                concat( case when prefixes_dla.name is not null then prefixes_dla.name else ' ' end , positions_dla.name , case when type_positions_dla.type_position is not null then type_positions_dla.type_position else ' ' end ) as pos_name ,
-                positions_dla.id_type as pos_type_id,
-                type_positions_dla.name as pos_type , 
-                sum(total::integer)    as  total
-            "))
-            ->groupBy('prov_main_id', 'prov_sub_id', 'id_pos', 'pos_name', 'pos_type_id', 'pos_type')
-            ->orderBy('total', 'DESC')
-            ->get()
-            ->toArray();
-        foreach ($fastEmpty as $fast) {
-            if (!isset($array[$fast->prov_main_id][$fast->prov_sub_id][$fast->id_pos])) {
-                $fullProvName = db::table('provinces_dla')
-                    ->where('id_main_province', $fast->prov_main_id)
-                    ->where('id_sub_province', $fast->prov_sub_id)
-                    ->first();
-                $array[$fast->prov_main_id][$fast->prov_sub_id][$fast->id_pos] = [
-                    'id_pos'            =>  $fast->id_pos,
-                    'pos_name'          =>  $fast->pos_name,
-                    'pos_type_id'       =>  $fast->pos_type_id,
-                    'pos_type'          =>  $fast->pos_type,
-                    'total_list'        =>  (int)$fast->total,
-                    'total_call'        =>  0,
-                    'status_empty'      =>  false,
-                    'prov_main_id'      =>  $fast->prov_main_id,
-                    'prov_sub_id'       =>  $fast->prov_sub_id,
-                    'prov_full_name'    =>  $fullProvName ? $fullProvName->main_name_province . " " . $fullProvName->sub_name_province : null
-                ];
-            }
-        }
-        $allCalling = db::table('calling_dla')
-            ->where('call_status', 1)
-            ->where('round', 1)
-            ->get();
-        foreach ($allCalling as $all) {
-            if (isset($array[$all->id_main_province][$all->id_sub_province][$all->id_position])) {
-                $array[$all->id_main_province][$all->id_sub_province][$all->id_position]['total_call'] = (int)$all->total;
-                $array[$all->id_main_province][$all->id_sub_province][$all->id_position]['status_empty'] = $array[$all->id_main_province][$all->id_sub_province][$all->id_position]['total_list'] - $all->total === 0;
-            }
-        }
-        foreach ($array as $zoneKey => $provinces) {
-            foreach ($provinces as $proKey => $positions) {
-                $array[$zoneKey][$proKey] = array_filter($positions, function ($item) {
-                    return $item['status_empty'] !== false;
-                });
-            }
-        }
-        $allPositions = collect($array)
-            ->collapse()
-            ->collapse()
-            ->filter(function ($item) {
-                return $item['status_empty'] === true;
-            })
-            ->sortByDesc('total_list')
-            ->take(10)
-            ->values()
-            ->all();
-        return $allPositions;
+        // $fastEmpty = db::table('updated_list_dla')
+        //     ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
+        //     ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
+        //     ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
+        //     ->select(db::raw("
+        //         updated_list_dla.id_main_province as prov_main_id    ,
+        //         updated_list_dla.id_sub_province  as prov_sub_id    ,
+        //         updated_list_dla.id_position as id_pos ,
+        //         concat( case when prefixes_dla.name is not null then prefixes_dla.name else ' ' end , positions_dla.name , case when type_positions_dla.type_position is not null then type_positions_dla.type_position else ' ' end ) as pos_name ,
+        //         positions_dla.id_type as pos_type_id,
+        //         type_positions_dla.name as pos_type , 
+        //         sum(total::integer)    as  total
+        //     "))
+        //     ->groupBy('prov_main_id', 'prov_sub_id', 'id_pos', 'pos_name', 'pos_type_id', 'pos_type')
+        //     ->orderBy('total', 'DESC')
+        //     ->get()
+        //     ->toArray();
+        // foreach ($fastEmpty as $fast) {
+        //     if (!isset($array[$fast->prov_main_id][$fast->prov_sub_id][$fast->id_pos])) {
+        //         $fullProvName = db::table('provinces_dla')
+        //             ->where('id_main_province', $fast->prov_main_id)
+        //             ->where('id_sub_province', $fast->prov_sub_id)
+        //             ->first();
+        //         $array[$fast->prov_main_id][$fast->prov_sub_id][$fast->id_pos] = [
+        //             'id_pos'            =>  $fast->id_pos,
+        //             'pos_name'          =>  $fast->pos_name,
+        //             'pos_type_id'       =>  $fast->pos_type_id,
+        //             'pos_type'          =>  $fast->pos_type,
+        //             'total_list'        =>  (int)$fast->total,
+        //             'total_call'        =>  0,
+        //             'status_empty'      =>  false,
+        //             'prov_main_id'      =>  $fast->prov_main_id,
+        //             'prov_sub_id'       =>  $fast->prov_sub_id,
+        //             'prov_full_name'    =>  $fullProvName ? $fullProvName->main_name_province . " " . $fullProvName->sub_name_province : null
+        //         ];
+        //     }
+        // }
+        // $allCalling = db::table('calling_dla')
+        //     ->where('call_status', 1)
+        //     ->where('round', 1)
+        //     ->get();
+        // foreach ($allCalling as $all) {
+        //     if (isset($array[$all->id_main_province][$all->id_sub_province][$all->id_position])) {
+        //         $array[$all->id_main_province][$all->id_sub_province][$all->id_position]['total_call'] = (int)$all->total;
+        //         $array[$all->id_main_province][$all->id_sub_province][$all->id_position]['status_empty'] = $array[$all->id_main_province][$all->id_sub_province][$all->id_position]['total_list'] - $all->total === 0;
+        //     }
+        // }
+        // foreach ($array as $zoneKey => $provinces) {
+        //     foreach ($provinces as $proKey => $positions) {
+        //         $array[$zoneKey][$proKey] = array_filter($positions, function ($item) {
+        //             return $item['status_empty'] !== false;
+        //         });
+        //     }
+        // }
+        // $allPositions = collect($array)
+        //     ->collapse()
+        //     ->collapse()
+        //     ->filter(function ($item) {
+        //         return $item['status_empty'] === true;
+        //     })
+        //     ->sortByDesc('total_list')
+        //     ->take(10)
+        //     ->values()
+        //     ->all();
+        // return $allPositions;
+        return $array;
     }
 
     public function Tab2_Part6_TypeCallAll()
