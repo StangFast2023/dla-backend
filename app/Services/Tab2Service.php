@@ -206,6 +206,7 @@ class Tab2Service
             ->groupBy('id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
             ->get()
+            ->limite(10)
             ->toArray();
         return $top10Pos;
     }
@@ -229,6 +230,7 @@ class Tab2Service
             ->groupBy('prov_main_id', 'prov_sub_id', 'id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
             ->get()
+            ->limite(10)
             ->toArray();
         foreach ($fastEmpty as $fast) {
             if (!isset($array[$fast->prov_main_id][$fast->prov_sub_id][$fast->id_pos])) {
@@ -297,6 +299,7 @@ class Tab2Service
             ->groupBy('id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
             ->get()
+            ->limite(10)
             ->toArray();
         foreach ($typeCallAll as $key => $call) {
             if (!isset($array[$key])) {
@@ -329,6 +332,7 @@ class Tab2Service
             ->groupBy('id_pos', 'pos_name', 'pos_type_id', 'pos_type')
             ->orderBy('total', 'DESC')
             ->get()
+            ->limite(10)
             ->toArray();
         foreach ($UpdateListed as $fast) {
             if (!isset($array[$fast->id_pos])) {
