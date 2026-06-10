@@ -354,7 +354,6 @@ class Tab5Service
         $data['summary']    =   $data_chart7['summary'];
         $data['max_round']  =   $data_chart7['max_round'];
         $data['sim_state']  =   $data_chart7['sim_state'];
-
         return $data;
     }
 
@@ -1030,8 +1029,7 @@ class Tab5Service
         for ($r = 1; $r <= $remaining_rounds; $r++) {
             foreach ($sim_state as $main_id => &$sub_regions) {
                 foreach ($sub_regions as $sub_id => &$sub) {
-
-                    $round = (int)$sub['round'] + 1;
+                    $round = (int)$sub['round'] + $r;
                     $called_count = 0;
                     $is_borrowed = false;
 
@@ -1061,10 +1059,10 @@ class Tab5Service
                 }
             }
         }
+
         foreach ($sim_state as $main_id => &$sub_regions) {
             foreach ($sub_regions as $sub_id => &$sub) {
                 $already_called = $sub['total_called'];
-                $total_rounds = count($sub['data_round']);
                 $borrow_count = 0;
                 $cumulative_called = 0;
                 foreach ($sub['data_round'] as $r => &$data) {
