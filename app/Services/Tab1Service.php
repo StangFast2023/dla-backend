@@ -185,7 +185,7 @@ class Tab1Service
 
     public function Tab1_part6_TableRoundCall()
     {
-        return Cache::remember('tab1_part6_table', 300, function () {
+        return Cache::remember('tab1_part6_table', 600, function () {
             $callStats = DB::table('calling_dla')
                 ->select('id_main_province', 'id_sub_province', 'round')
                 ->selectRaw('SUM(total::integer) as total_called')

@@ -35,7 +35,7 @@ class Tab2Service
 
     public function Tab2_Part1_TypePos()
     {
-        return Cache::remember('tab2_part1_stats', 300, function () {
+        return Cache::remember('tab2_part1_stats', 600, function () {
             $TypePos = DB::table('updated_list_dla as ul')
                 ->join('positions_dla as pos', 'pos.id_position', '=', 'ul.id_position')
                 ->join('type_positions_dla as type', 'type.id', '=', 'pos.id_type')
@@ -84,7 +84,7 @@ class Tab2Service
 
     public function Tab2_part2_TypeMonthly()
     {
-        return Cache::remember('tab2_part2_monthly', 300, function () {
+        return Cache::remember('tab2_part2_monthly', 600, function () {
             $rawCalls = DB::table('calling_dla as c')
                 ->join('positions_dla as p', 'p.id_position', '=', 'c.id_position')
                 ->join('type_positions_dla as t', 't.id', '=', 'p.id_type')
@@ -124,7 +124,7 @@ class Tab2Service
 
     public function Tab2_part3_TypeRoundly()
     {
-        return Cache::remember('tab2_part3_roundly', 300, function () {
+        return Cache::remember('tab2_part3_roundly', 600, function () {
             $CallingRoundly = DB::table('calling_dla as c')
                 ->join('positions_dla as p', 'p.id_position', '=', 'c.id_position')
                 ->join('type_positions_dla as t', 't.id', '=', 'p.id_type')
@@ -185,7 +185,7 @@ class Tab2Service
 
     public function Tab2_Part5_Empty()
     {
-        return Cache::remember('tab2_part5_empty', 300, function () {
+        return Cache::remember('tab2_part5_empty', 600, function () {
             return DB::table('updated_list_dla as ul')
                 ->join('calling_dla as c', function ($join) {
                     $join->on('c.id_main_province', '=', 'ul.id_main_province')
@@ -222,7 +222,7 @@ class Tab2Service
 
     public function Tab2_Part6_TypeCallAll()
     {
-        return Cache::remember('tab2_part6_call_all', 300, function () {
+        return Cache::remember('tab2_part6_call_all', 600, function () {
             return DB::table('calling_dla as c')
                 ->join('positions_dla as p', 'p.id_position', '=', 'c.id_position')
                 ->join('type_positions_dla as t', 't.id', '=', 'p.id_type')
@@ -254,7 +254,7 @@ class Tab2Service
 
     public function Tab2_Part7_TypeRemainAll()
     {
-        return Cache::remember('tab2_part7_remain_all', 300, function () {
+        return Cache::remember('tab2_part7_remain_all', 600, function () {
             return DB::table('updated_list_dla as ul')
                 ->join('positions_dla as p', 'p.id_position', '=', 'ul.id_position')
                 ->join('type_positions_dla as t', 't.id', '=', 'p.id_type')
@@ -293,7 +293,7 @@ class Tab2Service
 
     public function Tab2_Part8_TableAllTypes()
     {
-        return Cache::remember('tab2_part8_all_types', 300, function () {
+        return Cache::remember('tab2_part8_all_types', 600, function () {
             $listed = DB::table('updated_list_dla as ul')
                 ->join('positions_dla as p', 'p.id_position', '=', 'ul.id_position')
                 ->join('type_positions_dla as t', 't.id', '=', 'p.id_type')

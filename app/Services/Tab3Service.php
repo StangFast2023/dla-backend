@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Models\CallingDla;
 use App\Models\UpdateListDla;
@@ -27,98 +28,69 @@ class Tab3Service
 
     public function Tab3_Part8_TableAllTypes()
     {
-        $array = [];
-        $AllType = db::table('updated_list_dla')
-            ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
-            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->select(db::raw('
-                updated_list_dla.id_main_province as prov_main_id    ,
-                updated_list_dla.id_sub_province  as prov_sub_id    ,
-                positions_dla.id_type as pos_type_id,
-                type_positions_dla.name as pos_type , 
-                sum( total::integer ) as  total
-            '))
-            ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_type')
-            ->orderBy('total', 'DESC')
-            ->get()
-            ->toArray();
-        foreach ($AllType as $type) {
-            if (!isset($array[$type->prov_main_id][$type->prov_sub_id][$type->pos_type_id])) {
-                $fullProvName = db::table('provinces_dla')
-                    ->where('id_main_province', $type->prov_main_id)
-                    ->where('id_sub_province', $type->prov_sub_id)
-                    ->first();
+        return Cache::remember('tab3_part8_table_all_types', 600, function () {
+            $provinces = db::table('provinces_dla')
+                ->get(['id_main_province', 'id_sub_province', 'main_name_province', 'sub_name_province'])
+                ->keyBy(function ($item) {
+                    return $item->id_main_province . '_' . $item->id_sub_province;
+                });
+            $AllType = db::table('updated_list_dla')
+                ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
+                ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
+                ->select(db::raw('updated_list_dla.id_main_province as prov_main_id, updated_list_dla.id_sub_province as prov_sub_id, positions_dla.id_type as pos_type_id, type_positions_dla.name as pos_type, sum(total::integer) as total'))
+                ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_type')
+                ->get();
+            $array = [];
+            foreach ($AllType as $type) {
+                $provKey = $type->prov_main_id . '_' . $type->prov_sub_id;
+                $prov = $provinces->get($provKey);
+
                 $array[$type->prov_main_id][$type->prov_sub_id][$type->pos_type_id] = [
-                    'prov_main_id'      =>  $type->prov_main_id,
-                    'prov_sub_id'       =>  $type->prov_sub_id,
-                    'prov_main_name'    =>  $fullProvName ? $fullProvName->main_name_province : null,
-                    'prov_full_name'    =>  $fullProvName ? $fullProvName->main_name_province . " " . $fullProvName->sub_name_province : null,
-                    'prov_sub_name'     =>  $fullProvName ? $fullProvName->sub_name_province : null,
-                    'pos_type_id'       =>  $type->pos_type_id,
-                    'pos_type'          =>  $type->pos_type,
-                    'total_list'        =>  (int)$type->total,
-                    'total_call'        =>  0,
-                    'total_remain'      =>  (int)$type->total,
-                    'status_empty'      =>  false,
-                    'status_called'     =>  false,
-                    'round_data'        =>  []
+                    'prov_main_id'   => $type->prov_main_id,
+                    'prov_sub_id'    => $type->prov_sub_id,
+                    'prov_main_name' => $prov ? $prov->main_name_province : null,
+                    'prov_full_name' => $prov ? $prov->main_name_province . " " . $prov->sub_name_province : null,
+                    'prov_sub_name'  => $prov ? $prov->sub_name_province : null,
+                    'pos_type_id'    => $type->pos_type_id,
+                    'pos_type'       => $type->pos_type,
+                    'total_list'     => (int)$type->total,
+                    'total_call'     => 0,
+                    'total_remain'   => (int)$type->total,
+                    'status_empty'   => false,
+                    'status_called'  => false,
+                    'round_data'     => []
                 ];
             }
-        }
-        $array = collect($array)->sortKeys()->toArray();
-        foreach ($array as &$subArray) {
-            foreach ($subArray as &$main) {
-                if (is_array($main)) {
-                    ksort($main);
+            $typeCallAll = db::table('calling_dla')
+                ->leftjoin('positions_dla', 'positions_dla.id_position', 'calling_dla.id_position')
+                ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
+                ->where('call_status', 1)
+                ->select(db::raw('calling_dla.id_main_province, calling_dla.id_sub_province, calling_dla.round, positions_dla.id_type as pos_type_id, sum(total::integer) as total'))
+                ->groupBy('id_main_province', 'id_sub_province', 'round', 'pos_type_id')
+                ->get();
+            foreach ($typeCallAll as $all) {
+                $ref = &$array[$all->id_main_province][$all->id_sub_province][$all->pos_type_id];
+
+                if ($ref) {
+                    $ref['total_call'] += $all->total;
+                    $ref['total_remain'] -= $all->total;
+                    $ref['status_called'] = true;
+
+                    $ref['round_data'][$all->round] = [
+                        'round'  => $all->round,
+                        'total'  => ($ref['round_data'][$all->round]['total'] ?? 0) + $all->total,
+                        'called' => $all->total !== 0
+                    ];
                 }
             }
-        }
-        $typeCallAll = db::table('calling_dla')
-            ->leftjoin('positions_dla', 'positions_dla.id_position', 'calling_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
-            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->where('call_status', 1)
-            ->select(db::raw('
-                calling_dla.id_main_province                as  id_main_province    ,
-                calling_dla.id_sub_province                 as  id_sub_province     ,
-                calling_dla.round                           as  round               ,
-                positions_dla.id_type                       as  pos_type_id         ,
-                type_positions_dla.name                     as  pos_type            , 
-                sum( total::integer )                       as  total
-            '))
-            ->groupBy('id_main_province', 'id_sub_province', 'round', 'pos_type_id', 'pos_type')
-            ->orderBy('total', 'DESC')
-            ->get()
-            ->toArray();
-        foreach ($typeCallAll as $all) {
-            $id_main_province   = $all->id_main_province;
-            $id_sub_province    = $all->id_sub_province;
-            $pos_type_id        = $all->pos_type_id;
-            $total              = $all->total;
-            if (isset($array[$id_main_province][$id_sub_province][$pos_type_id])) {
-                $array[$id_main_province][$id_sub_province][$pos_type_id]['total_call'] += $total;
-                $array[$id_main_province][$id_sub_province][$pos_type_id]['total_remain'] -= $total;
+            foreach ($array as &$main) {
+                foreach ($main as &$sub) {
+                    foreach ($sub as &$pos) {
+                        $pos['status_empty'] = ($pos['total_remain'] <= 0);
+                    }
+                }
             }
-
-            $round = $all->round;
-            if (!isset($array[$id_main_province][$id_sub_province][$pos_type_id]['round_data'][$round])) {
-                $array[$id_main_province][$id_sub_province][$pos_type_id]['status_called'] = true;
-                $array[$id_main_province][$id_sub_province][$pos_type_id]['round_data'][$round] = [
-                    'round'     =>  $round,
-                    'total'     =>  0,
-                    'called'    =>  false
-                ];
-            }
-            $array[$id_main_province][$id_sub_province][$pos_type_id]['round_data'][$round]['total'] += $total;
-            $array[$id_main_province][$id_sub_province][$pos_type_id]['round_data'][$round]['called'] = $total !== 0;
-        }
-        foreach ($array as $key_prov => $call) {
-            foreach ($call as $key_type => $type) {
-                $total_remain = $type[$key_type]['total_remain'];
-                $type[$key_type]['status_empty'] = $total_remain === 0;
-            }
-        }
-        return $array;
+            return $array;
+        });
     }
 }

@@ -11,6 +11,6 @@ class PrefixsDla extends Model
     public      $timestamps = false;
     public function position()
     {
-        return $this->belongsTo(PositionDla::class, 'id', 'id_prefix');
+        return $this->belongsTo(PrefixsDla::class, 'id_prefix', 'id');
     }
 }
