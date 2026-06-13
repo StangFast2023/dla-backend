@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Models\CallingDla;
 use App\Models\UpdateListDla;
@@ -35,218 +36,192 @@ class Tab1Service
 
     public function Tab1_Part1_Static()
     {
-        $CurRound   = CallingDla::max('round');
-        $MaxRound   = 25;
-        $TotalList  = UpdateListDla::sum(DB::raw('total::integer'));
-        $TotalCall  = CallingDla::where('call_status', 1)->sum(DB::raw('total::integer'));
-        $AVGCall = CallingDla::where('call_status', 1)
-            ->select(DB::raw("
-                concat(called_month || '/' || called_year) as monthly, 
-                sum(total::integer) as total_per_month
-            "))
-            ->groupBy('monthly')
-            ->get()
-            ->avg('total_per_month');
-        $array = [
-            'CurRound'      =>  (int)$CurRound,
-            'MaxRound'      =>  (int)$MaxRound,
-            'TotalList'     =>  (int)$TotalList,
-            'TotalCall'     =>  (int)$TotalCall,
-            'AvgCall'       =>  (int)$AVGCall,
-        ];
-        return $array;
+        return Cache::remember('tab1_part1_stats', 600, function () {
+
+            $CurRound   = CallingDla::max('round');
+            $MaxRound   = 25;
+            $TotalList  = UpdateListDla::sum(DB::raw('total::integer'));
+            $TotalCall  = CallingDla::where('call_status', 1)->sum(DB::raw('total::integer'));
+            $AVGCall = CallingDla::where('call_status', 1)
+                ->select(DB::raw("concat(called_month, '/', called_year) as monthly, sum(total::integer) as total_per_month"))
+                ->groupBy('monthly')
+                ->get()
+                ->avg('total_per_month');
+            return [
+                'CurRound'      => (int)$CurRound,
+                'MaxRound'      => (int)$MaxRound,
+                'TotalList'     => (int)$TotalList,
+                'TotalCall'     => (int)$TotalCall,
+                'AvgCall'       => (int)$AVGCall,
+            ];
+        });
     }
 
     public function Tab1_Part2_Monthly()
     {
-        $fullMonthly = $this->getAccountTimeline();
-
-        $MonthlyRaw = CallingDla::where('call_status', 1)->get();
-        $minMonth = $MonthlyRaw->min(fn($m) => $m->called_year * 12 + $m->called_month);
-        $maxMonth = $MonthlyRaw->max(fn($m) => $m->called_year * 12 + $m->called_month);
-
-        $array = [];
-        foreach ($fullMonthly as $full) {
-            $currentMonthValue = $full['year'] * 12 + $full['month'];
-            if ($currentMonthValue >= $minMonth && $currentMonthValue <= $maxMonth) {
-                $key_month_year = $full['month'] . '-' . $full['year'];
-                $array[$key_month_year] = [
-                    'month'           => $full['month'],
-                    'year'            => $full['year'],
-                    'label_eng'       => $full['label'],
-                    'label_th_f'      => $this->monthYearThai(true, $full['month'], $full['year']),
-                    'label_th_s'      => $this->monthYearThai(false, $full['month'], $full['year']),
-                    'call_status'     => false,
+        return Cache::remember('monthly_stats_tab1', 600, function () {
+            $rawStats = DB::table('calling_dla')
+                ->select('called_month', 'called_year', 'round')
+                ->selectRaw('SUM(total::integer) as total_sum')
+                ->where('call_status', 1)
+                ->groupBy('called_year', 'called_month', 'round')
+                ->get();
+            $fullMonthly = $this->getAccountTimeline();
+            $array = [];
+            foreach ($fullMonthly as $full) {
+                $key = $full['month'] . '-' . $full['year'];
+                $array[$key] = [
+                    'month' => $full['month'],
+                    'year' => $full['year'],
+                    'label_eng' => $full['label'],
+                    'label_th_f' => $this->monthYearThai(true, $full['month'], $full['year']),
+                    'label_th_s' => $this->monthYearThai(false, $full['month'], $full['year']),
+                    'call_status' => false,
                     'total_per_month' => 0,
-                    'total_round'     => 0,
-                    'data'            => []
+                    'total_round' => 0,
+                    'data' => []
                 ];
             }
-        }
-
-        foreach ($MonthlyRaw as $month) {
-            $key_month_year = $month->called_month . '-' . $month->called_year;
-            if (isset($array[$key_month_year])) {
-                $round = $month->round;
-                $total = $month->total;
-                if (!isset($array[$key_month_year]['data'][$round])) {
-                    $array[$key_month_year]['total_round'] += 1;
-                    $array[$key_month_year]['data'][$round] = ['round' => $round, 'total' => 0];
+            foreach ($rawStats as $row) {
+                $key = $row->called_month . '-' . $row->called_year;
+                if (isset($array[$key])) {
+                    $array[$key]['call_status'] = true;
+                    $array[$key]['total_per_month'] += $row->total_sum;
+                    $array[$key]['total_round'] += 1;
+                    $array[$key]['data'][$row->round] = [
+                        'round' => $row->round,
+                        'total' => $row->total_sum
+                    ];
                 }
-                $array[$key_month_year]['call_status'] = true;
-                $array[$key_month_year]['total_per_month'] += $total;
-                $array[$key_month_year]['data'][$round]['total'] += $total;
             }
-        }
-        return $array;
+            return $array;
+        });
     }
 
     public function Tab1_Part3_Cumulative()
     {
-        $fullMonthly = $this->getAccountTimeline();
-        $array = [];
-        $Monthly    = CallingDla::all()->where('call_status', 1);
-        $minMonth = $Monthly->min(fn($m) => $m->called_year * 12 + $m->called_month);
-        $maxMonth = $Monthly->max(fn($m) => $m->called_year * 12 + $m->called_month);
-        foreach ($fullMonthly as $full) {
-            $currentMonthValue = $full['year'] * 12 + $full['month'];
-            if ($currentMonthValue >= $minMonth && $currentMonthValue <= $maxMonth) {
-                $key_month_year = $full['month'] . '-' . $full['year'];
-                $array[$key_month_year] = [
+        return Cache::remember('tab1_part3_cumulative', 600, function () {
+            $monthlySums = DB::table('calling_dla')
+                ->select('called_month', 'called_year')
+                ->selectRaw('SUM(total::integer) as sum_total')
+                ->where('call_status', 1)
+                ->groupBy('called_year', 'called_month')
+                ->get()
+                ->keyBy(function ($item) {
+                    return $item->called_month . '-' . $item->called_year;
+                });
+            $fullMonthly = $this->getAccountTimeline();
+            $array = [];
+            foreach ($fullMonthly as $full) {
+                $key = $full['month'] . '-' . $full['year'];
+                $array[$key] = [
                     'month'           => $full['month'],
                     'year'            => $full['year'],
                     'label_eng'       => $full['label'],
                     'label_th_f'      => $this->monthYearThai(true, $full['month'], $full['year']),
                     'label_th_s'      => $this->monthYearThai(false, $full['month'], $full['year']),
-                    'call_status'     => false,
-                    'total_per_month' => 0,
+                    'call_status'     => isset($monthlySums[$key]),
+                    'total_per_month' => isset($monthlySums[$key]) ? (int)$monthlySums[$key]->sum_total : 0,
                     'total_round'     => 0,
                     'data'            => []
                 ];
             }
-        }
 
-        foreach ($Monthly as $month) {
-            $called_month   = $month->called_month;
-            $called_year    = $month->called_year;
-            $full_month_year = $called_month . '-' . $called_year;
-            if (isset($array[$full_month_year])) {
-                $array[$full_month_year]['total_per_month'] += $month->total;
-                $array[$full_month_year]['call_status'] = true;
-            }
-        }
-        return $array;
+            return $array;
+        });
     }
 
     public function Tab1_Part4_OtherStatic()
     {
-        $CurRound    = CallingDla::max('round');
-        $MaxRound    = 25;
-        $CallProcess = round((($CurRound / $MaxRound) * 100), 2);
-
-        $MostTotalCall = CallingDla::where('call_status', 1)
-            ->select(db::raw("
-            called_month , called_year ,
-                sum(total::integer ) as total
-            "))
-            ->groupBy('called_month', 'called_year')
-            ->orderBy('total', 'DESC')
-            ->first();
-
-        $MostRoundCall = CallingDla::where('call_status', 1)
-            ->select(db::raw('
-                round as round    ,
-                sum(total::integer) as total
-            '))
-            ->groupBy('round')
-            ->orderBy('total', 'DESC')
-            ->first();
-
-        $array = [
-            'CurRound'          =>  ['name' => 'ความคืบหน้าในการเรียกใช้บัญชี', 'value' => $CallProcess],
-            'MostTotalCall_1'   =>  ['name' => 'เดือนที่มีการเรียกรายงานตัวมากที่สุด', 'value' => $this->monthYearThai(true, $MostTotalCall->called_month, $MostTotalCall->called_year)],
-            'MostTotalCall_2'   =>  ['name' => 'ทั้งหมด', 'value' => $MostTotalCall->total],
-            'MostRoundCall_1'   =>  ['name' => 'รอบที่มีการเรียกรายงานตัวมากที่สุด', 'value' => $MostRoundCall->round],
-            'MostRoundCall_2'   =>  ['name' => 'ทั้งหมด', 'value' => $MostRoundCall->total],
-        ];
-        return $array;
+        return Cache::remember('tab1_part4_stats', 600, function () {
+            $CurRound = CallingDla::max('round') ?? 0;
+            $MaxRound = 25;
+            $CallProcess = $MaxRound > 0 ? round((($CurRound / $MaxRound) * 100), 2) : 0;
+            $MostTotalCall = DB::table('calling_dla')
+                ->select('called_month', 'called_year')
+                ->selectRaw('SUM(total::integer) as total')
+                ->where('call_status', true)
+                ->groupBy('called_month', 'called_year')
+                ->orderByDesc('total')
+                ->first();
+            $MostRoundCall = DB::table('calling_dla')
+                ->select('round')
+                ->selectRaw('SUM(total::integer) as total')
+                ->where('call_status', true)
+                ->groupBy('round')
+                ->orderByDesc('total')
+                ->first();
+            return [
+                'CurRound' => ['name' => 'ความคืบหน้าในการเรียกใช้บัญชี', 'value' => $CallProcess],
+                'MostTotalCall_1' => ['name' => 'เดือนที่มีการเรียกรายงานตัวมากที่สุด', 'value' => $MostTotalCall ? $this->monthYearThai(true, $MostTotalCall->called_month, $MostTotalCall->called_year) : '-'],
+                'MostTotalCall_2' => ['name' => 'ทั้งหมด', 'value' => $MostTotalCall ? $MostTotalCall->total : 0],
+                'MostRoundCall_1' => ['name' => 'รอบที่มีการเรียกรายงานตัวมากที่สุด', 'value' => $MostRoundCall ? $MostRoundCall->round : '-'],
+                'MostRoundCall_2' => ['name' => 'ทั้งหมด', 'value' => $MostRoundCall ? $MostRoundCall->total : 0],
+            ];
+        });
     }
 
     public function Tab1_Part5_PercentRound()
     {
-        $AllRound   = CallingDla::all()->where('total', '!=', '-');
-        $array = [];
-        foreach ($AllRound as $all) {
-            if (!isset($array[$all->round])) {
-                $array[$all->round] = [
-                    'round' =>  $all->round,
-                    'total' =>  0
+        return Cache::remember('tab1_part5_percent_round', 600, function () {
+            $results = DB::table('calling_dla')
+                ->select('round')
+                ->selectRaw('SUM(total::integer) as total')
+                ->where('total', '!=', '-')
+                ->groupBy('round')
+                ->orderBy('round', 'ASC')
+                ->get();
+            $array = [];
+            foreach ($results as $row) {
+                $array[$row->round] = [
+                    'round' => $row->round,
+                    'total' => (int)$row->total
                 ];
             }
-            $array[$all->round]['total'] += $all->total;
-        }
-        return $array;
-    }
 
+            return $array;
+        });
+    }
 
     public function Tab1_part6_TableRoundCall()
     {
-        $array = [];
-        $Province = ProvincesDla::all();
-        foreach ($Province as $prov) {
-            $main   = $prov->id_main_province;
-            $sub    = $prov->id_sub_province;
-            if (!isset($array[$main])) {
-                $array[$main] = [
-                    'name'  =>  $prov->main_name_province,
-                    'data'  =>  []
-                ];
-            }
-            if (!isset($array[$main]['data'][$sub])) {
+        return Cache::remember('tab1_part6_table', 300, function () {
+            $callStats = DB::table('calling_dla')
+                ->select('id_main_province', 'id_sub_province', 'round')
+                ->selectRaw('SUM(total::integer) as total_called')
+                ->where('call_status', true)
+                ->groupBy('id_main_province', 'id_sub_province', 'round')
+                ->get()
+                ->groupBy(['id_main_province', 'id_sub_province']);
+            $listStats = DB::table('updated_list_dla')
+                ->select('id_main_province', 'id_sub_province')
+                ->selectRaw('SUM(total::integer) as total_listed')
+                ->groupBy('id_main_province', 'id_sub_province')
+                ->get()
+                ->keyBy(fn($item) => $item->id_main_province . '-' . $item->id_sub_province);
+            $provinces = ProvincesDla::all();
+            $array = [];
+            foreach ($provinces as $prov) {
+                $main = $prov->id_main_province;
+                $sub = $prov->id_sub_province;
+                $provinceCalls = $callStats->get($main, collect())->get($sub, collect());
+                $listed = $listStats->get("$main-$sub");
+                $totalCalled = $provinceCalls->sum('total_called');
+                $totalListed = $listed ? $listed->total_listed : 0;
+                if (!isset($array[$main])) {
+                    $array[$main] = ['name' => $prov->main_name_province, 'data' => []];
+                }
                 $array[$main]['data'][$sub] = [
-                    'full'  =>  $main . $sub,
-                    'name'  =>  $prov->main_name_province . ' ' . $prov->sub_name_province,
-                    'total_listed'  =>  0,
-                    'total_called'  =>  0,
-                    'total_remain'  =>  0,
-                    'total_round'   =>  0,
-                    'data-round'    =>  []
+                    'full' => $main . $sub,
+                    'name' => $prov->main_name_province . ' ' . $prov->sub_name_province,
+                    'total_listed' => $totalListed,
+                    'total_called' => $totalCalled,
+                    'total_remain' => $totalListed - $totalCalled,
+                    'total_round'  => $provinceCalls->count(),
+                    'data-round'   => $provinceCalls->keyBy('round')->toArray()
                 ];
             }
-        }
-
-        $UpdateList = UpdateListDla::all();
-        foreach ($UpdateList as $updt) {
-            $main   = $updt->id_main_province;
-            $sub    = $updt->id_sub_province;
-            $total  = $updt->total;
-            if (isset($array[$main]['data'][$sub])) {
-                $array[$main]['data'][$sub]['total_listed'] += $total;
-                $array[$main]['data'][$sub]['total_remain'] += $total;
-            }
-        }
-
-        $Calling = CallingDla::all();
-        foreach ($Calling as $call) {
-            if ($call->call_status == true) {
-                $main   = $call->id_main_province;
-                $sub    = $call->id_sub_province;
-                $total  = $call->total;
-                if (isset($array[$main]['data'][$sub])) {
-                    $array[$main]['data'][$sub]['total_called'] += $total;
-                }
-                $round  = $call->round;
-                if (!isset($array[$main]['data'][$sub]['data-round'][$round])) {
-                    $array[$main]['data'][$sub]['total_round'] += 1;
-                    $array[$main]['data'][$sub]['data-round'][$round] = [
-                        'round' =>  $round,
-                        'total' =>  0
-                    ];
-                }
-                $array[$main]['data'][$sub]['data-round'][$round]['total'] += $total;
-                $array[$main]['data'][$sub]['total_remain'] -= $total;
-            }
-        }
-        return $array;
+            return $array;
+        });
     }
 }
