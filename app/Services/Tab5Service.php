@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Models\CallingDla;
@@ -29,23 +30,19 @@ class Tab5Service
 
     public function Tab5_Part1_FilterData()
     {
-        $fullMonthly = $this->getAccountTimeline(false);
         $all_pos_array = [];
         $all_Positions = db::table('positions_dla')
-            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
-            ->select(db::raw('
-                positions_dla.id_position                   as  pos_id          ,
-                positions_dla.name                          as  pos_name        ,
-
-                prefixes_dla.name                           as  pref_name       ,
-                type_positions_dla.type_position            as  suff_name       ,
-
-                positions_dla.id_type                       as  pos_type_id     ,
-                type_positions_dla.name                     as  pos_type_name
-            '))
-            ->get()
-            ->toArray();
+            ->join('prefixes_dla', 'prefixes_dla.id', '=', 'positions_dla.id_prefix')
+            ->join('type_positions_dla', 'type_positions_dla.id', '=', 'positions_dla.id_type')
+            ->select([
+                'positions_dla.id_position as pos_id',
+                'positions_dla.name as pos_name',
+                'prefixes_dla.name as pref_name',
+                'type_positions_dla.type_position as suff_name',
+                'positions_dla.id_type as pos_type_id',
+                'type_positions_dla.name as pos_type_name'
+            ])
+            ->get();
         foreach ($all_Positions as $pos) {
             if (!isset($all_pos_array[$pos->pos_id])) {
                 $all_pos_array[$pos->pos_id] = [
@@ -63,16 +60,22 @@ class Tab5Service
                 ];
             }
         }
+        //--- passed
+
+
         $array = [];
         $provinces = db::table('provinces_dla')
-            ->select(db::raw("
-                provinces_dla.id                    as pro_id           ,
-                provinces_dla.id_main_province      as pro_main_id      ,
-                provinces_dla.main_name_province    as pro_main_name    ,
-                provinces_dla.id_sub_province       as pro_sub_id       ,
-                provinces_dla.sub_name_province     as pro_sub_name     ,
-                concat( provinces_dla.main_name_province || ' ' || provinces_dla.sub_name_province )  as pro_full_name 
-            "))
+            ->select([
+                'provinces_dla.id as pro_id',
+                'provinces_dla.id_main_province as pro_main_id',
+                'provinces_dla.main_name_province as pro_main_name',
+                'provinces_dla.id_sub_province as pro_sub_id',
+                'provinces_dla.sub_name_province as pro_sub_name',
+            ])
+            ->selectRaw("
+                provinces_dla.main_name_province || ' ' ||
+                provinces_dla.sub_name_province as pro_full_name
+            ")
             ->orderBy('pro_id', 'ASC')
             ->get();
         foreach ($provinces as $prov) {
@@ -100,25 +103,25 @@ class Tab5Service
                 ];
             }
         }
+        //--- passed
+
+
         $listed_position = db::table('updated_list_dla')
-            ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
-            ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
-            ->leftjoin('prefixes_dla', 'prefixes_dla.id', 'positions_dla.id_prefix')
-            ->select(db::raw('
-                updated_list_dla.id_main_province               as  prov_main_id    ,
-                updated_list_dla.id_sub_province                as  prov_sub_id     ,
-                positions_dla.id_type                           as  pos_type_id     ,
-                positions_dla.id_position                       as  pos_id          ,
-                sum( total::integer )                           as  total
-            '))
+            ->join('positions_dla', 'positions_dla.id_position', '=', 'updated_list_dla.id_position')
+            ->join('type_positions_dla', 'type_positions_dla.id', '=', 'positions_dla.id_type')
+            ->select([
+                'updated_list_dla.id_main_province as prov_main_id',
+                'updated_list_dla.id_sub_province as prov_sub_id',
+                'positions_dla.id_type as pos_type_id',
+                'positions_dla.id_position as pos_id',
+            ])
+            ->selectRaw('SUM(total::integer) as total')
             ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_id')
             ->orderBy('pos_id', 'asc')
-            ->get()
-            ->toArray();
+            ->get();
         foreach ($listed_position as $pos) {
             $prov_main_id   =   $pos->prov_main_id;
             $prov_sub_id    =   $pos->prov_sub_id;
-            $pos_type_id    =   $pos->pos_type_id;
             $pos_id         =   $pos->pos_id;
             $total          =   $pos->total;
             if (isset($array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id])) {
@@ -132,19 +135,21 @@ class Tab5Service
             $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_listed'] += (int)$total;
             $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_remain'] += (int)$total;
         }
+        //--- passed
 
-        $max_round = db::table('calling_dla')->max('round');
         $called_position = db::table('calling_dla')
-            ->leftjoin('positions_dla', 'positions_dla.id_position', 'calling_dla.id_position')
-            ->select(db::raw('calling_dla.* , positions_dla.id_type   as  pos_type_id'))
-            ->get()
-            ->toArray();
+            ->join('positions_dla', 'positions_dla.id_position', '=', 'calling_dla.id_position')
+            ->select([
+                'calling_dla.*',
+                'positions_dla.id_type as pos_type_id'
+            ])
+            ->get();
+        $current_date       =   Carbon::today();
         foreach ($called_position as $pos) {
 
             $prov_main_id   =   $pos->id_main_province;
             $prov_sub_id    =   $pos->id_sub_province;
 
-            $pos_type_id    =   $pos->pos_type_id;
             $pos_id         =   $pos->id_position;
             $round          =   $pos->round;
             $total          =   $pos->total;
@@ -155,7 +160,6 @@ class Tab5Service
 
             $call_status        =   $pos->call_status;
             $list_status        =   $pos->list_status;
-            $current_date       =   Carbon::today();
 
             if ($call_status === true) {
                 $call_date      =   Carbon::createFromDate($pos->called_year, $pos->called_month, $pos->called_day);
@@ -250,17 +254,18 @@ class Tab5Service
      */
     public function predictionUserDetail($regionId, $areaId, $positionId, $sequence, $frequency)
     {
-        $updateLisedTotal = db::table('updated_list_dla')
+        $totalListed = db::table('updated_list_dla')
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
             ->where('id_position', $positionId)
-            ->first();
+            ->value('total');
+
         $data = [
             //---- part 1
             'rank'              =>  (int)$sequence,
-            'total_listed'      =>  $updateLisedTotal->total,
+            'total_listed'      =>  (int)$totalListed,
             'total_called'      =>  0,
-            'total_remain'      =>  $updateLisedTotal->total,
+            'total_remain'      =>  (int)$totalListed,
             'total_round'       =>  0,
             'process_bars'      =>  0,
             'avg_call'          =>  0,
@@ -280,51 +285,68 @@ class Tab5Service
 
 
         // total_round , total_called , total_remain
-        $calledData = db::table('calling_dla')
+        $calledData = DB::table('calling_dla')
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
             ->where('id_position', $positionId)
             ->get();
 
         $round = 1;
+        $avg_called = 0;
+        $avg_counted = 0;
+        $total_round = 0;
+        $total_called = 0;
+        $total_remain = 0;
+
         foreach ($calledData as $call) {
-            $total = $call->total;
-            $data['total_round']  += $round;
-            $data['total_called'] += ($call->list_status === true ? $total : 0);
-            $data['total_remain'] -= ($call->list_status === true ? $total : 0);
+            $total_round += $round;
+            $total = (int)$call->total;
+            if ($call->list_status) {
+                $total_called += $total;
+            }
+            if ($call->call_status && $call->list_status) {
+                $avg_counted++;
+                $avg_called += $total;
+            }
         }
+        $data['avg_call'] = $avg_counted > 0 ? round($avg_called / $avg_counted, 2) : 0;
+        $data['total_round'] = $total_round;
+        $data['total_called'] = $total_called;
+        $data['total_remain'] -= $total_remain;
 
-        // avg_call
-        $avgCalled = db::table('calling_dla')
-            ->where('id_main_province', $regionId)
-            ->where('id_sub_province', $areaId)
-            ->where('id_position', $positionId)
-            ->where('call_status', 1)
-            ->where('list_status', 1)
-            ->select(db::raw('avg(total::integer) as avg'))
-            ->first();
-        $data['avg_call'] = $avgCalled->avg;
+        $data['process_bars']   =   ($data['total_called'] / $data['total_listed']) * 100;
+        $data['status_work']    =   $sequence <= $data['total_called'] ? 'completed' : 'waiting';
 
-        // process_bars , status_work , remain_before , rank_risk , probabilitys , next_round , status_out_list
-        $rank           = $data['rank'];
-        $total_listed   = $data['total_listed'];
-        $total_called   = $data['total_called'];
-        $total_round    = $data['total_round'];
+        $data['remain_before']  =   ($sequence - $data['total_called']) > 0 ? $sequence - $data['total_called'] : 0;
 
-        $data['process_bars']   =   ($total_called / $total_listed) * 100;
-        $data['status_work']    =    $rank <= $total_called ? 'completed' : 'waiting';
-
-        $data['remain_before']  =   ($rank - $total_called) > 0 ? $rank - $total_called : 0;
-
-        $empty = $total_called - $total_listed;
+        $empty = $data['total_called'] - $data['total_listed'];
         $data['status_out_list'] = $empty === 0 ? true : false;
 
         //  chart_1_round_monthly
         //  chart_2_round_table 
-        $data_chart1 = $this->data_part1_chart1($regionId, $areaId, $positionId);
+
+        $calledDataChart1 = DB::table('calling_dla')
+            ->where('id_main_province', $regionId)
+            ->where('id_sub_province', $areaId)
+            ->where('id_position', $positionId)
+            ->select([
+                'round',
+                'call_status',
+                'list_status',
+                'total',
+                'called_day',
+                'called_month',
+                'called_year',
+                'is_cross_region',
+                'crossed_region',
+                'crossed_zone',
+            ])
+            ->get();
+
+        $data_chart1 = $this->data_part1_chart1($calledDataChart1, $data['total_listed']);
         $data['chart_1_round'] = $data_chart1;
 
-        $data_chart2 = $this->data_part1_chart2($regionId, $areaId, $positionId);
+        $data_chart2 = $this->data_part1_chart2($calledDataChart1, $data['total_listed']);
         $data['chart_2_round'] = $data_chart2;
 
         //  chart_3_region_monthly
@@ -332,14 +354,34 @@ class Tab5Service
         $data_chart3 = $this->data_part1_chart3($positionId);
         $data['chart_3_region'] = $data_chart3;
 
+        $getAccountDaysStatus   =   $this->getAccountDaysStatus();
         //  predictions / rank_risk / probabilitys / next_round
-        $data_chart5 = $this->data_part2_chart1($total_called, $total_round, $avgCalled->avg, $sequence, $frequency);
+        $data_chart5 = $this->data_part2_chart1(
+            $data['total_called'],
+            $data['total_round'],
+            $data['avg_call'],
+            $sequence,
+            $frequency,
+            $getAccountDaysStatus
+        );
         $data['rank_risk']      = $data_chart5['rank_risk'];
         $data['probabilitys']   = $data_chart5['probabilitys'];
         $data['next_round']     = $data_chart5['next_round'];
 
         // predictions / probabilitys of exhaustion / projection / total of next round
-        $data_chart6 = $this->data_part2_chart2($regionId, $areaId, $positionId, $sequence, $frequency);
+        $data_chart6 = $this->data_part2_chart2(
+            $regionId,
+            $areaId,
+            $positionId,
+            $sequence,
+            $frequency,
+            $data['total_listed'],
+            $data['total_called'],
+            $data['avg_call'],
+            $data['total_round'],
+            $getAccountDaysStatus,
+            $calledDataChart1->sortByDesc('round')->first()
+        );
         $data['probability_percent']    =   $data_chart6['probability_percent'];
         $data['start_rank_2y']          =   $data_chart6['start_rank_2y'];
         $data['end_rank_2y']            =   $data_chart6['end_rank_2y'];
@@ -350,7 +392,7 @@ class Tab5Service
         $data['rounds_header']          =   $data_chart6['rounds_header'];
 
         // probability of crossing region
-        $data_chart7 = $this->data_part2_chart3($regionId, $areaId, $positionId, $sequence, $frequency);
+        $data_chart7 = $this->data_part2_chart3($regionId, $areaId, $positionId, $sequence, $frequency, $getAccountDaysStatus);
         $data['summary']    =   $data_chart7['summary'];
         $data['max_round']  =   $data_chart7['max_round'];
         $data['sim_state']  =   $data_chart7['sim_state'];
@@ -359,18 +401,12 @@ class Tab5Service
 
 
     /**
-     * @param int $regionId
-     * @param int $areaId
-     * @param int $positionId
+     * @param int $total_listed
+     * @param Collection $calledDataChart1
      */
-    public function data_part1_chart1($regionId, $areaId, $positionId)
+    public function data_part1_chart1($calledDataChart1, $total_listed)
     {
         $date_chart1 = [];
-        $total_listed = db::table('updated_list_dla')
-            ->where('id_main_province', $regionId)
-            ->where('id_sub_province', $areaId)
-            ->where('id_position', $positionId)
-            ->sum(DB::raw('total::integer'));
         $getAccountTimeline = $this->getAccountTimeline();
         foreach ($getAccountTimeline as $timeline) {
             $date = $timeline['date'];
@@ -394,11 +430,6 @@ class Tab5Service
             }
         }
 
-        $calledDataChart1 = db::table('calling_dla')
-            ->where('id_main_province', $regionId)
-            ->where('id_sub_province', $areaId)
-            ->where('id_position', $positionId)
-            ->get();
 
         $last_end = 0;
         $current_date = Carbon::today();
@@ -448,27 +479,13 @@ class Tab5Service
     }
 
     /**
-     * @param int $regionId
-     * @param int $areaId
-     * @param int $positionId
+     * @param int $total_listed
+     * @param Collection $calledDataChart1
      */
-    public function data_part1_chart2($regionId, $areaId, $positionId)
+    public function data_part1_chart2($calledDataChart1, $total_listed)
     {
         //  chart_2_round_table
         $date_chart2 = [];
-
-        $total_listed = db::table('updated_list_dla')
-            ->where('id_main_province', $regionId)
-            ->where('id_sub_province', $areaId)
-            ->where('id_position', $positionId)
-            ->sum(DB::raw('total::integer'));
-
-        $calledDataChart1 = db::table('calling_dla')
-            ->where('id_main_province', $regionId)
-            ->where('id_sub_province', $areaId)
-            ->where('id_position', $positionId)
-            ->get();
-
         $current_date = Carbon::today();
         foreach ($calledDataChart1 as $call) {
             $round = $call->round;
@@ -495,6 +512,7 @@ class Tab5Service
                 ];
             }
         }
+
         $last_end = 0;
         $prev_total = null;
         foreach ($date_chart2 as $index => &$item) {
@@ -534,6 +552,7 @@ class Tab5Service
      */
     public function data_part1_chart3($positionId)
     {
+        $chart3 = [];
         $getAccountTimeline = $this->getAccountTimeline();
         foreach ($getAccountTimeline as &$get) {
             unset($get['data']);
@@ -542,15 +561,16 @@ class Tab5Service
             $get['calls']  =   false;
             $get['lists']  =   false;
         }
-        $getAccountTimeline = collect($getAccountTimeline)->keyBy('date')->toArray();
-        $updated_list_dla = db::table('updated_list_dla')
-            ->where('id_position', $positionId)
-            ->get();
 
-        $chart3 = [];
         $provData = db::table('provinces_dla')
+            ->select([
+                'id_main_province',
+                'id_sub_province',
+                'main_name_province',
+                'sub_name_province',
+            ])
             ->get();
-
+        $getAccountTimeline = collect($getAccountTimeline)->keyBy('date')->toArray();
         foreach ($provData as $prov) {
             $main  = $prov->id_main_province;
             $subs  = $prov->id_sub_province;
@@ -581,6 +601,14 @@ class Tab5Service
             }
         }
 
+        $updated_list_dla = db::table('updated_list_dla')
+            ->select([
+                'id_main_province',
+                'id_sub_province',
+                'total',
+            ])
+            ->where('id_position', $positionId)
+            ->get();
         foreach ($updated_list_dla as $update) {
             $main  = $update->id_main_province;
             $subs  = $update->id_sub_province;
@@ -596,14 +624,28 @@ class Tab5Service
 
         $calling_dla = db::table('calling_dla')
             ->where('id_position', $positionId)
+            ->select([
+                'id_main_province',
+                'id_sub_province',
+                'round',
+                'total',
+                'call_status',
+                'list_status',
+                'called_day',
+                'called_month',
+                'called_year',
+                'is_cross_region',
+                'crossed_region',
+                'crossed_zone',
+            ])
             ->get();
+        $current_date = Carbon::today();
         foreach ($calling_dla as $call) {
             $main  = $call->id_main_province;
             $subs  = $call->id_sub_province;
             $total = $call->total;
             $called = (bool)$call->call_status;
             $listed = (bool)$call->list_status;
-
             //--- monthly
             if ($called === true && $listed === true) {
                 $chart3[$main]['total_called'] += $total;
@@ -613,7 +655,6 @@ class Tab5Service
                 $chart3[$main]['sub_province'][$subs]['total_called'] += $total;
                 $chart3[$main]['sub_province'][$subs]['total_remaining'] -= $total;
             }
-
             $day    = $call->called_day;
             $month  = $call->called_month;
             $years  = $call->called_year;
@@ -624,10 +665,8 @@ class Tab5Service
                 $chart3[$main]['sub_province'][$subs]['data_monthly'][$date]['calls'] = $called;
                 $chart3[$main]['sub_province'][$subs]['data_monthly'][$date]['lists'] = $listed;
             }
-
             //--- roundly
             $round  = $call->round;
-            $current_date = Carbon::today();
             $date_numb    = Carbon::createFromDate($years, $month, $day);
             if (!isset($chart3[$main]['sub_province'][$subs]['data_rounds'][$round])) {
                 $chart3[$main]['sub_province'][$subs]['data_rounds'][$round] = [
@@ -700,48 +739,47 @@ class Tab5Service
      * @param int $average
      * @param int $sequence
      * @param int $frequency
+     * @param array $getAccountDaysStatus
      */
-    public function data_part2_chart1($total_called, $total_round, $average, $sequence, $frequency)
+    public function data_part2_chart1($total_called, $total_round, $average, $sequence, $frequency, $getAccountDaysStatus)
     {
         $data = [];
         $rank = $sequence;
-        $getAccountDaysStatus   =   $this->getAccountDaysStatus();
         $days_passed            =   $getAccountDaysStatus['days_passed'];
         $days_remaining         =   $getAccountDaysStatus['days_remaining'];
-        $daily_rates            =   $total_called / $days_passed;
+        $daily_rates            =   $days_passed > 0 ? ($total_called / $days_passed) : 0;
         $expected_rotal         =   $total_called + ($daily_rates * $days_remaining);
         $probabilitys           =   min(100, ($expected_rotal / $rank) * 100);
-        $data['probabilitys']   =   $probabilitys;
 
         $today      =   $getAccountDaysStatus['current_date'];
         $final      =   $getAccountDaysStatus['final_date'];
         $interval   =   $today->diff($final);
         $m_remains  =   ($interval->y * 12) + $interval->m;
-        $avg_per    =   $total_called / $total_round;
+        $avg_per    =   $total_round > 0 ? ($total_called / $total_round) : 0;
         $round_size =   $avg_per * $frequency;
         $end_of_next_round = $total_called + $round_size;
-        if ($end_of_next_round >= $rank) {
-            $next_rate = 100;
-        } else {
-            $next_rate = ($end_of_next_round / $rank) * 100;
-        }
-        $data['next_round'] = $next_rate;
+        $next_rate = min(100, ($rank > 0 ? ($end_of_next_round / $rank) * 100 : 0));
 
+        $rank_risk = 0;
         if ($rank <= $total_called) {
-            $data['rank_risk'] = 0;
+            $rank_risk = 0;
         } else {
             $distanc = $rank - $total_called;
 
             $avg_per_month = ($average > 0) ? $average : 0.1;
             $months_needed = $distanc / $avg_per_month;
             if ($months_needed <= $m_remains) {
-                $data['rank_risk'] = round(($months_needed / ($m_remains > 0 ? $m_remains : 1)) * 50, 2);
+                $rank_risk = round(($months_needed / ($m_remains > 0 ? $m_remains : 1)) * 50, 2);
             } else {
-                $data['rank_risk'] = min(100, 50 + (($months_needed - $m_remains) * 2));
+                $rank_risk = min(100, 50 + (($months_needed - $m_remains) * 2));
             }
         }
 
-        return $data;
+        return [
+            'probabilitys' => $probabilitys,
+            'next_round'   => $next_rate,
+            'rank_risk'    => $rank_risk,
+        ];
     }
 
     /**
@@ -750,38 +788,17 @@ class Tab5Service
      * @param int $positionId
      * @param int $sequence
      * @param int $frequency
+     * @param int $total_rank
+     * @param int $last_call_rank
+     * @param int $avg_call_per_month
+     * @param int $current_round
+     * @param array $DaysStatus
+     * @param Collection $last_call_date
      */
-    public function data_part2_chart2($regionId, $areaId, $positionId, $sequence, $frequency)
+    public function data_part2_chart2($regionId, $areaId, $positionId, $sequence, $frequency, $total_rank, $last_call_rank, $avg_call_per_month, $current_round, $DaysStatus, $last_call_date)
     {
         $data = [];
         //---- probability of exhaustion
-        $total_rank = db::table('updated_list_dla')
-            ->where('id_main_province', $regionId)
-            ->where('id_sub_province', $areaId)
-            ->where('id_position', $positionId)
-            ->first()
-            ->total;
-        $last_call_rank = db::table('calling_dla')
-            ->where('id_main_province', $regionId)
-            ->where('id_sub_province', $areaId)
-            ->where('id_position', $positionId)
-            ->where('call_status', 1)
-            ->select(db::raw('sum(total::integer) as total'))
-            ->first()
-            ->total;
-        $avg_call_per_month = db::table('calling_dla')
-            ->where('id_main_province', $regionId)
-            ->where('id_sub_province', $areaId)
-            ->where('id_position', $positionId)
-            ->where('call_status', 1)
-            ->select(db::raw('avg(calling_dla.total::integer) as avg_call'))
-            ->first()
-            ->avg_call;
-        $current_round = db::table('calling_dla')
-            ->where('id_main_province', $regionId)
-            ->where('id_sub_province', $areaId)
-            ->where('id_position', $positionId)
-            ->max('round');
         $DaysStatus     =   $this->getAccountDaysStatus();
         $today          =   $DaysStatus['current_date'];
         $final          =   $DaysStatus['final_date'];
@@ -824,20 +841,7 @@ class Tab5Service
             $rank_tracker = $end_of_round;
             if ($rank_tracker >= $total_rank) break;
         }
-        $last_call_rank = db::table('calling_dla')
-            ->where('id_main_province', $regionId)
-            ->where('id_sub_province', $areaId)
-            ->where('id_position', $positionId)
-            ->where('call_status', 1)
-            ->select(db::raw('sum(total::integer) as total'))
-            ->first()
-            ->total;
-        $last_call_date = db::table('calling_dla')
-            ->where('id_main_province', $regionId)
-            ->where('id_sub_province', $areaId)
-            ->where('id_position', $positionId)
-            ->where('round', $current_round)
-            ->first();
+
         $rank_tracker = max($last_call_rank, $sequence);
         $target_date  = $final;
         $next_date    = Carbon::create($last_call_date->called_year, $last_call_date->called_month, $last_call_date->called_day);
@@ -890,13 +894,14 @@ class Tab5Service
      * @param int $positionId
      * @param int $sequence
      * @param int $frequency
+     * @param array $getAccountDaysStatus
      */
     //  ตรรกะการยืม (Priority):
     //  เหนือ (1): ยืม -> อีสาน(3) -> กลาง(2) -> ใต้(4)
     //  กลาง (2): ยืม -> ใต้(4) -> อีสาน(3) -> เหนือ(1)
     //  อีสาน (3): ยืม -> เหนือ(1) -> ใต้(4) -> กลาง(2)
     //  ใต้ (4): ยืม -> กลาง(2) -> เหนือ(1) -> อีสาน(3)
-    public function data_part2_chart3($regionId, $areaId, $positionId, $sequence, $frequency)
+    public function data_part2_chart3($regionId, $areaId, $positionId, $sequence, $frequency, $getAccountDaysStatus)
     {
         $data = [];
         $lending_priority = [
@@ -922,6 +927,12 @@ class Tab5Service
             ]
         ];
         $all_provinces = db::table('provinces_dla')
+            ->select([
+                'id_main_province',
+                'main_name_province',
+                'id_sub_province',
+                'sub_name_province',
+            ])
             ->get();
         foreach ($all_provinces as $prov) {
             if (!isset($data[$prov->id_main_province])) {
@@ -950,8 +961,14 @@ class Tab5Service
                 ];
             }
         }
+
         $update_listed = db::table('updated_list_dla')
             ->where('id_position', $positionId)
+            ->select([
+                'id_main_province',
+                'id_sub_province',
+                'total',
+            ])
             ->get();
         foreach ($update_listed as $listed) {
             $m_prov = (int)$listed->id_main_province;
@@ -963,8 +980,15 @@ class Tab5Service
                 $data[$m_prov]['sub_prov'][$s_prov]['total_remain'] = $totals;
             }
         }
+
         $calling = db::table('calling_dla')
             ->where('id_position', $positionId)
+            ->select([
+                'id_main_province',
+                'id_sub_province',
+                'call_status',
+                'total',
+            ])
             ->get();
         foreach ($calling as $call) {
             $m_prov = (int)$call->id_main_province;
@@ -1012,7 +1036,7 @@ class Tab5Service
                 }
             }
         }
-        $getAccountDaysStatus   =   $this->getAccountDaysStatus();
+
         $today  = $getAccountDaysStatus['current_date'];
         $final  = $getAccountDaysStatus['final_date'];
         $interval = $today->diff($final);
