@@ -67,6 +67,16 @@ class CallingDlaController extends Controller
         $data = $tab2Service->getPositionDetail($id);
         return response()->json($data);
     }
+    //--- api data of Tab 3
+    /**
+     * @param int $id
+     */
+    public function updateTablePart6ForTab3($id, Tab3Service $tab3Service)
+    {
+        $data = $tab3Service->updateTablePart6ForTab3($id);
+        return response()->json($data);
+    }
+
 
 
     public function updateTableForTab4(Request $request, Tab4Service $Tab4Service)

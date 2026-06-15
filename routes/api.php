@@ -21,6 +21,7 @@ Route::get('/recruitment/tab5', [CallingDlaController::class, 'getDataTab5']);
 
 Route::get('/prediction-user-detail/{regionId}/{areaId}/{positionId}/{sequence}/{frequency}', [CallingDlaController::class, 'predictionUserDetail']);
 Route::get('/listed-position-detail/{id}', [CallingDlaController::class, 'getPositionDetailByZone']);
+Route::get('/updating-tab3-part6/{id}', [CallingDlaController::class, 'updateTablePart6ForTab3']);
 
 //---- post
 Route::post('/updating-tab4-table', [CallingDlaController::class, 'updateTableForTab4']);
