@@ -24,6 +24,7 @@ class Tab3Service
 
         return [
             'part6' =>  $this->Tab3_Part6_PositionSelect(),
+            'part7' =>  $this->Tab3_Part7_RegionSelect(),
             'part8' =>  $this->Tab3_Part8_TableAllTypes(),
         ];
     }
@@ -62,6 +63,38 @@ class Tab3Service
             }
         }
         return $array;
+    }
+
+    public function Tab3_Part7_RegionSelect()
+    {
+        $data = [];
+        $provinces_dla = db::table('provinces_dla')
+            ->select([
+                'id_main_province',
+                'id_sub_province',
+                'main_name_province',
+                'sub_name_province'
+            ])
+            ->get();
+        foreach ($provinces_dla as $prov) {
+            $id_main_province   =   $prov->id_main_province;
+            $id_sub_province    =   $prov->id_sub_province;
+            $main_name_province =   $prov->main_name_province;
+            $sub_name_province  =   $prov->sub_name_province;
+            if (!isset($data[$id_main_province])) {
+                $data[$id_main_province] = [
+                    'name_main' =>  $main_name_province,
+                    'sub'       =>  []
+                ];
+            }
+            if (!isset($data[$id_main_province]['sub'][$id_sub_province])) {
+                $data[$id_main_province]['sub'][$id_sub_province] = [
+                    'id_sub'    =>  $id_sub_province,
+                    'name'      =>  $sub_name_province
+                ];
+            }
+        }
+        return $data;
     }
 
     /**
