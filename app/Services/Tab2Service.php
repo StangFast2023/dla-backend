@@ -329,7 +329,8 @@ class Tab2Service
                     prov.main_name_province,
                     p.id_type as pos_type_id,
                     t.name as pos_type,
-                    SUM(ul.total::integer) as total
+                    SUM(ul.total::integer) as total,
+                    SUM(ul.new_total::integer) as new_total
                 ")
                 ->groupBy('prov_main_id', 'prov.main_name_province', 'pos_type_id', 'pos_type')
                 ->get();
@@ -352,8 +353,10 @@ class Tab2Service
                     'pos_type_id'    => $item->pos_type_id,
                     'pos_type'       => $item->pos_type,
                     'total_list'     => (int)$item->total,
+                    'total_list_n'   => (int)$item->new_total,
+                    'total_diff'     => (int)($item->total - $item->new_total),
                     'total_call'     => 0,
-                    'total_remain'   => (int)$item->total,
+                    'total_remain'   => (int)$item->new_total,
                     'status_empty'   => false,
                     'status_called'  => false,
                     'round_data'     => []
