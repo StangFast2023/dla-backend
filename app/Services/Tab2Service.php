@@ -41,15 +41,16 @@ class Tab2Service
                 ->join('type_positions_dla as type', 'type.id', '=', 'pos.id_type')
                 ->join('prefixes_dla as pre', 'pre.id', '=', 'pos.id_prefix')
                 ->selectRaw("
-                pos.id_type as pos_type_id,
-                type.name as pos_type,
-                ul.id_position as id_pos,
-                concat(pre.name, pos.name, type.type_position) as pos_name,
-                SUM(ul.total::integer) as total
-            ")
+                    pos.id_type as pos_type_id,
+                    type.name as pos_type,
+                    ul.id_position as id_pos,
+                    concat(pre.name, pos.name, type.type_position) as pos_name,
+                    SUM(ul.total) as total,
+                    SUM(ul.new_total) as new_total
+                ")
                 ->groupBy('pos_type_id', 'pos_type', 'id_pos', 'pos_name')
                 ->get();
-            $array = ['t' => ['total_count' => 0, 'total_person' => 0]];
+            $array = ['t' => ['total_count' => 0, 'total_person_old' => 0, 'total_person_new' => 0, 'diff' => 0]];
             foreach ($TypePos as $pos) {
                 $tid = $pos->pos_type_id;
                 $pid = $pos->id_pos;
@@ -59,23 +60,31 @@ class Tab2Service
                         'pos_type_id' => $tid,
                         'type_name' => $pos->pos_type,
                         'total_count' => 0,
-                        'total_person' => 0,
+                        'total_person_old' => 0,
+                        'total_person_new' => 0,
+                        'diff' => 0,
                         'data' => []
                     ];
                 }
-                $array[$tid]['data'][$pid] = ['id_pos' => $pid, 'pos_name' => $pos->pos_name, 'data' => (int)$pos->total];
+                $array[$tid]['data'][$pid] = ['id_pos' => $pid, 'pos_name' => $pos->pos_name, 'total' => (int)$pos->total, 'new_total' => (int)$pos->new_total, 'diff' => (int)($pos->total - $pos->new_total)];
                 $array[$tid]['total_count']++;
-                $array[$tid]['total_person'] += $pos->total;
+                $array[$tid]['total_person_old'] += $pos->total;
+                $array[$tid]['total_person_new'] += $pos->new_total;
+                $array[$tid]['diff'] += ($pos->total - $pos->new_total);
 
                 $array['t']['total_count']++;
-                $array['t']['total_person'] += $pos->total;
+                $array['t']['total_person_old'] += $pos->total;
+                $array['t']['total_person_new'] += $pos->new_total;
+                $array['t']['diff'] += ($pos->total - $pos->new_total);
             }
             $totalCount = $array['t']['total_count'] ?: 1;
-            $totalPerson = $array['t']['total_person'] ?: 1;
+            $totalPerson = $array['t']['total_person_old'] ?: 1;
+            $totalPersonNew = $array['t']['total_person_new'] ?: 1;
             foreach ($array as $key => &$item) {
                 if ($key !== 't') {
                     $item['total_count_in_percent'] = ($item['total_count'] / $totalCount) * 100;
-                    $item['total_person_in_percent'] = ($item['total_person'] / $totalPerson) * 100;
+                    $item['total_person_in_percent'] = ($item['total_person_old'] / $totalPerson) * 100;
+                    $item['total_person_new_in_percent'] = ($item['total_person_new'] / $totalPersonNew) * 100;
                 }
             }
             return $array;
@@ -206,15 +215,15 @@ class Tab2Service
                     COALESCE(pre.name, '') || p.name || COALESCE(t.type_position, '') as pos_name,
                     p.id_type as pos_type_id,
                     t.name as pos_type,
-                    ul.total::integer as total_list,
+                    ul.new_total::integer as total_list,
                     c.total::integer as total_call,
                     ul.id_main_province as prov_main_id,
                     ul.id_sub_province as prov_sub_id,
+                    c.total::integer > ul.new_total::integer as over_status,
                     prov.main_name_province || ' ' || prov.sub_name_province as prov_full_name
                 ")
-                ->whereRaw('ul.total::integer - c.total::integer = 0')
+                ->whereRaw('ul.new_total::integer - c.total::integer = 0')
                 ->orderByDesc('total_list')
-                // ->limit(10)
                 ->get()
                 ->toArray();
         });
@@ -255,36 +264,50 @@ class Tab2Service
     public function Tab2_Part7_TypeRemainAll()
     {
         return Cache::remember('tab2_part7_remain_all', 600, function () {
+            $calling = DB::table('calling_dla')
+                ->select(
+                    'id_position',
+                    DB::raw('SUM(total::integer) as total_call')
+                )
+                ->where('list_status', 1)
+                ->where('call_status', 1)
+                ->groupBy('id_position');
             return DB::table('updated_list_dla as ul')
                 ->join('positions_dla as p', 'p.id_position', '=', 'ul.id_position')
                 ->join('type_positions_dla as t', 't.id', '=', 'p.id_type')
                 ->leftJoin('prefixes_dla as pre', 'pre.id', '=', 'p.id_prefix')
-                ->leftJoin('calling_dla as c', function ($join) {
-                    $join->on('c.id_position', '=', 'ul.id_position')
-                        ->where('c.call_status', 1);
+                ->leftJoinSub($calling, 'c', function ($join) {
+                    $join->on('c.id_position', '=', 'ul.id_position');
                 })
                 ->selectRaw("
-                ul.id_position as id_pos,
-                COALESCE(pre.name, '') || p.name || COALESCE(t.type_position, '') as pos_name,
-                p.id_type as pos_type_id,
-                t.name as pos_type,
-                SUM(ul.total::integer) as total_list,
-                COALESCE(SUM(c.total::integer), 0) as total_call,
-                SUM(ul.total::integer) - COALESCE(SUM(c.total::integer), 0) as total_remain
-            ")
-                ->groupBy('ul.id_position', 'pos_name', 'p.id_type', 't.name')
+                    ul.id_position as id_pos,
+                    COALESCE(pre.name, '') || p.name || COALESCE(t.type_position, '') as pos_name,
+                    p.id_type as pos_type_id,
+                    t.name as pos_type,
+                    SUM(ul.new_total::integer) as total_list,
+                    COALESCE(c.total_call, 0) as total_call,
+                    SUM(ul.new_total::integer) - COALESCE(c.total_call, 0) as total_remain
+                ")
+                ->groupBy(
+                    'ul.id_position',
+                    'pos_name',
+                    'p.id_type',
+                    't.name',
+                    'c.total_call'
+                )
+
                 ->orderByDesc('total_remain')
-                // ->limit(10)
                 ->get()
+
                 ->map(function ($item) {
                     return [
                         'id_pos'       => $item->id_pos,
                         'pos_name'     => $item->pos_name,
                         'pos_type_id'  => $item->pos_type_id,
                         'pos_type'     => $item->pos_type,
-                        'total_list'   => (int)$item->total_list,
-                        'total_call'   => (int)$item->total_call,
-                        'total_remain' => (int)$item->total_remain,
+                        'total_list'   => (int) $item->total_list,
+                        'total_call'   => (int) $item->total_call,
+                        'total_remain' => (int) $item->total_remain,
                     ];
                 })
                 ->toArray();
@@ -361,7 +384,7 @@ class Tab2Service
     /**
      * @param int $id
      */
-    public function getPositionDetail($id)
+    public function getPositionDetail($id, $part)
     {
         $position = DB::table('positions_dla as p')
             ->leftJoin('type_positions_dla as t', 't.id', '=', 'p.id_type')
@@ -383,16 +406,18 @@ class Tab2Service
             ->keyBy(fn($item) => $item->id_main_province . '-' . $item->id_sub_province);
         $array = [
             'id' => $id,
+            'part' => (int)$part,
             'name' => $position->pos_name ?? 'ไม่พบข้อมูล',
             'data' => [],
-            'total' => ['listed' => 0, 'called' => 0, 'remain' => 0]
+            'total' => ['listed' => 0, 'listed_new' => 0, 'called' => 0, 'remain' => 0, 'diff' => 0]
         ];
         foreach ($provinces as $prov) {
             $key = $prov->id_main_province . '-' . $prov->id_sub_province;
             $listed = $updates->get($key);
             $calling = $calls->get($key);
-            $listedTotal = (int)($listed->total ?? 0);
             $calledTotal = (int)($calling->total ?? 0);
+            $listedTotal = (int)($listed->total ?? 0);
+            $listedTotalNew = (int)($listed->new_total ?? 0);
             $array['data'][$prov->id_main_province][$prov->id_sub_province] = [
                 'pro_main_id'    => $prov->id_main_province,
                 'pro_sub_id'     => $prov->id_sub_province,
@@ -400,17 +425,21 @@ class Tab2Service
                 'pro_sub_name'   => $prov->sub_name_province,
                 'pro_full_name'  => "{$prov->main_name_province} {$prov->sub_name_province}",
                 'total_listed'   => $listedTotal,
+                'total_listed_n' => $listedTotalNew,
+                'total_diff'     => $listedTotal - $listedTotalNew,
                 'total_called'   => $calledTotal,
-                'total_remain'   => $listedTotal - $calledTotal,
-                'total_process'  => ($listedTotal > 0) ? ($calledTotal / $listedTotal) * 100 : 0,
+                'total_remain'   => $listedTotalNew - $calledTotal,
+                'total_process'  => ($listedTotalNew > 0) ? ($calledTotal / $listedTotalNew) * 100 : 0,
                 'total_round'    => (int)($calling->round ?? 0),
                 'status_listed'  => !is_null($listed),
                 'status_calling' => !is_null($calling),
             ];
             $array['total']['listed'] += $listedTotal;
+            $array['total']['listed_new'] += $listedTotalNew;
             $array['total']['called'] += $calledTotal;
+            $array['total']['diff'] += ($listedTotal - $listedTotalNew);
         }
-        $array['total']['remain'] = $array['total']['listed'] - $array['total']['called'];
+        $array['total']['remain'] = $array['total']['listed_new'] - $array['total']['called'];
         return $array;
     }
 }

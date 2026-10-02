@@ -40,17 +40,21 @@ class Tab1Service
 
             $CurRound   = CallingDla::max('round');
             $MaxRound   = 25;
-            $TotalList  = UpdateListDla::sum(DB::raw('total::integer'));
+            $OldTotalList  = UpdateListDla::sum('total');
+            $NewTotalList  = UpdateListDla::sum('new_total');
             $TotalCall  = CallingDla::where('call_status', 1)->sum(DB::raw('total::integer'));
             $AVGCall = CallingDla::where('call_status', 1)
                 ->select(DB::raw("concat(called_month, '/', called_year) as monthly, sum(total::integer) as total_per_month"))
                 ->groupBy('monthly')
                 ->get()
                 ->avg('total_per_month');
+
             return [
                 'CurRound'      => (int)$CurRound,
                 'MaxRound'      => (int)$MaxRound,
-                'TotalList'     => (int)$TotalList,
+                'OldTotalList'  => (int)$OldTotalList,
+                'NewTotalList'  => (int)$NewTotalList,
+                'DiffTotalList' => (int)$OldTotalList - (int)$NewTotalList,
                 'TotalCall'     => (int)$TotalCall,
                 'AvgCall'       => (int)$AVGCall,
             ];
@@ -195,7 +199,7 @@ class Tab1Service
                 ->groupBy(['id_main_province', 'id_sub_province']);
             $listStats = DB::table('updated_list_dla')
                 ->select('id_main_province', 'id_sub_province')
-                ->selectRaw('SUM(total::integer) as total_listed')
+                ->selectRaw('SUM(total::integer) as total_listed , SUM(new_total::integer) as total_listed_new')
                 ->groupBy('id_main_province', 'id_sub_province')
                 ->get()
                 ->keyBy(fn($item) => $item->id_main_province . '-' . $item->id_sub_province);
@@ -208,15 +212,17 @@ class Tab1Service
                 $listed = $listStats->get("$main-$sub");
                 $totalCalled = $provinceCalls->sum('total_called');
                 $totalListed = $listed ? $listed->total_listed : 0;
+                $totalListed_new = $listed ? $listed->total_listed_new : 0;
                 if (!isset($array[$main])) {
                     $array[$main] = ['name' => $prov->main_name_province, 'data' => []];
                 }
                 $array[$main]['data'][$sub] = [
                     'full' => $main . $sub,
                     'name' => $prov->main_name_province . ' ' . $prov->sub_name_province,
+                    'total_listed_new' => $totalListed_new,
                     'total_listed' => $totalListed,
                     'total_called' => $totalCalled,
-                    'total_remain' => $totalListed - $totalCalled,
+                    'total_remain' => $totalListed_new - $totalCalled,
                     'total_round'  => $provinceCalls->count(),
                     'data-round'   => $provinceCalls->keyBy('round')->toArray()
                 ];
