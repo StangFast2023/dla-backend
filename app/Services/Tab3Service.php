@@ -127,6 +127,8 @@ class Tab3Service
                     'status_open'           =>  false,
                     'total_round'           =>  0,
                     'total_listed'          =>  0,
+                    'total_listed_new'      =>  0,
+                    'total_diff'            =>  0,
                     'total_called'          =>  0,
                     'total_remain'          =>  0,
                     'stauts_of_exhaustion'  =>  false,
@@ -140,11 +142,13 @@ class Tab3Service
             ->select([
                 'id_main_province',
                 'id_sub_province',
-                'total'
+                'total',
+                'new_total'
             ])
             ->get();
         foreach ($updated_list_dla as $updated) {
-            $total    =   $updated->total;
+            $total      =   $updated->total;
+            $new_total  =   $updated->new_total;
 
             $id_main_province   =   $updated->id_main_province;
             $id_sub_province    =   $updated->id_sub_province;
@@ -152,7 +156,9 @@ class Tab3Service
             if (isset($array[$full_key_province])) {
                 $array[$full_key_province]['status_open'] = true;
                 $array[$full_key_province]['total_listed'] = $total;
-                $array[$full_key_province]['total_remain'] = $total;
+                $array[$full_key_province]['total_listed_new'] = $new_total;
+                $array[$full_key_province]['total_diff'] = $total - $new_total;
+                $array[$full_key_province]['total_remain'] = $new_total;
             }
         }
 
@@ -284,7 +290,7 @@ class Tab3Service
             $AllType = db::table('updated_list_dla')
                 ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
                 ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
-                ->select(db::raw('updated_list_dla.id_main_province as prov_main_id, updated_list_dla.id_sub_province as prov_sub_id, positions_dla.id_type as pos_type_id, type_positions_dla.name as pos_type, sum(total::integer) as total'))
+                ->select(db::raw('updated_list_dla.id_main_province as prov_main_id, updated_list_dla.id_sub_province as prov_sub_id, positions_dla.id_type as pos_type_id, type_positions_dla.name as pos_type, sum(total::integer) as total, sum(new_total::integer) as new_total'))
                 ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_type')
                 ->get();
             $array = [];
@@ -301,8 +307,10 @@ class Tab3Service
                     'pos_type_id'    => $type->pos_type_id,
                     'pos_type'       => $type->pos_type,
                     'total_list'     => (int)$type->total,
+                    'total_list_new' => (int)$type->new_total,
+                    'total_diff'     => (int)($type->total - $type->new_total),
                     'total_call'     => 0,
-                    'total_remain'   => (int)$type->total,
+                    'total_remain'   => (int)$type->new_total,
                     'status_empty'   => false,
                     'status_called'  => false,
                     'round_data'     => []
