@@ -25,3 +25,7 @@ Route::get('/updating-tab3-part6/{id}', [CallingDlaController::class, 'updateTab
 
 //---- post
 Route::post('/updating-tab4-table', [CallingDlaController::class, 'updateTableForTab4']);
+
+//---- track view
+Route::post('/track-view', [CallingDlaController::class, 'trackView']);
+Route::get('/visitor-stats', [CallingDlaController::class, 'getVisitorStats']);

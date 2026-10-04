@@ -22,7 +22,42 @@ use Illuminate\Support\Facades\Log;
 
 class CallingDlaController extends Controller
 {
+    public function trackView(Request $request)
+    {
+        try {
+            DB::table('page_views')->insert([
+                'page_name' => $request->input('page_name', 'tab5'),
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
 
+            return response()->json(['status' => 'success']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getVisitorStats()
+    {
+        try {
+            $totalViews = DB::table('page_views')->count();
+            $uniqueVisitors = DB::table('page_views')->distinct('ip_address')->count('ip_address');
+            $todayViews = DB::table('page_views')->whereDate('created_at', Carbon::today())->count();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => [
+                    'total_views' => $totalViews,
+                    'unique_visitors' => $uniqueVisitors,
+                    'today_views' => $todayViews,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
     public function getDataTab1()
     {
         return response()->json([
