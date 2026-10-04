@@ -89,6 +89,8 @@ class Tab4Service
                     'pos_type_id'       =>  $pos->pos_type_id,
                     'pos_type_name'     =>  $pos->pos_type_name,
                     'total_listed'      =>  0,
+                    'total_listed_n'    =>  0,
+                    'total_diff'        =>  0,
                     'total_called'      =>  0,
                     'total_remain'      =>  0,
                     'total_each_round'  =>  [],
@@ -103,6 +105,8 @@ class Tab4Service
                     'pos_type_name'         =>  $pos->pos_type_name,
                     'status_open'           =>  false,
                     'total_listed'          =>  0,
+                    'total_listed_n'        =>  0,
+                    'total_diff'            =>  0,
                     'total_call_round'      =>  0,
                     'total_call'            =>  0,
                     'total_remain'          =>  0,
@@ -127,6 +131,8 @@ class Tab4Service
                     'pro_main_name'     =>  $main_provinces->main_name_province,
                     'total_position'    =>  0,
                     'total_listed'      =>  0,
+                    'total_listed_n'    =>  0,
+                    'total_diff'        =>  0,
                     'total_called'      =>  0,
                     'total_remain'      =>  0,
                     'total_each_round'  =>  [],
@@ -140,6 +146,8 @@ class Tab4Service
                         'pro_sub_id'            =>  $prov->id_sub_province,
                         'pro_sub_name'          =>  $prov->sub_name_province,
                         'total_listed'          =>  0,
+                        'total_listed_n'        =>  0,
+                        'total_diff'            =>  0,
                         'total_called'          =>  0,
                         'total_remain'          =>  0,
                         'total_each_round'      =>  [],
@@ -156,7 +164,8 @@ class Tab4Service
                 updated_list_dla.id_sub_province as prov_sub_id,
                 type_positions_dla.id as pos_type_id,
                 positions_dla.id_position as pos_id,
-                SUM(total::integer) as total
+                SUM(total::integer) as total,
+                SUM(new_total::integer) as new_total
             ")
             ->whereIn('updated_list_dla.id_position', $array_position)
             ->whereIn('updated_list_dla.id_main_province', array_keys($array_province))
@@ -170,19 +179,28 @@ class Tab4Service
             $pos_type_id    =   $pos->pos_type_id;
             $pos_id         =   $pos->pos_id;
             $total          =   $pos->total;
+            $new_total      =   $pos->new_total;
             if (isset($array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id])) {
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['status_open'] = (int)$total !== 0;
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_listed'] = (int)$total;
-                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_remain'] = (int)$total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_listed_n'] = (int)$new_total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_diff'] = (int)($total - $new_total);
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['data_position'][$pos_id]['total_remain'] = (int)$new_total;
 
                 $array[$prov_main_id]['total_listed'] += (int)$total;
-                $array[$prov_main_id]['total_remain'] += (int)$total;
+                $array[$prov_main_id]['total_listed_n'] += (int)$new_total;
+                $array[$prov_main_id]['total_diff'] += (int)($total - $new_total);
+                $array[$prov_main_id]['total_remain'] += (int)$new_total;
 
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_listed'] += (int)$total;
-                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_remain'] += (int)$total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_listed_n'] += (int)$new_total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_diff'] += (int)($total - $new_total);
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_remain'] += (int)$new_total;
 
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['total_listed'] += (int)$total;
-                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['total_remain'] += (int)$total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['total_listed_n'] += (int)$new_total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['total_diff'] += (int)($total - $new_total);
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_type_position'][$pos_type_id]['total_remain'] += (int)$new_total;
             }
         }
         $current_date    =  Carbon::today();
