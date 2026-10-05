@@ -21,7 +21,7 @@ class Tab1Service
     {
         //---- tab 1
         $Tab1_Part1_Static          =   $this->Tab1_Part1_Static();
-        $getAccountDaysStatus       =   $this->getAccountDaysStatus();
+        $getAccountDaysStatus       =   $this->getAccountDaysStatus(null);
         $Tab1_Part1_Static          =   array_merge($Tab1_Part1_Static, $getAccountDaysStatus);
 
         return [

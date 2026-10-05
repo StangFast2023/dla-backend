@@ -325,7 +325,7 @@ class Tab5Service
         $data['total_round'] = $total_round;
         $data['total_called'] = $total_called;
 
-        $data['process_bars']   = ($data['total_called'] / $data['total_listed_n']) * 100;
+        $data['process_bars']   = $data['total_listed_n'] > 0 ? ($data['total_called'] / $data['total_listed_n']) * 100 : 0;
         $data['status_work']    = $sequence <= $data['total_called'] ? 'completed' : 'waiting';
         $data['remain_before']  = ($sequence - $data['total_called']) > 0 ? $sequence - $data['total_called'] : 0;
 
@@ -352,10 +352,10 @@ class Tab5Service
             ])
             ->get();
 
-        $data_chart1 = $this->data_part1_chart1($calledDataChart1, $data['total_listed']);
+        $data_chart1 = $this->data_part1_chart1($calledDataChart1, $data['total_listed_n']);
         $data['chart_1_round'] = $data_chart1;
 
-        $data_chart2 = $this->data_part1_chart2($calledDataChart1, $data['total_listed']);
+        $data_chart2 = $this->data_part1_chart2($calledDataChart1, $data['total_listed_n']);
         $data['chart_2_round'] = $data_chart2;
 
         //  chart_3_region_monthly
@@ -411,10 +411,10 @@ class Tab5Service
 
 
     /**
-     * @param int $total_listed
+     * @param int $total_listed_n
      * @param Collection $calledDataChart1
      */
-    public function data_part1_chart1($calledDataChart1, $total_listed)
+    public function data_part1_chart1($calledDataChart1, $total_listed_n)
     {
         $date_chart1 = [];
         $getAccountTimeline = $this->getAccountTimeline();
@@ -481,7 +481,7 @@ class Tab5Service
                 }
                 $last_end = ($total > 0) ? $end : $last_end;
 
-                $date_chart1[$date]['proportion'] = $total > 0 ? (($total / $total_listed) * 100) : '-';
+                $date_chart1[$date]['proportion'] = $total_listed_n > 0 ? (($total / $total_listed_n) * 100) : '-';
             }
         }
         $chart_data = array_values($date_chart1);
@@ -489,10 +489,10 @@ class Tab5Service
     }
 
     /**
-     * @param int $total_listed
+     * @param int $total_listed_n
      * @param Collection $calledDataChart1
      */
-    public function data_part1_chart2($calledDataChart1, $total_listed)
+    public function data_part1_chart2($calledDataChart1, $total_listed_n)
     {
         //  chart_2_round_table
         $date_chart2 = [];
@@ -514,7 +514,7 @@ class Tab5Service
                     'end'               =>  0,
                     'start_end'         =>  0,
                     'change'            =>  0,
-                    'proportion'        =>  (bool)$call->call_status === true ? (($call->total / $total_listed) * 100) : 0,
+                    'proportion'        =>  (bool)$call->call_status === true ? ($total_listed_n > 0 ? (($call->total / $total_listed_n) * 100) : 0)  : 0,
                     'status'            =>  $date_numb->greaterThan($current_date) ? 'waiting' : 'completed',
                     'is_cross_region'   =>  (bool)$call->is_cross_region,
                     'crossed_region'    =>  $call->crossed_region,
@@ -589,6 +589,8 @@ class Tab5Service
                     'main'              =>  $main,
                     'name'              =>  $prov->main_name_province,
                     'total_listed'      =>  0,
+                    'total_listed_n'    =>  0,
+                    'total_diff'        =>  0,
                     'total_called'      =>  0,
                     'total_remaining'   =>  0,
                     'processing'        =>  0,
@@ -600,6 +602,8 @@ class Tab5Service
                     'sum'               =>  $subs,
                     'name'              =>  $prov->sub_name_province,
                     'total_listed'      =>  0,
+                    'total_listed_n'    =>  0,
+                    'total_diff'        =>  0,
                     'total_called'      =>  0,
                     'total_remaining'   =>  0,
                     'total_rounds'      =>  0,
@@ -616,6 +620,7 @@ class Tab5Service
                 'id_main_province',
                 'id_sub_province',
                 'total',
+                'new_total',
             ])
             ->where('id_position', $positionId)
             ->get();
@@ -623,15 +628,19 @@ class Tab5Service
             $main  = $update->id_main_province;
             $subs  = $update->id_sub_province;
             $total = $update->total;
+            $new_total = $update->new_total;
 
             $chart3[$main]['total_listed'] += $total;
-            $chart3[$main]['total_remaining'] += $total;
+            $chart3[$main]['total_listed_n'] += $new_total;
+            $chart3[$main]['total_diff'] += ($total - $new_total);
+            $chart3[$main]['total_remaining'] += $new_total;
 
             $chart3[$main]['sub_province'][$subs]['status_open'] = true;
             $chart3[$main]['sub_province'][$subs]['total_listed'] += $total;
-            $chart3[$main]['sub_province'][$subs]['total_remaining'] += $total;
+            $chart3[$main]['sub_province'][$subs]['total_listed_n'] += $new_total;
+            $chart3[$main]['sub_province'][$subs]['total_diff'] += ($total - $new_total);
+            $chart3[$main]['sub_province'][$subs]['total_remaining'] += $new_total;
         }
-
         $calling_dla = db::table('calling_dla')
             ->where('id_position', $positionId)
             ->select([
@@ -699,11 +708,11 @@ class Tab5Service
         }
 
         foreach ($chart3 as &$ch3) {
-            $ch3['processing'] = $ch3['total_listed'] > 0 ? ($ch3['total_called'] / $ch3['total_listed']) * 100 : 0;
+            $ch3['processing'] = $ch3['total_listed_n'] > 0 ? ($ch3['total_called'] / $ch3['total_listed_n']) * 100 : 0;
             foreach ($ch3['sub_province'] as &$sub) {
-                $total_listed = $sub['total_listed'];
+                $total_listed_n = $sub['total_listed_n'];
                 $total_called = $sub['total_called'];
-                $sub['processing'] = $total_listed > 0 ? ($total_called / $total_listed) * 100 : 0;
+                $sub['processing'] = $total_listed_n > 0 ? ($total_called / $total_listed_n) * 100 : 0;
                 $last_end = 0;
                 $prev_total = null;
                 foreach ($sub['data_rounds'] as &$rds) {
@@ -717,7 +726,7 @@ class Tab5Service
                     $called = $rds['called'];
                     $listed = $rds['listed'];
                     if ($called === true && $listed === true) {
-                        $rds['proportion'] = $total_listed > 0 ? ($total / $total_listed) * 100 : 0;
+                        $rds['proportion'] = $total_listed_n > 0 ? ($total / $total_listed_n) * 100 : 0;
                     }
 
                     //--- start end

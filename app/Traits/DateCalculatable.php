@@ -55,8 +55,12 @@ trait DateCalculatable
 
     public function getAccountDaysStatus($regionId)
     {
-        if ($regionId === 4) {
-            $startDate = Carbon::create(2026, 4, 8);
+        if ($regionId !== null) {
+            if ($regionId === 4) {
+                $startDate = Carbon::create(2026, 4, 8);
+            } else {
+                $startDate = Carbon::create(2026, 2, 19);
+            }
         } else {
             $startDate = Carbon::create(2026, 2, 19);
         }
