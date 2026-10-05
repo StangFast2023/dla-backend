@@ -53,9 +53,13 @@ trait DateCalculatable
         ];
     }
 
-    public function getAccountDaysStatus()
+    public function getAccountDaysStatus($regionId)
     {
-        $startDate = Carbon::create(2026, 2, 20);
+        if ($regionId === 4) {
+            $startDate = Carbon::create(2026, 4, 8);
+        } else {
+            $startDate = Carbon::create(2026, 2, 19);
+        }
         $expiryDate = $startDate->copy()->addYears(2);
         $today = Carbon::now();
         $totalDays = $startDate->diffInDays($expiryDate);

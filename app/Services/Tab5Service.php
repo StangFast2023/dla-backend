@@ -52,6 +52,8 @@ class Tab5Service
                     'pos_type_name'         =>  $pos->pos_type_name,
                     'status_open'           =>  false,
                     'total_listed'          =>  0,
+                    'total_listed_n'        =>  0,
+                    'total_diff'            =>  0,
                     'total_call_round'      =>  0,
                     'total_call'            =>  0,
                     'total_remain'          =>  0,
@@ -85,6 +87,8 @@ class Tab5Service
                     'pro_main_name'     =>  $prov->pro_main_name,
                     'total_position'    =>  0,
                     'total_listed'      =>  0,
+                    'total_listed_n'    =>  0,
+                    'total_diff'        =>  0,
                     'total_called'      =>  0,
                     'total_remain'      =>  0,
                     'total_each_round'  =>  [],
@@ -93,18 +97,18 @@ class Tab5Service
             }
             if (!isset($array[$prov->pro_main_id]['pro_sub'][$prov->pro_sub_id])) {
                 $array[$prov->pro_main_id]['pro_sub'][$prov->pro_sub_id] = [
-                    'pro_sub_id'            =>  $prov->pro_sub_id,
-                    'pro_sub_name'          =>  $prov->pro_full_name,
-                    'total_listed'          =>  0,
-                    'total_called'          =>  0,
-                    'total_remain'          =>  0,
-                    'total_each_round'      =>  [],
-                    'data_position'         =>  $all_pos_array
+                    'pro_sub_id'        =>  $prov->pro_sub_id,
+                    'pro_sub_name'      =>  $prov->pro_full_name,
+                    'total_listed'      =>  0,
+                    'total_listed_n'    =>  0,
+                    'total_diff'        =>  0,
+                    'total_called'      =>  0,
+                    'total_remain'      =>  0,
+                    'total_each_round'  =>  [],
+                    'data_position'     =>  $all_pos_array
                 ];
             }
         }
-        //--- passed
-
 
         $listed_position = db::table('updated_list_dla')
             ->join('positions_dla', 'positions_dla.id_position', '=', 'updated_list_dla.id_position')
@@ -115,7 +119,7 @@ class Tab5Service
                 'positions_dla.id_type as pos_type_id',
                 'positions_dla.id_position as pos_id',
             ])
-            ->selectRaw('SUM(total::integer) as total')
+            ->selectRaw('SUM(total::integer) as total , SUM(new_total::integer) as new_total , SUM( total::integer - new_total::integer ) as diff')
             ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_id')
             ->orderBy('pos_id', 'asc')
             ->get();
@@ -124,18 +128,25 @@ class Tab5Service
             $prov_sub_id    =   $pos->prov_sub_id;
             $pos_id         =   $pos->pos_id;
             $total          =   $pos->total;
+            $new_total      =   $pos->new_total;
+            $diff           =   $pos->diff;
             if (isset($array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id])) {
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['status_open'] = (int)$total !== 0;
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_listed'] = (int)$total;
-                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_remain'] = (int)$total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_listed_n'] = (int)$new_total;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_diff'] = (int)$diff;
+                $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_remain'] = (int)$new_total;
             }
             $array[$prov_main_id]['total_listed'] += (int)$total;
-            $array[$prov_main_id]['total_remain'] += (int)$total;
+            $array[$prov_main_id]['total_listed_n'] += (int)$new_total;
+            $array[$prov_main_id]['total_diff'] += (int)$diff;
+            $array[$prov_main_id]['total_remain'] += (int)$new_total;
 
             $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_listed'] += (int)$total;
-            $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_remain'] += (int)$total;
+            $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_listed_n'] += (int)$new_total;
+            $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_diff'] += (int)$diff;
+            $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_remain'] += (int)$new_total;
         }
-        //--- passed
 
         $called_position = db::table('calling_dla')
             ->join('positions_dla', 'positions_dla.id_position', '=', 'calling_dla.id_position')
@@ -144,6 +155,7 @@ class Tab5Service
                 'positions_dla.id_type as pos_type_id'
             ])
             ->get();
+
         $current_date       =   Carbon::today();
         foreach ($called_position as $pos) {
 
@@ -254,18 +266,21 @@ class Tab5Service
      */
     public function predictionUserDetail($regionId, $areaId, $positionId, $sequence, $frequency)
     {
-        $totalListed = db::table('updated_list_dla')
+        $raw_data_part1 = db::table('updated_list_dla')
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
             ->where('id_position', $positionId)
-            ->value('total');
+            ->selectRaw('total , new_total , total - new_total as diff')
+            ->first();
 
         $data = [
             //---- part 1
             'rank'              =>  (int)$sequence,
-            'total_listed'      =>  (int)$totalListed,
+            'total_listed'      =>  (int)$raw_data_part1->total,
+            'total_listed_n'    =>  (int)$raw_data_part1->new_total,
+            'total_diff'        =>  (int)$raw_data_part1->diff,
             'total_called'      =>  0,
-            'total_remain'      =>  (int)$totalListed,
+            'total_remain'      =>  (int)$raw_data_part1->new_total,
             'total_round'       =>  0,
             'process_bars'      =>  0,
             'avg_call'          =>  0,
@@ -282,8 +297,6 @@ class Tab5Service
             'next_round'        =>  0,
         ];
 
-
-
         // total_round , total_called , total_remain
         $calledData = DB::table('calling_dla')
             ->where('id_main_province', $regionId)
@@ -296,7 +309,6 @@ class Tab5Service
         $avg_counted = 0;
         $total_round = 0;
         $total_called = 0;
-        $total_remain = 0;
 
         foreach ($calledData as $call) {
             $total_round += $round;
@@ -312,19 +324,16 @@ class Tab5Service
         $data['avg_call'] = $avg_counted > 0 ? round($avg_called / $avg_counted, 2) : 0;
         $data['total_round'] = $total_round;
         $data['total_called'] = $total_called;
-        $data['total_remain'] -= $total_remain;
 
-        $data['process_bars']   =   ($data['total_called'] / $data['total_listed']) * 100;
-        $data['status_work']    =   $sequence <= $data['total_called'] ? 'completed' : 'waiting';
+        $data['process_bars']   = ($data['total_called'] / $data['total_listed_n']) * 100;
+        $data['status_work']    = $sequence <= $data['total_called'] ? 'completed' : 'waiting';
+        $data['remain_before']  = ($sequence - $data['total_called']) > 0 ? $sequence - $data['total_called'] : 0;
 
-        $data['remain_before']  =   ($sequence - $data['total_called']) > 0 ? $sequence - $data['total_called'] : 0;
-
-        $empty = $data['total_called'] - $data['total_listed'];
+        $empty = $data['total_called'] - $data['total_listed_n'];
         $data['status_out_list'] = $empty === 0 ? true : false;
 
         //  chart_1_round_monthly
         //  chart_2_round_table 
-
         $calledDataChart1 = DB::table('calling_dla')
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
@@ -354,7 +363,10 @@ class Tab5Service
         $data_chart3 = $this->data_part1_chart3($positionId);
         $data['chart_3_region'] = $data_chart3;
 
-        $getAccountDaysStatus   =   $this->getAccountDaysStatus();
+        $getAccountDaysStatus   =   $this->getAccountDaysStatus($regionId);
+
+
+
         //  predictions / rank_risk / probabilitys / next_round
         $data_chart5 = $this->data_part2_chart1(
             $data['total_called'],
@@ -371,8 +383,6 @@ class Tab5Service
         // predictions / probabilitys of exhaustion / projection / total of next round
         $data_chart6 = $this->data_part2_chart2(
             $regionId,
-            $areaId,
-            $positionId,
             $sequence,
             $frequency,
             $data['total_listed'],
@@ -784,8 +794,6 @@ class Tab5Service
 
     /**
      * @param int $regionId
-     * @param int $areaId
-     * @param int $positionId
      * @param int $sequence
      * @param int $frequency
      * @param int $total_rank
@@ -795,11 +803,11 @@ class Tab5Service
      * @param array $DaysStatus
      * @param Collection $last_call_date
      */
-    public function data_part2_chart2($regionId, $areaId, $positionId, $sequence, $frequency, $total_rank, $last_call_rank, $avg_call_per_month, $current_round, $DaysStatus, $last_call_date)
+    public function data_part2_chart2($regionId, $sequence, $frequency, $total_rank, $last_call_rank, $avg_call_per_month, $current_round, $DaysStatus, $last_call_date)
     {
         $data = [];
         //---- probability of exhaustion
-        $DaysStatus     =   $this->getAccountDaysStatus();
+        $DaysStatus     =   $this->getAccountDaysStatus($regionId);
         $today          =   $DaysStatus['current_date'];
         $final          =   $DaysStatus['final_date'];
         $interval       =   $today->diff($final);
