@@ -137,15 +137,16 @@ class Tab5Service
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_diff'] = (int)$diff;
                 $array[$prov_main_id]['pro_sub'][$prov_sub_id]['data_position'][$pos_id]['total_remain'] = (int)$new_total;
             }
-            $array[$prov_main_id]['total_listed'] += (int)$total;
-            $array[$prov_main_id]['total_listed_n'] += (int)$new_total;
-            $array[$prov_main_id]['total_diff'] += (int)$diff;
-            $array[$prov_main_id]['total_remain'] += (int)$new_total;
 
             $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_listed'] += (int)$total;
             $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_listed_n'] += (int)$new_total;
             $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_diff'] += (int)$diff;
             $array[$prov_main_id]['pro_sub'][$prov_sub_id]['total_remain'] += (int)$new_total;
+
+            $array[$prov_main_id]['total_listed'] += (int)$total;
+            $array[$prov_main_id]['total_listed_n'] += (int)$new_total;
+            $array[$prov_main_id]['total_diff'] += (int)$diff;
+            $array[$prov_main_id]['total_remain'] += (int)$new_total;
         }
 
         $called_position = db::table('calling_dla')
@@ -328,9 +329,12 @@ class Tab5Service
         $data['process_bars']   = $data['total_listed_n'] > 0 ? ($data['total_called'] / $data['total_listed_n']) * 100 : 0;
         $data['status_work']    = $sequence <= $data['total_called'] ? 'completed' : 'waiting';
         $data['remain_before']  = ($sequence - $data['total_called']) > 0 ? $sequence - $data['total_called'] : 0;
+        $data['total_remain']   = $data['total_listed_n'] > 0 ? ($data['total_remain'] - $total_called) : 0;
 
-        $empty = $data['total_called'] - $data['total_listed_n'];
+        $empty = $data['total_listed_n'] - $data['total_called'];
         $data['status_out_list'] = $empty === 0 ? true : false;
+
+        // dd($data);
 
         //  chart_1_round_monthly
         //  chart_2_round_table 
