@@ -334,10 +334,6 @@ class Tab5Service
         $empty = $data['total_listed_n'] - $data['total_called'];
         $data['status_out_list'] = $empty === 0 ? true : false;
 
-        // dd($data);
-
-        //  chart_1_round_monthly
-        //  chart_2_round_table 
         $calledDataChart1 = DB::table('calling_dla')
             ->where('id_main_province', $regionId)
             ->where('id_sub_province', $areaId)
@@ -356,12 +352,18 @@ class Tab5Service
             ])
             ->get();
 
+
+        //  success
+        //  chart_1_round_monthly
         $data_chart1 = $this->data_part1_chart1($calledDataChart1, $data['total_listed_n']);
         $data['chart_1_round'] = $data_chart1;
 
+        //  success
+        //  chart_2_round_table 
         $data_chart2 = $this->data_part1_chart2($calledDataChart1, $data['total_listed_n']);
         $data['chart_2_round'] = $data_chart2;
 
+        //  success
         //  chart_3_region_monthly
         //  chart_4_region_table
         $data_chart3 = $this->data_part1_chart3($positionId);
@@ -369,8 +371,7 @@ class Tab5Service
 
         $getAccountDaysStatus   =   $this->getAccountDaysStatus($regionId);
 
-
-
+        //  success
         //  predictions / rank_risk / probabilitys / next_round
         $data_chart5 = $this->data_part2_chart1(
             $data['total_called'],
@@ -384,6 +385,7 @@ class Tab5Service
         $data['probabilitys']   = $data_chart5['probabilitys'];
         $data['next_round']     = $data_chart5['next_round'];
 
+        //  success
         // predictions / probabilitys of exhaustion / projection / total of next round
         $data_chart6 = $this->data_part2_chart2(
             $regionId,
@@ -405,6 +407,7 @@ class Tab5Service
         $data['heatmap_matrix']         =   $data_chart6['heatmap_matrix'];
         $data['rounds_header']          =   $data_chart6['rounds_header'];
 
+        //  success
         // probability of crossing region
         $data_chart7 = $this->data_part2_chart3($regionId, $areaId, $positionId, $sequence, $frequency, $getAccountDaysStatus);
         $data['summary']    =   $data_chart7['summary'];
@@ -766,7 +769,6 @@ class Tab5Service
      */
     public function data_part2_chart1($total_called, $total_round, $average, $sequence, $frequency, $getAccountDaysStatus)
     {
-        $data = [];
         $rank = $sequence;
         $days_passed            =   $getAccountDaysStatus['days_passed'];
         $days_remaining         =   $getAccountDaysStatus['days_remaining'];
@@ -971,6 +973,8 @@ class Tab5Service
                     'owner_zone'            =>  (int)$prov->id_main_province === (int)$regionId && (int)$prov->id_sub_province === (int)$areaId,
                     'status_open'           =>  false,
                     'total_listed'          =>  0,
+                    'total_listed_n'        =>  0,
+                    'total_diff'            =>  0,
                     'total_called'          =>  0,
                     'total_remain'          =>  0,
                     'average_called'        =>  0,
@@ -989,16 +993,20 @@ class Tab5Service
                 'id_main_province',
                 'id_sub_province',
                 'total',
+                'new_total',
             ])
             ->get();
         foreach ($update_listed as $listed) {
             $m_prov = (int)$listed->id_main_province;
             $s_prov = (int)$listed->id_sub_province;
             $totals = (int)$listed->total;
+            $new_total = (int)$listed->new_total;
             if (isset($data[$m_prov]['sub_prov'][$s_prov])) {
                 $data[$m_prov]['sub_prov'][$s_prov]['status_open'] = true;
                 $data[$m_prov]['sub_prov'][$s_prov]['total_listed'] = $totals;
-                $data[$m_prov]['sub_prov'][$s_prov]['total_remain'] = $totals;
+                $data[$m_prov]['sub_prov'][$s_prov]['total_listed_n'] = $new_total;
+                $data[$m_prov]['sub_prov'][$s_prov]['total_diff'] = ($totals - $new_total);
+                $data[$m_prov]['sub_prov'][$s_prov]['total_remain'] = $new_total;
             }
         }
 
@@ -1047,6 +1055,8 @@ class Tab5Service
                         'status_open' => $sub['status_open'],
                         'owner_zone' => $sub['owner_zone'],
                         'total_listed' => $sub['total_listed'],
+                        'total_listed_n' => $sub['total_listed_n'],
+                        'total_diff' => $sub['total_diff'],
                         'total_called' => $sub['total_called'],
                         'total_remain' => $sub['total_remain'],
                         'avg' => $sub['average_called'],
