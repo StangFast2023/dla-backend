@@ -369,9 +369,9 @@ class Tab5Service
         $data_chart3 = $this->data_part1_chart3($positionId);
         $data['chart_3_region'] = $data_chart3;
 
-        $getAccountDaysStatus   =   $this->getAccountDaysStatus($regionId);
+        $getAccountDaysStatus   =   $this->getAccountDaysStatus((int)$regionId);
 
-        //  success
+        //  checking
         //  predictions / rank_risk / probabilitys / next_round
         $data_chart5 = $this->data_part2_chart1(
             $data['total_called'],
@@ -385,8 +385,8 @@ class Tab5Service
         $data['probabilitys']   = $data_chart5['probabilitys'];
         $data['next_round']     = $data_chart5['next_round'];
 
-        //  success
-        // predictions / probabilitys of exhaustion / projection / total of next round
+        //  checking
+        //  predictions / probabilitys of exhaustion / projection / total of next round
         $data_chart6 = $this->data_part2_chart2(
             $regionId,
             $sequence,
@@ -407,8 +407,8 @@ class Tab5Service
         $data['heatmap_matrix']         =   $data_chart6['heatmap_matrix'];
         $data['rounds_header']          =   $data_chart6['rounds_header'];
 
-        //  success
-        // probability of crossing region
+        //  checking
+        //  probability of crossing region
         $data_chart7 = $this->data_part2_chart3($regionId, $areaId, $positionId, $sequence, $frequency, $getAccountDaysStatus);
         $data['summary']    =   $data_chart7['summary'];
         $data['max_round']  =   $data_chart7['max_round'];
@@ -822,7 +822,7 @@ class Tab5Service
     {
         $data = [];
         //---- probability of exhaustion
-        $DaysStatus     =   $this->getAccountDaysStatus($regionId);
+        $DaysStatus     =   $this->getAccountDaysStatus((int)$regionId);
         $today          =   $DaysStatus['current_date'];
         $final          =   $DaysStatus['final_date'];
         $interval       =   $today->diff($final);
