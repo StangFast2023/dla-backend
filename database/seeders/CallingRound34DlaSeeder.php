@@ -30,244 +30,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 102,
-                'round'             => 4,
-                'total'             => '0',
-                'call_status'       => 0,
-                'list_status'       => 1,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 103,
-                'round'             => 4,
-                'total'             => '-',
-                'call_status'       => 0,
-                'list_status'       => 0,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 104,
-                'round'             => 4,
-                'total'             => '-',
-                'call_status'       => 0,
-                'list_status'       => 0,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 105,
-                'round'             => 4,
-                'total'             => '-',
-                'call_status'       => 0,
-                'list_status'       => 0,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 106,
-                'round'             => 4,
-                'total'             => '0',
-                'call_status'       => 0,
-                'list_status'       => 1,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 109,
-                'round'             => 4,
-                'total'             => '0',
-                'call_status'       => 0,
-                'list_status'       => 1,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 111,
-                'round'             => 4,
-                'total'             => '0',
-                'call_status'       => 0,
-                'list_status'       => 1,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 112,
-                'round'             => 4,
-                'total'             => '-',
-                'call_status'       => 0,
-                'list_status'       => 0,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 115,
-                'round'             => 4,
-                'total'             => '-',
-                'call_status'       => 0,
-                'list_status'       => 0,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 116,
-                'round'             => 4,
-                'total'             => '-',
-                'call_status'       => 0,
-                'list_status'       => 0,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 117,
-                'round'             => 4,
-                'total'             => '-',
-                'call_status'       => 0,
-                'list_status'       => 0,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 118,
-                'round'             => 4,
-                'total'             => '-',
-                'call_status'       => 0,
-                'list_status'       => 0,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 119,
-                'round'             => 4,
-                'total'             => '-',
-                'call_status'       => 0,
-                'list_status'       => 0,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-            [
-                'id_main_province'  => 1,
-                'id_sub_province'   => 1,
-                'id_position'       => 121,
-                'round'             => 4,
-                'total'             => '0',
-                'call_status'       => 0,
-                'list_status'       => 1,
-                'called_day'        => 9,
-                'called_month'      => 11,
-                'called_year'       => 2026,
-                'is_cross_region'   => 0,
-                'crossed_region'    => null,
-                'crossed_zone'      => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 81, 'end' => 126]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -285,6 +49,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 16, 'end' => 19]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -302,6 +68,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -319,6 +87,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 6, 'end' => 14]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -336,6 +106,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 38, 'end' => 65]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -353,6 +125,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 55, 'end' => 69]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -370,6 +144,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 90, 'end' => 120]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -387,6 +163,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 10]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -404,6 +182,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 96, 'end' => 146]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -421,6 +201,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -438,6 +220,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 51, 'end' => 73]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -455,6 +239,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 106, 'end' => 116]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -472,6 +258,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -489,6 +277,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -506,6 +296,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 6, 'end' => 10]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -523,6 +315,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 21, 'end' => 28]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -540,6 +334,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -557,6 +353,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 265, 'end' => 306]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -574,6 +372,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 14, 'end' => 17]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -591,6 +391,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -608,6 +410,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -625,6 +429,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -642,6 +448,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 11, 'end' => 23]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -659,6 +467,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 11, 'end' => 31]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -676,6 +486,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 4, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -693,6 +505,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 56, 'end' => 96]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -710,6 +524,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -727,6 +543,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 10]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -744,6 +562,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 11, 'end' => 15]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -761,6 +581,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 9]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -778,6 +600,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 13, 'end' => 15]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -795,6 +619,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 8, 'end' => 12]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -812,6 +638,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 6, 'end' => 7]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -829,6 +657,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -846,6 +676,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -863,6 +695,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 6, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -880,6 +714,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
         ]);
 
@@ -900,6 +736,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 163, 'end' => 292]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -917,6 +755,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 8]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -934,6 +774,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -951,6 +793,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -968,6 +812,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -985,6 +831,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1002,6 +850,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1019,6 +869,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1036,6 +888,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1053,6 +907,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1070,6 +926,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1087,6 +945,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1104,6 +964,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1121,6 +983,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 8, 'end' => 9]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1138,6 +1002,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 33, 'end' => 35]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1155,6 +1021,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1172,6 +1040,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1189,6 +1059,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1206,6 +1078,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 24]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1223,6 +1097,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 47, 'end' => 112]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1240,6 +1116,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 55, 'end' => 108]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1257,6 +1135,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 136, 'end' => 191]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1274,13 +1154,15 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 8, 'end' => 13]]),
             ],
             [
                 'id_main_province'  => 1,
                 'id_sub_province'   => 2,
                 'id_position'       => 206,
                 'round'             => 4,
-                'total'             => '-5',
+                'total'             => '5',
                 'call_status'       => 1,
                 'list_status'       => 1,
                 'called_day'        => 9,
@@ -1291,6 +1173,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 146, 'end' => 150]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1308,6 +1192,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1325,6 +1211,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1342,6 +1230,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1359,6 +1249,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1376,6 +1268,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 5]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1393,6 +1287,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 13, 'end' => 19]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1410,6 +1306,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1427,6 +1325,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 145, 'end' => 191]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1444,6 +1344,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1461,6 +1363,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 15, 'end' => 15]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1478,6 +1382,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1495,6 +1401,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1512,6 +1420,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 2]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1529,6 +1439,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1546,6 +1458,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 56, 'end' => 63]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1563,6 +1477,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 20, 'end' => 53]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1580,6 +1496,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 17, 'end' => 23]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1597,6 +1515,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 92, 'end' => 174]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1614,6 +1534,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 14, 'end' => 19]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1631,6 +1553,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1648,6 +1572,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1665,6 +1591,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1682,6 +1610,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 22, 'end' => 34]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1699,6 +1629,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 17, 'end' => 20]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1716,6 +1648,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 25, 'end' => 31]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1733,6 +1667,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1750,6 +1686,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1767,6 +1705,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 4]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1784,6 +1724,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 7]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1801,6 +1743,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1818,6 +1762,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1835,6 +1781,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1852,6 +1800,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1869,6 +1819,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 10]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1886,6 +1838,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 6, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1903,6 +1857,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1920,6 +1876,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 2]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1937,6 +1895,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 1,
@@ -1954,6 +1914,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 2]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1971,6 +1933,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 6, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 1,
@@ -1988,6 +1952,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 2]]),
             ],
         ]);
 
@@ -2008,6 +1974,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2025,6 +1993,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2042,6 +2012,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2059,6 +2031,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2076,6 +2050,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2093,6 +2069,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2110,6 +2088,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 9]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2127,6 +2107,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2144,6 +2126,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2161,6 +2145,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2178,6 +2164,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2195,6 +2183,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2212,6 +2202,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2229,6 +2221,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2246,6 +2240,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2263,6 +2259,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2280,15 +2278,17 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 9]]),
             ],
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 1,
                 'id_position'       => 122,
                 'round'             => 4,
-                'total'             => '0',
+                'total'             => '-',
                 'call_status'       => 0,
-                'list_status'       => 1,
+                'list_status'       => 0,
                 'called_day'        => 9,
                 'called_month'      => 11,
                 'called_year'       => 2026,
@@ -2297,6 +2297,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2314,6 +2316,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2331,6 +2335,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2348,6 +2354,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2365,6 +2373,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2382,6 +2392,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 9]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2399,6 +2411,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 22, 'end' => 48]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2416,6 +2430,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 32, 'end' => 67]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2433,6 +2449,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 82, 'end' => 130]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2450,6 +2468,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 5]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2467,6 +2487,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 110, 'end' => 157]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2484,6 +2506,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2501,6 +2525,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2518,6 +2544,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 43, 'end' => 47]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2535,6 +2563,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2552,6 +2582,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 5]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2569,6 +2601,27 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 2]]),
+            ],
+            [
+                'id_main_province'  => 2,
+                'id_sub_province'   => 1,
+                'id_position'       => 214,
+                'round'             => 4,
+                'total'             => '1',
+                'call_status'       => 1,
+                'list_status'       => 1,
+                'called_day'        => 9,
+                'called_month'      => 11,
+                'called_year'       => 2026,
+                'is_cross_region'   => 0,
+                'crossed_region'    => null,
+                'crossed_zone'      => null,
+                'created_at'        => now(),
+                'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 5, 'end' => 5]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2586,6 +2639,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 106, 'end' => 145]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2603,6 +2658,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2620,6 +2677,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 25, 'end' => 34]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2637,6 +2696,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2654,6 +2715,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2671,6 +2734,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2688,6 +2753,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2705,6 +2772,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2722,6 +2791,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2739,6 +2810,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 3, 'end' => 3]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2756,6 +2829,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 15, 'end' => 32]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2773,6 +2848,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 11, 'end' => 15]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2790,6 +2867,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 47, 'end' => 103]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2807,6 +2886,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 2]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2824,6 +2905,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 15, 'end' => 19]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2841,6 +2924,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 6, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2858,6 +2943,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 11]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2875,6 +2962,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 5, 'end' => 7]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2892,6 +2981,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2909,14 +3000,16 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 5, 'end' => 5]]),
             ],
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 1,
                 'id_position'       => 240,
                 'round'             => 4,
-                'total'             => '1',
-                'call_status'       => 1,
+                'total'             => '0',
+                'call_status'       => 0,
                 'list_status'       => 1,
                 'called_day'        => 9,
                 'called_month'      => 11,
@@ -2926,6 +3019,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2943,6 +3038,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 40, 'end' => 47]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2960,6 +3057,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -2977,6 +3076,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 48, 'end' => 64]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -2994,6 +3095,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3011,6 +3114,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3028,6 +3133,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3045,6 +3152,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 4, 'end' => 12]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3062,6 +3171,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 4, 'end' => 4]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3079,6 +3190,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3096,15 +3209,17 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 3, 'end' => 4]]),
             ],
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 1,
                 'id_position'       => 317,
                 'round'             => 4,
-                'total'             => '0',
+                'total'             => '-',
                 'call_status'       => 0,
-                'list_status'       => 1,
+                'list_status'       => 0,
                 'called_day'        => 9,
                 'called_month'      => 11,
                 'called_year'       => 2026,
@@ -3113,15 +3228,17 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 1,
                 'id_position'       => 318,
                 'round'             => 4,
-                'total'             => '0',
+                'total'             => '-',
                 'call_status'       => 0,
-                'list_status'       => 1,
+                'list_status'       => 0,
                 'called_day'        => 9,
                 'called_month'      => 11,
                 'called_year'       => 2026,
@@ -3130,6 +3247,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3147,6 +3266,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 3]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3164,6 +3285,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3181,6 +3304,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 5, 'end' => 5]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3198,6 +3323,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3215,6 +3342,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3232,6 +3361,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 10]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3249,6 +3380,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 2]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3266,6 +3399,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
         ]);
 
@@ -3286,6 +3421,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3303,6 +3440,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3320,6 +3459,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3337,6 +3478,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3354,6 +3497,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3371,6 +3516,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3388,6 +3535,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 17, 'end' => 19]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3405,6 +3554,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3422,6 +3573,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3439,6 +3592,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3456,6 +3611,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3473,6 +3630,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3490,6 +3649,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3507,6 +3668,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3524,6 +3687,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3541,6 +3706,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3558,6 +3725,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3575,6 +3744,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3592,6 +3763,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3609,6 +3782,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3626,6 +3801,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 129, 'end' => 172]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3643,6 +3820,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 121, 'end' => 157]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3660,6 +3839,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 255, 'end' => 302]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3677,6 +3858,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 63, 'end' => 82]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3694,6 +3877,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3711,6 +3896,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3728,6 +3915,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3745,6 +3934,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3762,6 +3953,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3779,6 +3972,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 21, 'end' => 24]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3796,6 +3991,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 9, 'end' => 10]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3813,6 +4010,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3830,6 +4029,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3847,6 +4048,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 11]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3864,6 +4067,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3881,6 +4086,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3898,6 +4105,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3915,6 +4124,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3932,6 +4143,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3949,6 +4162,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 14, 'end' => 16]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -3966,6 +4181,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -3983,6 +4200,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 46, 'end' => 74]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4000,6 +4219,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 86, 'end' => 127]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4017,6 +4238,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 41, 'end' => 53]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4034,6 +4257,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 260, 'end' => 311]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4051,6 +4276,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 6, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4068,6 +4295,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 10, 'end' => 10]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4085,6 +4314,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4102,6 +4333,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4119,6 +4352,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 37, 'end' => 47]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4136,6 +4371,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 25, 'end' => 30]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4153,6 +4390,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4170,6 +4409,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4187,6 +4428,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 33, 'end' => 44]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4204,6 +4447,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 69, 'end' => 89]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4221,6 +4466,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4238,6 +4485,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 9, 'end' => 13]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4255,6 +4504,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 24, 'end' => 37]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4272,6 +4523,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4289,6 +4542,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4306,6 +4561,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 8, 'end' => 13]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4323,6 +4580,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 4]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4340,6 +4599,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4357,6 +4618,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 13, 'end' => 14]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4374,6 +4637,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4391,6 +4656,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4408,6 +4675,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 18, 'end' => 23]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4425,6 +4694,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4442,6 +4713,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4459,6 +4732,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4476,6 +4751,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4493,6 +4770,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 17, 'end' => 17]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4510,6 +4789,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4527,6 +4808,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 3, 'end' => 5]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4544,6 +4827,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 10, 'end' => 16]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4561,6 +4846,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 9, 'end' => 13]]),
             ],
         ]);
 
@@ -4581,6 +4868,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4598,6 +4887,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 5, 'end' => 7]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4615,6 +4906,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4632,6 +4925,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4649,6 +4944,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4666,6 +4963,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4683,6 +4982,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 4, 'end' => 4]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4700,6 +5001,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4717,6 +5020,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4734,6 +5039,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4751,6 +5058,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4768,6 +5077,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4785,6 +5096,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 5, 'end' => 7]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4802,6 +5115,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4819,6 +5134,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4836,6 +5153,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4853,6 +5172,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4870,6 +5191,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 6, 'end' => 35]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4887,6 +5210,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 4, 'end' => 21]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4904,6 +5229,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 91, 'end' => 97], ['start' => 99, 'end' => 141]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4921,6 +5248,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4938,6 +5267,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 99, 'end' => 117]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -4955,6 +5286,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4972,6 +5305,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -4989,6 +5324,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -5006,6 +5343,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -5023,6 +5362,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5040,6 +5381,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -5057,6 +5400,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 28, 'end' => 29]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5074,6 +5419,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -5091,6 +5438,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -5108,6 +5457,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 3, 'end' => 3]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5125,6 +5476,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 15, 'end' => 22]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5142,6 +5495,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 13]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5159,6 +5514,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 50]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5176,6 +5533,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 28, 'end' => 33]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5193,6 +5552,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -5210,6 +5571,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -5227,6 +5590,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 7]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5244,6 +5609,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 39, 'end' => 52]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5261,6 +5628,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 7]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5278,6 +5647,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 5, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5295,6 +5666,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 6, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5312,6 +5685,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 7]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5329,6 +5704,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -5346,6 +5723,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -5363,6 +5742,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -5380,6 +5761,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 3, 'end' => 4]]),
             ],
             [
                 'id_main_province'  => 2,
@@ -5397,6 +5780,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 2,
@@ -5414,6 +5799,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 5, 'end' => 6]]),
             ],
         ]);
 
@@ -5423,7 +5810,7 @@ class CallingRound34DlaSeeder extends Seeder
                 'id_sub_province'   => 1,
                 'id_position'       => 101,
                 'round'             => 4,
-                'total'             => '23',
+                'total'             => '28',
                 'call_status'       => 1,
                 'list_status'       => 1,
                 'called_day'        => 9,
@@ -5434,6 +5821,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 69, 'end' => 96]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5451,6 +5840,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5468,6 +5859,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5485,6 +5878,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5502,6 +5897,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5519,6 +5916,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5536,6 +5935,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5553,6 +5954,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5570,6 +5973,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5587,6 +5992,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5604,6 +6011,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5621,6 +6030,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 3, 'end' => 3]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5638,6 +6049,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5655,6 +6068,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 16, 'end' => 34]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5672,6 +6087,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 65, 'end' => 106]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5689,6 +6106,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 107, 'end' => 146]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5706,6 +6125,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5723,6 +6144,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5740,6 +6163,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5757,6 +6182,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5774,6 +6201,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 8, 'end' => 9]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5791,6 +6220,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 90, 'end' => 127]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5808,6 +6239,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 28, 'end' => 37]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5825,6 +6258,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5842,6 +6277,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 2]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5859,6 +6296,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 14, 'end' => 25]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5876,6 +6315,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 13, 'end' => 41]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5893,6 +6334,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 13, 'end' => 17]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5910,6 +6353,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -5927,6 +6372,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 4, 'end' => 7]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5944,6 +6391,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 3, 'end' => 3]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5961,6 +6410,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 8]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5978,6 +6429,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 10, 'end' => 11]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -5995,6 +6448,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 9, 'end' => 10]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6012,6 +6467,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 3]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6029,6 +6486,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6046,6 +6505,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 9, 'end' => 15]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6063,6 +6524,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6080,6 +6543,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 5, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6097,6 +6562,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6114,6 +6581,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6131,6 +6600,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 4, 'end' => 5]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6148,6 +6619,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
         ]);
 
@@ -6168,6 +6641,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 49, 'end' => 66]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6185,6 +6660,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6202,6 +6679,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6219,6 +6698,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6236,6 +6717,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6253,6 +6736,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 3, 'end' => 5]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6270,6 +6755,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6287,6 +6774,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6304,6 +6793,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6321,6 +6812,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6338,6 +6831,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6355,6 +6850,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 18, 'end' => 22]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6372,6 +6869,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6389,6 +6888,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6406,6 +6907,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 8, 'end' => 17]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6423,6 +6926,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 51, 'end' => 75]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6440,6 +6945,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6457,6 +6964,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 89, 'end' => 130]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6474,6 +6983,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 41, 'end' => 41]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6491,6 +7002,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6508,6 +7021,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6525,6 +7040,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 13, 'end' => 19]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6542,6 +7059,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 55, 'end' => 74]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6559,6 +7078,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 7, 'end' => 8]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6576,6 +7097,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6593,6 +7116,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6610,6 +7135,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 21, 'end' => 38]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6627,6 +7154,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6644,6 +7173,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6661,6 +7192,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 18, 'end' => 18]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6678,6 +7211,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6695,6 +7230,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6712,6 +7249,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 4, 'end' => 12]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6729,6 +7268,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 2]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6746,6 +7287,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
         ]);
 
@@ -6766,6 +7309,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 55, 'end' => 84], ['start' => 86, 'end' => 87]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6783,6 +7328,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6800,6 +7347,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6817,6 +7366,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6834,6 +7385,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6851,6 +7404,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6868,6 +7423,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6885,6 +7442,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6892,7 +7451,7 @@ class CallingRound34DlaSeeder extends Seeder
                 'id_position'       => 110,
                 'round'             => 4,
                 'total'             => '1',
-                'call_status'       => 1,
+                'call_status'       => 0,
                 'list_status'       => 1,
                 'called_day'        => 9,
                 'called_month'      => 11,
@@ -6902,6 +7461,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 2]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -6919,6 +7480,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6936,6 +7499,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6953,6 +7518,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6970,6 +7537,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -6987,6 +7556,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -7004,6 +7575,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 19, 'end' => 19]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7021,6 +7594,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -7038,6 +7613,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -7055,6 +7632,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -7072,6 +7651,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 17, 'end' => 25]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7089,6 +7670,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 4, 'end' => 22]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7106,6 +7689,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 52, 'end' => 78]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7123,6 +7708,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7140,6 +7727,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 62, 'end' => 95]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7157,6 +7746,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -7174,6 +7765,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 33, 'end' => 36]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7191,6 +7784,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 47, 'end' => 55]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7208,6 +7803,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 55, 'end' => 83]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7225,6 +7822,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 2]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7242,6 +7841,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7259,6 +7860,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 37, 'end' => 65]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7276,6 +7879,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 13, 'end' => 13]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7293,6 +7898,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -7310,6 +7917,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -7327,6 +7936,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 17, 'end' => 28]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7344,6 +7955,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 5, 'end' => 10]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7361,6 +7974,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 13]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7378,6 +7993,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 3]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7395,6 +8012,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 10, 'end' => 12]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7412,6 +8031,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -7429,6 +8050,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -7446,15 +8069,17 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 3, 'end' => 4]]),
             ],
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 3,
                 'id_position'       => 306,
                 'round'             => 4,
-                'total'             => '0',
+                'total'             => '-',
                 'call_status'       => 0,
-                'list_status'       => 1,
+                'list_status'       => 0,
                 'called_day'        => 9,
                 'called_month'      => 11,
                 'called_year'       => 2026,
@@ -7463,15 +8088,17 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 3,
                 'id_position'       => 308,
                 'round'             => 4,
-                'total'             => '0',
+                'total'             => '-',
                 'call_status'       => 0,
-                'list_status'       => 1,
+                'list_status'       => 0,
                 'called_day'        => 9,
                 'called_month'      => 11,
                 'called_year'       => 2026,
@@ -7480,15 +8107,17 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 3,
                 'id_position'       => 309,
                 'round'             => 4,
-                'total'             => '0',
+                'total'             => '-',
                 'call_status'       => 0,
-                'list_status'       => 1,
+                'list_status'       => 0,
                 'called_day'        => 9,
                 'called_month'      => 11,
                 'called_year'       => 2026,
@@ -7497,6 +8126,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 3,
@@ -7514,6 +8145,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 9, 'end' => 16]]),
             ],
             [
                 'id_main_province'  => 3,
@@ -7531,6 +8164,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
         ]);
 
@@ -7551,6 +8186,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 137]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -7568,6 +8205,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7585,6 +8224,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7602,6 +8243,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7619,6 +8262,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 55, 'end' => 57]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -7636,6 +8281,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 61, 'end' => 96]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -7653,6 +8300,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7670,6 +8319,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7687,6 +8338,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7704,6 +8357,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7721,6 +8376,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7738,6 +8395,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7755,6 +8414,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7772,6 +8433,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7789,6 +8452,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7806,6 +8471,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 8, 'end' => 29]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -7823,6 +8490,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7840,6 +8509,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7857,6 +8528,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 18]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -7874,6 +8547,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 56]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -7891,6 +8566,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 51]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -7908,6 +8585,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 83]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -7925,6 +8604,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 14]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -7942,6 +8623,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 76]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -7959,6 +8642,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7976,6 +8661,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -7993,6 +8680,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 22, 'end' => 34]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8010,6 +8699,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 94]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8027,6 +8718,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 8]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8044,6 +8737,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 2]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8061,6 +8756,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 66]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8078,6 +8775,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 5, 'end' => 30]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8095,6 +8794,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8112,6 +8813,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8129,6 +8832,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8146,6 +8851,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 2]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8163,6 +8870,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 3]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8180,6 +8889,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 11]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8197,12 +8908,13 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 41]]),
             ],
             [
                 'id_main_province'  => 4,
                 'id_sub_province'   => 1,
-                'id_position'
-                => 229,
+                'id_position'       => 229,
                 'round'             => 3,
                 'total'             => '9',
                 'call_status'       => 1,
@@ -8215,6 +8927,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 9]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8232,6 +8946,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 105]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8249,6 +8965,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 3, 'end' => 7]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8266,6 +8984,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 5]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8283,6 +9003,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 3, 'end' => 3]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8300,6 +9022,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8317,6 +9041,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8334,6 +9060,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8351,6 +9079,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 14, 'end' => 27]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8368,6 +9098,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 36, 'end' => 45]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8385,6 +9117,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8402,6 +9136,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8419,6 +9155,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8436,6 +9174,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8453,6 +9193,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 2, 'end' => 3]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8470,6 +9212,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8487,6 +9231,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8504,6 +9250,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8521,6 +9269,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8538,6 +9288,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8555,6 +9307,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8572,6 +9326,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8589,6 +9345,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 11]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8606,6 +9364,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 2]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8623,6 +9383,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
         ]);
 
@@ -8643,6 +9405,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 27]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8660,6 +9424,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8677,6 +9443,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8694,6 +9462,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 18, 'end' => 29]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8711,6 +9481,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 46]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8728,6 +9500,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8745,6 +9519,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 34, 'end' => 58]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8762,6 +9538,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8779,6 +9557,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8796,6 +9576,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8813,6 +9595,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8830,6 +9614,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 4]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8847,6 +9633,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 17]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8864,6 +9652,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8881,6 +9671,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8898,6 +9690,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -8915,6 +9709,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 3, 'end' => 27]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8932,6 +9728,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8949,6 +9747,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 8, 'end' => 34]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8966,6 +9766,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 8]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -8983,6 +9785,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 20]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -9000,6 +9804,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 67]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -9017,6 +9823,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -9034,6 +9842,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 40]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -9051,6 +9861,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -9068,6 +9880,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 4, 'end' => 9]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -9085,6 +9899,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -9102,6 +9918,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -9119,6 +9937,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -9136,6 +9956,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -9153,6 +9975,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 26]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -9170,6 +9994,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 6, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -9187,6 +10013,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -9204,6 +10032,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -9221,6 +10051,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -9238,6 +10070,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 4, 'end' => 4]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -9255,6 +10089,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -9272,6 +10108,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 5, 'end' => 6]]),
             ],
             [
                 'id_main_province'  => 4,
@@ -9289,6 +10127,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -9306,6 +10146,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -9323,6 +10165,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => null,
             ],
             [
                 'id_main_province'  => 4,
@@ -9340,6 +10184,8 @@ class CallingRound34DlaSeeder extends Seeder
                 'crossed_zone'      => null,
                 'created_at'        => now(),
                 'updated_at'        => now(),
+                'list_new_status'   => 1,
+                'rank'              => json_encode([['start' => 1, 'end' => 1]]),
             ],
         ]);
     }
