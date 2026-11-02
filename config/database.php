@@ -92,6 +92,19 @@ return [
             'search_path' => 'public',
         ],
 
+        'pgsql_local' => [
+            'driver' => 'pgsql',
+            'host' => env('LOCAL_DB_HOST', '127.0.0.1'),
+            'port' => env('LOCAL_DB_PORT', '5432'),
+            'database' => env('LOCAL_DB_DATABASE', 'exam_system'),
+            'username' => env('LOCAL_DB_USERNAME', 'postgres'),
+            'password' => env('LOCAL_DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),

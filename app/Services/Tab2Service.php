@@ -2,23 +2,21 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use App\Models\CallingDla;
-use App\Models\UpdateListDla;
-use App\Models\ProvincesDla;
-use App\Models\PrefixsDla;
-use App\Models\PositionDla;
-use App\Models\TypePositionDla;
 use App\Traits\DateCalculatable;
+use App\Traits\TotalNewListCalculatable;
 
 class Tab2Service
 {
 
     use DateCalculatable;
+    use TotalNewListCalculatable;
 
     public function getData()
     {
+        $getNewTotal = $this->getNewTotal();
         //---- tab 2
         return [
             'part1' =>  $this->Tab2_Part1_TypePos(),
@@ -387,60 +385,43 @@ class Tab2Service
     /**
      * @param int $id
      */
-    public function getPositionDetail($id, $part)
+    public function getPositionDetail($id)
     {
-        $position = DB::table('positions_dla as p')
-            ->leftJoin('type_positions_dla as t', 't.id', '=', 'p.id_type')
-            ->leftJoin('prefixes_dla as pre', 'pre.id', '=', 'p.id_prefix')
-            ->where('p.id_position', $id)
-            ->selectRaw("COALESCE(pre.name, '') || p.name || COALESCE(t.type_position, '') as pos_name")
-            ->first();
-        $provinces = DB::table('provinces_dla')->get();
-        $updates = DB::table('updated_list_dla')
-            ->where('id_position', $id)
-            ->get()
-            ->keyBy(fn($item) => $item->id_main_province . '-' . $item->id_sub_province);
-        $calls = DB::table('calling_dla')
-            ->where('call_status', 1)
-            ->where('id_position', $id)
-            ->selectRaw("id_main_province, id_sub_province, MAX(round) as round, SUM(total::integer) as total")
-            ->groupBy('id_main_province', 'id_sub_province')
-            ->get()
-            ->keyBy(fn($item) => $item->id_main_province . '-' . $item->id_sub_province);
+        $getNewTotal = $this->getNewTotal();
+        $result = Str::substr($id, 0, 1);
+        $position = $getNewTotal['data'][1]['data'][1]['data'][$result]['data'][$id]['name_position'] ?? 'ไม่พบข้อมูล';
         $array = [
             'id' => $id,
-            'part' => (int)$part,
-            'name' => $position->pos_name ?? 'ไม่พบข้อมูล',
+            'name' => $position,
             'data' => [],
             'total' => ['listed' => 0, 'listed_new' => 0, 'called' => 0, 'remain' => 0, 'diff' => 0]
         ];
-        foreach ($provinces as $prov) {
-            $key = $prov->id_main_province . '-' . $prov->id_sub_province;
-            $listed = $updates->get($key);
-            $calling = $calls->get($key);
-            $calledTotal = (int)($calling->total ?? 0);
-            $listedTotal = (int)($listed->total ?? 0);
-            $listedTotalNew = (int)($listed->new_total ?? 0);
-            $array['data'][$prov->id_main_province][$prov->id_sub_province] = [
-                'pro_main_id'    => $prov->id_main_province,
-                'pro_sub_id'     => $prov->id_sub_province,
-                'pro_main_name'  => $prov->main_name_province,
-                'pro_sub_name'   => $prov->sub_name_province,
-                'pro_full_name'  => "{$prov->main_name_province} {$prov->sub_name_province}",
-                'total_listed'   => $listedTotal,
-                'total_listed_n' => $listedTotalNew,
-                'total_diff'     => $listedTotal - $listedTotalNew,
-                'total_called'   => $calledTotal,
-                'total_remain'   => $listedTotalNew - $calledTotal,
-                'total_process'  => ($listedTotalNew > 0) ? ($calledTotal / $listedTotalNew) * 100 : 0,
-                'total_round'    => (int)($calling->round ?? 0),
-                'status_listed'  => !is_null($listed),
-                'status_calling' => !is_null($calling),
-            ];
-            $array['total']['listed'] += $listedTotal;
-            $array['total']['listed_new'] += $listedTotalNew;
-            $array['total']['called'] += $calledTotal;
-            $array['total']['diff'] += ($listedTotal - $listedTotalNew);
+        foreach ($getNewTotal['data'] as $k1 => $region) {
+            foreach ($region['data'] as $k2 => $zone) {
+                $data = $zone['data'][$result]['data'][$id];
+                if (isset($data)) {
+                    $array['data'][$k1][$k2] = [
+                        'pro_main_id'    => $k1,
+                        'pro_sub_id'     => $k2,
+                        'pro_main_name'  => $region['name_main'],
+                        'pro_sub_name'   => $zone['name_sub'],
+                        'pro_full_name'  => $zone['full_name'],
+                        'total_listed'   => $data['listed_old'],
+                        'total_listed_n' => $data['listed_new'],
+                        'total_diff'     => $data['listed_diff'],
+                        'total_called'   => $data['called_new'],
+                        'total_remain'   => $data['remaining'],
+                        'total_process'  => ($data['listed_new'] > 0) ? ($data['called_new'] / $data['listed_new']) * 100 : 0,
+                        'total_round'    => $data['total_round'],
+                        'status_listed'  => $data['listed_new'] !== 0,
+                        'status_calling' => $data['called_new'] !== 0,
+                    ];
+                }
+                $array['total']['listed'] += $data['listed_old'];
+                $array['total']['listed_new'] += $data['listed_new'];
+                $array['total']['called'] += $data['called_new'];
+                $array['total']['diff'] += $data['listed_diff'];
+            }
         }
         $array['total']['remain'] = $array['total']['listed_new'] - $array['total']['called'];
         return $array;

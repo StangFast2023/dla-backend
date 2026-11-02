@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 trait DateCalculatable
 {
 
-
     public function getAccountTimeline($isFullTimeline = false)
     {
         $start = Carbon::create(2026, 4, 1);
@@ -53,7 +52,7 @@ trait DateCalculatable
         ];
     }
 
-    public function getAccountDaysStatus($regionId)
+    public function getAccountDaysStatus($regionId = null)
     {
         if ($regionId !== null) {
             if ($regionId === 4) {

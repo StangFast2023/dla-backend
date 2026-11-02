@@ -5,23 +5,20 @@ namespace App\Services;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Models\CallingDla;
-use App\Models\UpdateListDla;
-use App\Models\ProvincesDla;
-use App\Models\PrefixsDla;
-use App\Models\PositionDla;
-use App\Models\TypePositionDla;
 use App\Traits\DateCalculatable;
+use App\Traits\TotalNewListCalculatable;
 
 class Tab1Service
 {
 
     use DateCalculatable;
+    use TotalNewListCalculatable;
 
     public function getData()
     {
         //---- tab 1
         $Tab1_Part1_Static          =   $this->Tab1_Part1_Static();
-        $getAccountDaysStatus       =   $this->getAccountDaysStatus(null);
+        $getAccountDaysStatus       =   $this->getAccountDaysStatus();
         $Tab1_Part1_Static          =   array_merge($Tab1_Part1_Static, $getAccountDaysStatus);
 
         return [
@@ -38,11 +35,9 @@ class Tab1Service
     {
         return Cache::remember('tab1_part1_stats', 600, function () {
 
+            $getNewTotal = $this->getNewTotal();
             $CurRound   = CallingDla::max('round');
             $MaxRound   = 25;
-            $OldTotalList  = UpdateListDla::sum('total');
-            $NewTotalList  = UpdateListDla::sum('new_total');
-            $TotalCall  = CallingDla::where('call_status', 1)->sum(DB::raw('total::integer'));
             $AVGCall = CallingDla::where('call_status', 1)
                 ->select(DB::raw("concat(called_month, '/', called_year) as monthly, sum(total::integer) as total_per_month"))
                 ->groupBy('monthly')
@@ -52,10 +47,10 @@ class Tab1Service
             return [
                 'CurRound'      => (int)$CurRound,
                 'MaxRound'      => (int)$MaxRound,
-                'OldTotalList'  => (int)$OldTotalList,
-                'NewTotalList'  => (int)$NewTotalList,
-                'DiffTotalList' => (int)$OldTotalList - (int)$NewTotalList,
-                'TotalCall'     => (int)$TotalCall,
+                'OldTotalList'  => (int)$getNewTotal['listed_old'],
+                'NewTotalList'  => (int)$getNewTotal['listed_new'],
+                'DiffTotalList' => (int)$getNewTotal['listed_diff'],
+                'TotalCall'     => (int)$getNewTotal['called_total'],
                 'AvgCall'       => (int)$AVGCall,
             ];
         });
@@ -190,42 +185,41 @@ class Tab1Service
     public function Tab1_part6_TableRoundCall()
     {
         return Cache::remember('tab1_part6_table', 600, function () {
+
             $callStats = DB::table('calling_dla')
-                ->select('id_main_province', 'id_sub_province', 'round')
-                ->selectRaw('SUM(total::integer) as total_called')
+                ->select('id_main_province', 'id_sub_province', 'round', 'list_new_status')
+                ->selectRaw('SUM(total::integer) as total_called ')
                 ->where('call_status', true)
-                ->groupBy('id_main_province', 'id_sub_province', 'round')
+                ->orderBy('id_main_province', 'asc')
+                ->orderBy('id_sub_province', 'asc')
+                ->orderBy('round', 'asc')
+                ->groupBy('id_main_province', 'id_sub_province', 'round', 'list_new_status')
                 ->get()
-                ->groupBy(['id_main_province', 'id_sub_province']);
-            $listStats = DB::table('updated_list_dla')
-                ->select('id_main_province', 'id_sub_province')
-                ->selectRaw('SUM(total::integer) as total_listed , SUM(new_total::integer) as total_listed_new')
-                ->groupBy('id_main_province', 'id_sub_province')
-                ->get()
-                ->keyBy(fn($item) => $item->id_main_province . '-' . $item->id_sub_province);
-            $provinces = ProvincesDla::all();
+                ->groupBy(['id_main_province', 'id_sub_province'])
+                ->toArray();
+            $getNewTotal = $this->getNewTotal();
             $array = [];
-            foreach ($provinces as $prov) {
-                $main = $prov->id_main_province;
-                $sub = $prov->id_sub_province;
-                $provinceCalls = $callStats->get($main, collect())->get($sub, collect());
-                $listed = $listStats->get("$main-$sub");
-                $totalCalled = $provinceCalls->sum('total_called');
-                $totalListed = $listed ? $listed->total_listed : 0;
-                $totalListed_new = $listed ? $listed->total_listed_new : 0;
-                if (!isset($array[$main])) {
-                    $array[$main] = ['name' => $prov->main_name_province, 'data' => []];
+            foreach ($getNewTotal['data'] as $key1 => $region) {
+                if (!isset($array[$key1])) {
+                    $array[$key1] = [
+                        'name'  =>  $region['name_main'],
+                        'data'  =>  []
+                    ];
                 }
-                $array[$main]['data'][$sub] = [
-                    'full' => $main . $sub,
-                    'name' => $prov->main_name_province . ' ' . $prov->sub_name_province,
-                    'total_listed_new' => $totalListed_new,
-                    'total_listed' => $totalListed,
-                    'total_called' => $totalCalled,
-                    'total_remain' => $totalListed_new - $totalCalled,
-                    'total_round'  => $provinceCalls->count(),
-                    'data-round'   => $provinceCalls->keyBy('round')->toArray()
-                ];
+                foreach ($region['data'] as $key2 => $zone) {
+                    if (!isset($array[$key1]['data'][$key2])) {
+                        $array[$key1]['data'][$key2] = [
+                            'full'              =>  $key1 . $key2,
+                            'name'              =>  $zone['full_name'],
+                            'total_listed_new'  =>  $zone['listed_new'],
+                            'total_listed'      =>  $zone['listed_old'],
+                            'total_called'      =>  $zone['called_total'],
+                            'total_remain'      =>  $zone['remaining'],
+                            'total_round'       =>  $zone['total_round'],
+                            'data-round'        =>  $callStats[$key1][$key2],
+                        ];
+                    }
+                }
             }
             return $array;
         });

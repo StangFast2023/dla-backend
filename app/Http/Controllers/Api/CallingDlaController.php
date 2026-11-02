@@ -97,9 +97,9 @@ class CallingDlaController extends Controller
     /**
      * @param int $id
      */
-    public function getPositionDetailByZone($id, $part, Tab2Service $tab2Service)
+    public function getPositionDetailByZone($id, Tab2Service $tab2Service)
     {
-        $data = $tab2Service->getPositionDetail($id, $part);
+        $data = $tab2Service->getPositionDetail($id);
         return response()->json($data);
     }
     //--- api data of Tab 3
