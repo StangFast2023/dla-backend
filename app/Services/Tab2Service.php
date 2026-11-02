@@ -16,7 +16,6 @@ class Tab2Service
 
     public function getData()
     {
-        $getNewTotal = $this->getNewTotal();
         //---- tab 2
         return [
             'part1' =>  $this->Tab2_Part1_TypePos(),
@@ -170,23 +169,14 @@ class Tab2Service
     public function Tab2_Part4_TypePosTop10()
     {
         return Cache::remember('tab2_part4_top10', 600, function () {
-
-            return DB::table('updated_list_dla as ul')
-                ->join('positions_dla as p', 'p.id_position', '=', 'ul.id_position')
-                ->join('type_positions_dla as t', 't.id', '=', 'p.id_type')
-                ->leftJoin('prefixes_dla as pre', 'pre.id', '=', 'p.id_prefix')
-                ->selectRaw("
-                    ul.id_position as id_pos,
-                    COALESCE(pre.name, '') || p.name || COALESCE(t.type_position, '') as pos_name,
-                    p.id_type as pos_type_id,
-                    t.name as pos_type, 
-                    SUM(ul.total::integer) as total
-                ")
-                ->groupBy('id_pos', 'pos_name', 'pos_type_id', 'pos_type')
-                ->orderByDesc('total')
-                // ->limit(10)
-                ->get()
-                ->toArray();
+            $data = $this->dataForThreeTables();
+            usort($data, function ($a, $b) {
+                return $b['total_list'] <=> $a['total_list'];
+            });
+            $data = array_filter($data, function ($item) {
+                return $item['total_list'] != 0;
+            });
+            return $data;
         });
     }
 
@@ -230,152 +220,87 @@ class Tab2Service
     public function Tab2_Part6_TypeCallAll()
     {
         return Cache::remember('tab2_part6_call_all', 600, function () {
-            return DB::table('calling_dla as c')
-                ->join('positions_dla as p', 'p.id_position', '=', 'c.id_position')
-                ->join('type_positions_dla as t', 't.id', '=', 'p.id_type')
-                ->leftJoin('prefixes_dla as pre', 'pre.id', '=', 'p.id_prefix')
-                ->where('c.call_status', 1)
-                ->selectRaw("
-                c.id_position as id_pos,
-                p.id_type as pos_type_id,
-                t.name as pos_type, 
-                COALESCE(pre.name, '') || p.name || COALESCE(t.type_position, '') as pos_name,
-                SUM(c.total::integer) as total_call
-            ")
-                ->groupBy('id_pos', 'pos_name', 'pos_type_id', 'pos_type')
-                ->orderByDesc('total_call')
-                // ->limit(10)
-                ->get()
-                ->map(function ($call) {
-                    return [
-                        'id_pos'      => $call->id_pos,
-                        'pos_type_id' => $call->pos_type_id,
-                        'pos_name'    => $call->pos_name,
-                        'pos_type'    => $call->pos_type,
-                        'total_call'  => (int)$call->total_call
-                    ];
-                })
-                ->toArray();
+            $data = $this->dataForThreeTables();
+            usort($data, function ($a, $b) {
+                return $b['total_call'] <=> $a['total_call'];
+            });
+            $data = array_filter($data, function ($item) {
+                return $item['total_call'] != 0;
+            });
+            return $data;
         });
     }
 
     public function Tab2_Part7_TypeRemainAll()
     {
         return Cache::remember('tab2_part7_remain_all', 600, function () {
-            $calling = DB::table('calling_dla')
-                ->select(
-                    'id_position',
-                    DB::raw('SUM(total::integer) as total_call')
-                )
-                ->where('list_status', 1)
-                ->where('call_status', 1)
-                ->groupBy('id_position');
-            return DB::table('updated_list_dla as ul')
-                ->join('positions_dla as p', 'p.id_position', '=', 'ul.id_position')
-                ->join('type_positions_dla as t', 't.id', '=', 'p.id_type')
-                ->leftJoin('prefixes_dla as pre', 'pre.id', '=', 'p.id_prefix')
-                ->leftJoinSub($calling, 'c', function ($join) {
-                    $join->on('c.id_position', '=', 'ul.id_position');
-                })
-                ->selectRaw("
-                    ul.id_position as id_pos,
-                    COALESCE(pre.name, '') || p.name || COALESCE(t.type_position, '') as pos_name,
-                    p.id_type as pos_type_id,
-                    t.name as pos_type,
-                    SUM(ul.new_total::integer) as total_list,
-                    COALESCE(c.total_call, 0) as total_call,
-                    SUM(ul.new_total::integer) - COALESCE(c.total_call, 0) as total_remain
-                ")
-                ->groupBy(
-                    'ul.id_position',
-                    'pos_name',
-                    'p.id_type',
-                    't.name',
-                    'c.total_call'
-                )
-
-                ->orderByDesc('total_remain')
-                ->get()
-
-                ->map(function ($item) {
-                    return [
-                        'id_pos'       => $item->id_pos,
-                        'pos_name'     => $item->pos_name,
-                        'pos_type_id'  => $item->pos_type_id,
-                        'pos_type'     => $item->pos_type,
-                        'total_list'   => (int) $item->total_list,
-                        'total_call'   => (int) $item->total_call,
-                        'total_remain' => (int) $item->total_remain,
-                    ];
-                })
-                ->toArray();
+            $data = $this->dataForThreeTables();
+            usort($data, function ($a, $b) {
+                return $b['total_remain'] <=> $a['total_remain'];
+            });
+            $data = array_filter($data, function ($item) {
+                return $item['total_remain'] != 0;
+            });
+            return $data;
         });
     }
 
     public function Tab2_Part8_TableAllTypes()
     {
         return Cache::remember('tab2_part8_all_types', 600, function () {
-            $listed = DB::table('updated_list_dla as ul')
-                ->join('positions_dla as p', 'p.id_position', '=', 'ul.id_position')
-                ->join('type_positions_dla as t', 't.id', '=', 'p.id_type')
-                ->join('provinces_dla as prov', function ($join) {
-                    $join->on('prov.id_main_province', '=', 'ul.id_main_province')
-                        ->on('prov.id_sub_province', '=', 'ul.id_sub_province');
-                })
-                ->selectRaw("
-                    ul.id_main_province as prov_main_id,
-                    prov.main_name_province,
-                    p.id_type as pos_type_id,
-                    t.name as pos_type,
-                    SUM(ul.total::integer) as total,
-                    SUM(ul.new_total::integer) as new_total
-                ")
-                ->groupBy('prov_main_id', 'prov.main_name_province', 'pos_type_id', 'pos_type')
-                ->get();
-            $called = DB::table('calling_dla as c')
-                ->join('positions_dla as p', 'p.id_position', '=', 'c.id_position')
-                ->join('type_positions_dla as t', 't.id', '=', 'p.id_type')
-                ->where('call_status', 1)
-                ->selectRaw("
-                    c.id_main_province, c.round,
-                    p.id_type as pos_type_id,
-                    SUM(c.total::integer) as total
-                ")
-                ->groupBy('id_main_province', 'round', 'pos_type_id')
-                ->get();
+
+            $getNewTotal = $this->getNewTotal();
             $array = [];
-            foreach ($listed as $item) {
-                $array[$item->prov_main_id][$item->pos_type_id] = [
-                    'prov_main_id'   => $item->prov_main_id,
-                    'prov_main_name' => $item->main_name_province,
-                    'pos_type_id'    => $item->pos_type_id,
-                    'pos_type'       => $item->pos_type,
-                    'total_list'     => (int)$item->total,
-                    'total_list_n'   => (int)$item->new_total,
-                    'total_diff'     => (int)($item->total - $item->new_total),
-                    'total_call'     => 0,
-                    'total_remain'   => (int)$item->new_total,
-                    'status_empty'   => false,
-                    'status_called'  => false,
-                    'round_data'     => []
-                ];
-            }
-            foreach ($called as $call) {
-                $ref = &$array[$call->id_main_province][$call->pos_type_id];
-                if ($ref) {
-                    $ref['total_call'] += $call->total;
-                    $ref['total_remain'] -= $call->total;
-                    $ref['status_called'] = true;
-                    $ref['round_data'][$call->round] = [
-                        'round'  => $call->round,
-                        'total'  => (int)$call->total,
-                        'called' => true
-                    ];
+            foreach ($getNewTotal['data'] as $key_r => $regoin) {
+                foreach ($regoin['data'] as $zone) {
+                    foreach ($zone['data'] as $key_t => $type) {
+                        foreach ($type['data']  as $post) {
+                            if (!isset($array[$key_r][$key_t])) {
+                                $array[$key_r][$key_t] = [
+                                    'prov_main_id' => $key_r,
+                                    'prov_main_name' => $regoin['name_main'],
+                                    'pos_type_id' => $key_t,
+                                    'pos_type' => $type['name_type_position'],
+                                    'total_list' => 0,
+                                    'total_list_n' => 0,
+                                    'total_diff' => 0,
+                                    'total_call' => 0,
+                                    'total_remain' => 0,
+                                    'status_empty' => false,
+                                    'status_called' => false,
+                                    'account_status' => false,
+                                    'list_new_status' => false,
+                                    'round_data' => []
+                                ];
+                            }
+                            $array[$key_r][$key_t]['total_list'] += $post['listed_old'];
+                            $array[$key_r][$key_t]['total_list_n'] += $post['listed_new'];
+                            $array[$key_r][$key_t]['total_diff'] += $post['listed_diff'];
+                            $array[$key_r][$key_t]['total_call'] += $post['called_total'];
+                            $array[$key_r][$key_t]['total_remain'] += $post['listed_new'] - $post['called_total'];
+                            foreach ($post['detail_round'] as $key_round => $round) {
+                                if (!isset($array[$key_r][$key_t]['round_data'][$key_round])) {
+                                    $array[$key_r][$key_t]['round_data'][$key_round] = [
+                                        'round' => $key_round,
+                                        'total' => 0,
+                                        'called' => false,
+                                    ];
+                                }
+                                $array[$key_r][$key_t]['round_data'][$key_round]['total'] += ($round['call_status'] ? $round['total'] : 0);
+                                $array[$key_r][$key_t]['round_data'][$key_round]['list_new_status'] = $round['list_new_status'];
+                            }
+                        }
+                    }
                 }
             }
-            foreach ($array as &$provinces) {
-                foreach ($provinces as &$type) {
-                    $type['status_empty'] = ($type['total_remain'] <= 0);
+            foreach ($array as $regoin => $data) {
+                foreach ($data as $zones => $post) {
+                    $array[$regoin][$zones]['status_empty'] = $post['total_list_n'] === 0;
+                    $array[$regoin][$zones]['status_called'] = $post['total_call'] !== 0;
+                    $array[$regoin][$zones]['account_status'] = $post['total_remain'] === 0;
+                    foreach ($post['round_data'] as $round => $r_data) {
+                        $array[$regoin][$zones]['round_data'][$round]['called'] = $r_data['total'] !== 0;
+                    }
                 }
             }
             return $array;
@@ -400,6 +325,7 @@ class Tab2Service
             foreach ($region['data'] as $k2 => $zone) {
                 $data = $zone['data'][$result]['data'][$id];
                 if (isset($data)) {
+                    $account_status = $data['account_status'];
                     $array['data'][$k1][$k2] = [
                         'pro_main_id'    => $k1,
                         'pro_sub_id'     => $k2,
@@ -409,21 +335,57 @@ class Tab2Service
                         'total_listed'   => $data['listed_old'],
                         'total_listed_n' => $data['listed_new'],
                         'total_diff'     => $data['listed_diff'],
-                        'total_called'   => $data['called_new'],
-                        'total_remain'   => $data['remaining'],
-                        'total_process'  => ($data['listed_new'] > 0) ? ($data['called_new'] / $data['listed_new']) * 100 : 0,
+                        'total_called'   => $account_status ? $data['listed_new'] : $data['called_new'],
+                        'total_remain'   => $account_status ? 0 : $data['remaining'],
+                        'total_process'  => 0,
                         'total_round'    => $data['total_round'],
                         'status_listed'  => $data['listed_new'] !== 0,
                         'status_calling' => $data['called_new'] !== 0,
+                        'account_status' => $account_status,
                     ];
                 }
                 $array['total']['listed'] += $data['listed_old'];
                 $array['total']['listed_new'] += $data['listed_new'];
-                $array['total']['called'] += $data['called_new'];
+                $array['total']['called'] +=  $array['data'][$k1][$k2]['total_called'];
                 $array['total']['diff'] += $data['listed_diff'];
+                $array['total']['remain'] += $data['listed_new'];
+                $array['total']['remain'] -= $account_status ? $data['listed_new'] : $data['called_new'];
+                $array['data'][$k1][$k2]['total_process'] = $array['data'][$k1][$k2]['total_listed_n'] > 0 ? (($array['data'][$k1][$k2]['total_called'] / $array['data'][$k1][$k2]['total_listed_n']) * 100) : 0;
             }
         }
-        $array['total']['remain'] = $array['total']['listed_new'] - $array['total']['called'];
+        return $array;
+    }
+
+    private function dataForThreeTables()
+    {
+        $getNewTotal = $this->getNewTotal();
+        $array = [];
+        foreach ($getNewTotal['data'] as $region) {
+            foreach ($region['data'] as $zone) {
+                foreach ($zone['data'] as $id_type => $type) {
+                    foreach ($type['data'] as $id_post => $post) {
+                        $total_list = $post['listed_new'];
+                        $total_call = $post['called_total'];
+                        if (!isset($array[$id_post])) {
+                            $array[$id_post] = [
+                                'id_pos' => $id_post,
+                                'pos_name' => $post['name_position'],
+                                'pos_type_id' => $id_type,
+                                'pos_type' => $type['name_type_position'],
+                                'total_list' => 0,
+                                'total_call' => 0,
+                                'total_remain' => 0,
+                            ];
+                        }
+                        $array[$id_post]['total_list'] += $total_list;
+                        $array[$id_post]['total_call'] += $total_call;
+                    }
+                }
+            }
+        }
+        foreach ($array as &$data) {
+            $data['total_remain'] = $data['total_list'] - $data['total_call'];
+        }
         return $array;
     }
 }

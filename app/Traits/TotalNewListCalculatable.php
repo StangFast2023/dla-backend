@@ -319,37 +319,28 @@ trait TotalNewListCalculatable
                         $data['data'][$key1]['data'][$key2]['data'][$key3][$field] = 0;
                     }
                     foreach ($type['data'] as $key4 => $position) {
-                        // คำนวณผลต่างระดับตำแหน่ง
                         $position['called_diff'] = $position['called_old'] - $position['called_new'];
                         $data['data'][$key1]['data'][$key2]['data'][$key3]['data'][$key4]['called_diff'] = $position['called_diff'];
-                        // รวมยอดระดับประเภท
                         foreach ($total_fields as $field) {
                             $data['data'][$key1]['data'][$key2]['data'][$key3][$field] += $position[$field] ?? 0;
                         }
                     }
-                    // คำนวณผลต่างระดับประเภท
                     $data['data'][$key1]['data'][$key2]['data'][$key3]['called_diff'] = $data['data'][$key1]['data'][$key2]['data'][$key3]['called_old'] - $data['data'][$key1]['data'][$key2]['data'][$key3]['called_new'];
-                    // รวมยอดระดับเขต
                     foreach ($total_fields as $field) {
                         $data['data'][$key1]['data'][$key2][$field] += $data['data'][$key1]['data'][$key2]['data'][$key3][$field];
                     }
                 }
-                // คำนวณผลต่างระดับเขต
                 $data['data'][$key1]['data'][$key2]['called_diff'] = $data['data'][$key1]['data'][$key2]['called_old'] - $data['data'][$key1]['data'][$key2]['called_new'];
-                // รวมยอดระดับภาค
                 foreach ($total_fields as $field) {
-                    $data['data'][$key1][$field]
-                        += $data['data'][$key1]['data'][$key2][$field];
+                    $data['data'][$key1][$field] += $data['data'][$key1]['data'][$key2][$field];
                 }
             }
-            // คำนวณผลต่างระดับภาค
             $data['data'][$key1]['called_diff'] = $data['data'][$key1]['called_old'] - $data['data'][$key1]['called_new'];
-            // รวมยอดภาพรวม
             foreach ($total_fields as $field) {
                 $data[$field] += $data['data'][$key1][$field];
             }
         }
-        // คำนวณผลต่างภาพรวม
+
         $data['called_diff'] = $data['called_old'] - $data['called_new'];
 
         foreach ($data['data'] as $key1 => $region) {
