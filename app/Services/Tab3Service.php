@@ -4,19 +4,15 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use App\Models\CallingDla;
-use App\Models\UpdateListDla;
-use App\Models\ProvincesDla;
-use App\Models\PrefixsDla;
-use App\Models\PositionDla;
-use App\Models\TypePositionDla;
 use App\Traits\DateCalculatable;
+use App\Traits\TotalNewListCalculatable;
 use Carbon\Carbon;
 
 class Tab3Service
 {
 
     use DateCalculatable;
+    use TotalNewListCalculatable;
 
     public function getData()
     {
@@ -102,177 +98,85 @@ class Tab3Service
      */
     public function updateTablePart6ForTab3($id)
     {
+        $data_new = $this->getNewTotal();
         $array = [];
-        $provinces_dla = db::table('provinces_dla')
-            ->select([
-                'id_main_province',
-                'id_sub_province',
-                'main_name_province',
-                'sub_name_province'
-            ])
-            ->get();
-        foreach ($provinces_dla as $prov) {
-            $id_main_province   =   $prov->id_main_province;
-            $id_sub_province    =   $prov->id_sub_province;
-            $full_key_province  =   $id_main_province . $id_sub_province;
-
-            $main_name_province = $prov->main_name_province;
-            $sub_name_province  = $prov->sub_name_province;
-            $full_name_province = $main_name_province . ' ' . $sub_name_province;
-
-            if (!isset($array[$full_key_province])) {
-                $array[$full_key_province] = [
-                    'full_key_province'     =>  (int)$full_key_province,
-                    'full_name_province'    =>  $full_name_province,
-                    'status_open'           =>  false,
-                    'total_round'           =>  0,
-                    'total_listed'          =>  0,
-                    'total_listed_new'      =>  0,
-                    'total_diff'            =>  0,
-                    'total_called'          =>  0,
-                    'total_remain'          =>  0,
-                    'stauts_of_exhaustion'  =>  false,
-                    'data_round'            =>  []
-                ];
-            }
-        }
-
-        $updated_list_dla = db::table('updated_list_dla')
-            ->where('updated_list_dla.id_position', '=', $id)
-            ->select([
-                'id_main_province',
-                'id_sub_province',
-                'total',
-                'new_total'
-            ])
-            ->get();
-        foreach ($updated_list_dla as $updated) {
-            $total      =   $updated->total;
-            $new_total  =   $updated->new_total;
-
-            $id_main_province   =   $updated->id_main_province;
-            $id_sub_province    =   $updated->id_sub_province;
-            $full_key_province  =   $id_main_province . $id_sub_province;
-            if (isset($array[$full_key_province])) {
-                $array[$full_key_province]['status_open'] = true;
-                $array[$full_key_province]['total_listed'] = $total;
-                $array[$full_key_province]['total_listed_new'] = $new_total;
-                $array[$full_key_province]['total_diff'] = $total - $new_total;
-                $array[$full_key_province]['total_remain'] = $new_total;
-            }
-        }
-
-        $calling_dla = db::table('calling_dla')
-            ->where('calling_dla.id_position', '=', $id)
-            ->select([
-                'id_main_province',
-                'id_sub_province',
-                'round',
-                'total',
-                'call_status',
-                'list_status',
-                'called_day',
-                'called_month',
-                'called_year',
-                'is_cross_region',
-                'crossed_region',
-                'crossed_zone'
-            ])
-            ->get();
-
-        $current_date    =  Carbon::today();
-        foreach ($calling_dla as $called) {
-            $id_main_province   =   $called->id_main_province;
-            $id_sub_province    =   $called->id_sub_province;
-            $full_key_province  =   $id_main_province . $id_sub_province;
-
-            $round    =   (int)$called->round;
-            $total    =   (int)$called->total;
-
-            $call_status    =   (bool)$called->call_status;
-            $list_status    =   (bool)$called->list_status;
-
-            $called_day     =   (int)$called->called_day;
-            $called_month   =   (int)$called->called_month;
-            $called_year    =   (int)$called->called_year;
-
-            $is_cross_region    =   (bool)$called->is_cross_region;
-            $crossed_region     =   $called->crossed_region;
-            $crossed_zone       =   $called->crossed_zone;
-
-            if ($call_status === true) {
-                $call_date      =   Carbon::createFromDate($called_year, $called_month, $called_day);
-                $status         =   $call_date->greaterThan($current_date) ? 'waiting' : 'completed';
-            } else {
-                $call_date      =   null;
-                $status         =   $list_status === true ? 'not-used' : 'exhaustion';
-            }
-            $call_date_thai = $call_date ? (int)$call_date->format('d') . ' ' . $this->monthYearThai(true, $call_date->format('m'), $call_date->format('Y'))  : null;
-            if (isset($array[$full_key_province]) && $call_status === true) {
-                $array[$full_key_province]['status_open'] = true;
-                $array[$full_key_province]['total_called'] += $total;
-                $array[$full_key_province]['total_remain'] -= $total;
-            }
-
-            if (!isset($array[$full_key_province]['data_round'][$round])) {
-                $array[$full_key_province]['total_round'] += 1;
-                $array[$full_key_province]['data_round'][$round] = [
-                    'round' =>  $round,
-                    'total' =>  $total,
-
-                    'start'         =>  0,
-                    'end'           =>  0,
-                    'start_end'     =>  0,
-
-                    'call_status'   =>  $call_status,
-                    'list_status'   =>  $list_status,
-
-                    'called_day'    =>  $call_status === true ? $called_day     : null,
-                    'called_month'  =>  $call_status === true ? $called_month   : null,
-                    'called_year'   =>  $call_status === true ? $called_year    : null,
-
-                    'is_cross_region'   =>  $is_cross_region === true,
-                    'crossed_region'    =>  $is_cross_region === true ? $crossed_region     : null,
-                    'crossed_zone'      =>  $is_cross_region === true ? $crossed_zone       : null,
-
-                    'call_date'         =>  $call_date_thai,
-                    'status_work'       =>  $status,
-                    'percent_change'    =>  0,
-                    'proportion_used'   =>  0,
-                ];
-            }
-        }
-        foreach ($array as &$arr) {
-            $last_end = 0;
-            $prev_total = null;
-            $total_listed = $arr['total_listed'];
-            foreach ($arr['data_round'] as &$round) {
-                $total = (int)($round['total'] ?? 0);
-                $start = $last_end + 1;
-                $end = $start + $total - 1;
-
-                if ($total > 0) {
-                    $round['start'] = $start;
-                    $round['end'] = $end;
-                    $round['start_end'] = $total > 1 ? $start . ' - ' . $end : $start;
-                }
-
-                $last_end = ($total > 0) ? $end : $last_end;
-
-                if ($total > 0) {
-                    if ($prev_total !== null && $prev_total > 0) {
-                        $round['percent_change'] = (($total - $prev_total) / $prev_total) * 100;
-                    } else {
-                        $round['percent_change'] = 0;
+        foreach ($data_new['data'] as $key_r => $region) {
+            foreach ($region['data'] as $key_z => $zones) {
+                foreach ($zones['data'] as $key_t => $types) {
+                    foreach ($types['data'] as $key_p => $position) {
+                        $id_position = (int)$id;
+                        $full_key_province = (int)($key_r . $key_z);
+                        if ($key_p === $id_position) {
+                            if (!isset($array[$full_key_province])) {
+                                $array[$full_key_province] = [
+                                    'full_key_province' => $full_key_province,
+                                    'full_name_province' => $zones['full_name'],
+                                    'status_open' => $position['open_status'],
+                                    'total_round' => $position['total_round'],
+                                    'total_listed' => $position['listed_old'],
+                                    'total_listed_new' => $position['listed_new'],
+                                    'total_diff' => $position['listed_diff'],
+                                    'total_called' => $position['called_total'],
+                                    'total_remain' => $position['remaining'],
+                                    'stauts_of_exhaustion' => $position['account_status'],
+                                    'data_round' => []
+                                ];
+                            }
+                            $last_end = 0;
+                            $prev_total = null;
+                            foreach ($position['detail_round'] as $key_round => $rounds) {
+                                $total = (int)($rounds['total'] ?? 0);
+                                $ranks = $rounds['list_new_status'] ? collect($rounds['rank'] ?? [])->map(fn($item) => (array) $item)->all() : null;
+                                if (!isset($array[$full_key_province]['data_round'][$key_round])) {
+                                    $array[$full_key_province]['data_round'][$key_round] = [
+                                        'round' => $key_round,
+                                        'total' => $rounds['total'],
+                                        'start' => 0,
+                                        'end' => 0,
+                                        'start_end' => null,
+                                        'list_new_status' => $rounds['list_new_status'],
+                                        'call_status' => $rounds['call_status'],
+                                        'list_status' => $rounds['list_status'],
+                                        'is_cross_region' => $rounds['is_cross_region'],
+                                        'crossed_region' => $rounds['crossed_region'],
+                                        'crossed_zone' => $rounds['crossed_zone'],
+                                        'call_date' => $rounds['thai_short'],
+                                        'status_work' => Carbon::parse($rounds['datetime'])->startOfDay()->lte(now()->startOfDay()) ? 'completed' : 'waiting',
+                                        'percent_change' => 0,
+                                        'proportion_used' => ($rounds['call_status'] && $position['account_status'] && $position['listed_new'] > 0) ? ($rounds['total'] / $position['listed_new']) * 100 : 0,
+                                    ];
+                                }
+                                if ($rounds['list_new_status'] === false && $rounds['call_status'] === true) {
+                                    $start = $last_end + 1;
+                                    $end = $start + $total - 1;
+                                    if ($total > 0) {
+                                        $array[$full_key_province]['data_round'][$key_round]['start'] = $start;
+                                        $array[$full_key_province]['data_round'][$key_round]['end'] = $end;
+                                        $array[$full_key_province]['data_round'][$key_round]['start_end'][] = $total > 1 ? $start . '-' . $end : $start;
+                                    }
+                                    $last_end = ($total > 0) ? $end : $last_end;
+                                } elseif ($rounds['list_new_status'] === true && $rounds['call_status'] === true) {
+                                    foreach ($ranks as $rank) {
+                                        $st_n = $rank['start'];
+                                        $ed_n = $rank['end'];
+                                        $diff = $st_n - $ed_n;
+                                        $new_rank = $diff === 0 ? $st_n : $st_n . '-' . $ed_n;
+                                        $array[$full_key_province]['data_round'][$key_round]['start_end'][] = $new_rank;
+                                    }
+                                }
+                                if ($total > 0) {
+                                    if ($prev_total !== null && $prev_total > 0) {
+                                        $array[$full_key_province]['data_round'][$key_round]['percent_change'] = (($total - $prev_total) / $prev_total) * 100;
+                                    } else {
+                                        $array[$full_key_province]['data_round'][$key_round]['percent_change'] = 0;
+                                    }
+                                    $prev_total = $total;
+                                } else {
+                                    $array[$full_key_province]['data_round'][$key_round]['percent_change'] = null;
+                                }
+                            }
+                        }
                     }
-                    $prev_total = $total;
-                } else {
-                    $round['percent_change'] = null;
-                }
-
-
-                if ($total > 0) {
-                    $round['proportion_used'] = ($total / $total_listed) * 100;
                 }
             }
         }
@@ -282,66 +186,54 @@ class Tab3Service
     public function Tab3_Part8_TableAllTypes()
     {
         return Cache::remember('tab3_part8_table_all_types', 600, function () {
-            $provinces = db::table('provinces_dla')
-                ->get(['id_main_province', 'id_sub_province', 'main_name_province', 'sub_name_province'])
-                ->keyBy(function ($item) {
-                    return $item->id_main_province . '_' . $item->id_sub_province;
-                });
-            $AllType = db::table('updated_list_dla')
-                ->leftjoin('positions_dla', 'positions_dla.id_position', 'updated_list_dla.id_position')
-                ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
-                ->select(db::raw('updated_list_dla.id_main_province as prov_main_id, updated_list_dla.id_sub_province as prov_sub_id, positions_dla.id_type as pos_type_id, type_positions_dla.name as pos_type, sum(total::integer) as total, sum(new_total::integer) as new_total'))
-                ->groupBy('prov_main_id', 'prov_sub_id', 'pos_type_id', 'pos_type')
-                ->get();
+
+            $data_new = $this->getNewTotal();
             $array = [];
-            foreach ($AllType as $type) {
-                $provKey = $type->prov_main_id . '_' . $type->prov_sub_id;
-                $prov = $provinces->get($provKey);
-
-                $array[$type->prov_main_id][$type->prov_sub_id][$type->pos_type_id] = [
-                    'prov_main_id'   => $type->prov_main_id,
-                    'prov_sub_id'    => $type->prov_sub_id,
-                    'prov_main_name' => $prov ? $prov->main_name_province : null,
-                    'prov_full_name' => $prov ? $prov->main_name_province . " " . $prov->sub_name_province : null,
-                    'prov_sub_name'  => $prov ? $prov->sub_name_province : null,
-                    'pos_type_id'    => $type->pos_type_id,
-                    'pos_type'       => $type->pos_type,
-                    'total_list'     => (int)$type->total,
-                    'total_list_new' => (int)$type->new_total,
-                    'total_diff'     => (int)($type->total - $type->new_total),
-                    'total_call'     => 0,
-                    'total_remain'   => (int)$type->new_total,
-                    'status_empty'   => false,
-                    'status_called'  => false,
-                    'round_data'     => []
-                ];
-            }
-            $typeCallAll = db::table('calling_dla')
-                ->leftjoin('positions_dla', 'positions_dla.id_position', 'calling_dla.id_position')
-                ->leftjoin('type_positions_dla', 'type_positions_dla.id', 'positions_dla.id_type')
-                ->where('call_status', 1)
-                ->select(db::raw('calling_dla.id_main_province, calling_dla.id_sub_province, calling_dla.round, positions_dla.id_type as pos_type_id, sum(total::integer) as total'))
-                ->groupBy('id_main_province', 'id_sub_province', 'round', 'pos_type_id')
-                ->get();
-            foreach ($typeCallAll as $all) {
-                $ref = &$array[$all->id_main_province][$all->id_sub_province][$all->pos_type_id];
-
-                if ($ref) {
-                    $ref['total_call'] += $all->total;
-                    $ref['total_remain'] -= $all->total;
-                    $ref['status_called'] = true;
-
-                    $ref['round_data'][$all->round] = [
-                        'round'  => $all->round,
-                        'total'  => ($ref['round_data'][$all->round]['total'] ?? 0) + $all->total,
-                        'called' => $all->total !== 0
-                    ];
+            foreach ($data_new['data'] as $key_r => $region) {
+                foreach ($region['data'] as $key_z => $zones) {
+                    foreach ($zones['data'] as $key_t => $types) {
+                        foreach ($types['data'] as $posts) {
+                            if (!isset($array[$key_r][$key_z][$key_t])) {
+                                $array[$key_r][$key_z][$key_t] = [
+                                    'prov_main_id' => $key_r,
+                                    'prov_sub_id' => $key_z,
+                                    'prov_main_name' => $region['name_main'],
+                                    'prov_full_name' => $zones['full_name'],
+                                    'prov_sub_name' => $zones['name_sub'],
+                                    'pos_type_id' => $key_t,
+                                    'pos_type' => $types['name_type_position'],
+                                    'total_list' => $types['listed_old'],
+                                    'total_list_new' => $types['listed_new'],
+                                    'total_diff' => $types['listed_diff'],
+                                    'total_call' => $types['called_total'],
+                                    'total_remain' => $types['remaining'],
+                                    'status_empty' => $types['remaining'] === 0,
+                                    'status_called' => $types['called_total'] !== 0,
+                                    'round_data' => [],
+                                ];
+                            }
+                            foreach ($posts['detail_round'] as $key_round => $rounds) {
+                                if (!isset($array[$key_r][$key_z][$key_t]['round_data'][$key_round])) {
+                                    $array[$key_r][$key_z][$key_t]['round_data'][$key_round] = [
+                                        'round' => $key_round,
+                                        'total' => 0,
+                                        'called' => false,
+                                        'list_new_status' => false,
+                                    ];
+                                }
+                                $array[$key_r][$key_z][$key_t]['round_data'][$key_round]['total'] += $rounds['total'];
+                                $array[$key_r][$key_z][$key_t]['round_data'][$key_round]['list_new_status'] = $rounds['list_new_status'];
+                            }
+                        }
+                    }
                 }
             }
-            foreach ($array as &$main) {
-                foreach ($main as &$sub) {
-                    foreach ($sub as &$pos) {
-                        $pos['status_empty'] = ($pos['total_remain'] <= 0);
+            foreach ($array as $ky => $region) {
+                foreach ($region as $kz => $zones) {
+                    foreach ($zones as $kt => $types) {
+                        foreach ($types['round_data'] as $kr => $round) {
+                            $array[$ky][$kz][$kt]['round_data'][$kr]['called'] = $round['total'] !== 0;
+                        }
                     }
                 }
             }
