@@ -375,6 +375,12 @@ trait TotalNewListCalculatable
                             $data['data'][$key1]['data'][$key2]['called_total'] += $adjusted_total;
                             $data['data'][$key1]['called_total'] += $adjusted_total;
                             $data['called_total'] += $adjusted_total;
+
+                            $data['data'][$key1]['data'][$key2]['data'][$key3]['data'][$key4]['remaining'] -= $adjusted_total;
+                            $data['data'][$key1]['data'][$key2]['data'][$key3]['remaining'] -= $adjusted_total;
+                            $data['data'][$key1]['data'][$key2]['remaining'] -= $adjusted_total;
+                            $data['data'][$key1]['remaining'] -= $adjusted_total;
+                            $data['remaining'] -= $adjusted_total;
                         }
                     }
                 }

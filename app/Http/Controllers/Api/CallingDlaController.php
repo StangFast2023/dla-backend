@@ -116,7 +116,6 @@ class CallingDlaController extends Controller
 
     public function updateTableForTab4(Request $request, Tab4Service $Tab4Service)
     {
-
         $positions = $request->input('cleanPositions');
         $array_position = [];
         foreach ($positions as $pos) {
