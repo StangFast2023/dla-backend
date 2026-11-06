@@ -2000,7 +2000,7 @@ class NewUpdatedListSeeder extends Seeder
                 'id_main_province'  => 2,
                 'id_sub_province'   => 2,
                 'id_position'       => 209,
-                'total'             => 83,
+                'total'             => 82,
                 'new_total'         => 76,
                 'created_at'        => now(),
                 'updated_at'        => now(),
@@ -2889,7 +2889,7 @@ class NewUpdatedListSeeder extends Seeder
                 'new_total'         => 106,
                 'created_at'        => now(),
                 'updated_at'        => now(),
-            ]
+            ],
         ]);
 
         DB::table('updated_list_dla')->insert([
@@ -3459,7 +3459,7 @@ class NewUpdatedListSeeder extends Seeder
                 'id_sub_province'   => 2,
                 'id_position'       => 209,
                 'total'             => 41,
-                'new_total'         => 35,
+                'new_total'         => 36,
                 'created_at'        => now(),
                 'updated_at'        => now(),
             ],
@@ -3594,7 +3594,7 @@ class NewUpdatedListSeeder extends Seeder
                 'id_sub_province'   => 2,
                 'id_position'       => 327,
                 'total'             => 47,
-                'new_total'         => 27,
+                'new_total'         => 37,
                 'created_at'        => now(),
                 'updated_at'        => now(),
             ],
@@ -4881,7 +4881,7 @@ class NewUpdatedListSeeder extends Seeder
                 'id_sub_province'   => 2,
                 'id_position'       => 233,
                 'total'             => 8,
-                'new_total'         => 3,
+                'new_total'         => 6,
                 'created_at'        => now(),
                 'updated_at'        => now(),
             ],

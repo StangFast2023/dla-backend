@@ -217,6 +217,10 @@ trait TotalNewListCalculatable
             $called_month  = $call->called_month;
             $called_year   = $call->called_year;
 
+            $reported_day    = $call->reported_day;
+            $reported_month  = $call->reported_month;
+            $reported_year   = $call->reported_year;
+
             $is_cross_region    = $call->is_cross_region;
             $crossed_region     = $call->crossed_region;
             $crossed_zone       = $call->crossed_zone;
@@ -225,6 +229,11 @@ trait TotalNewListCalculatable
             $rank               = $call->rank;
 
             if (!isset($data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post]['detail_round'][$round])) {
+                $report_date = Carbon::create(
+                    $reported_year,
+                    $reported_month
+                )->locale('th');
+
                 $date = Carbon::create(
                     $called_year,
                     $called_month,
@@ -236,15 +245,21 @@ trait TotalNewListCalculatable
                     'total'             =>  $total,
                     'call_status'       =>  $call_status,
                     'list_status'       =>  $list_status,
+
+                    'report_thai_full'  =>  $reported_day . ' ' . $report_date->copy()->addYears(543)->translatedFormat('F Y'),
+                    'report_thai_short' =>  $reported_day . ' ' . $report_date->copy()->addYears(543)->translatedFormat('M Y'),
+
                     'datetime'          =>  $date->format('Y-m-d H:i:s'),
                     'thai_full'         =>  $date->copy()->addYears(543)->translatedFormat('j F Y'),
                     'thai_short'        =>  $date->copy()->addYears(543)->translatedFormat('j M Y'),
                     'work_status'       =>  $date->lessThanOrEqualTo(Carbon::today()),
+
+
                     'is_cross_region'   =>  $is_cross_region,
                     'crossed_region'    =>  $crossed_region,
                     'crossed_zone'      =>  $crossed_zone,
                     'list_new_status'   =>  $list_new_status,
-                    'rank'              =>  $list_new_status && $call_status ? json_decode($rank) : null
+                    'rank'              =>  $call_status ? json_decode($rank) : null
                 ];
 
                 $data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post]['total_round'] += 1;
@@ -258,10 +273,9 @@ trait TotalNewListCalculatable
                         $data['data'][$id_main][$name_called] += $total;
                         $data[$name_called] += $total;
                     } else {
-                        $called_new = $call_status ? $this->calculateCalledNew($call->rank) : 0;
-                        $data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post][$name_called] += $called_new;
-                        $data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post]['called_total'] += $called_new;
-                        $data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post]['remaining'] -= $called_new;
+                        $data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post][$name_called] += $total;
+                        $data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post]['called_total'] += $total;
+                        $data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post]['remaining'] -= $total;
                     }
                 }
 
@@ -387,26 +401,5 @@ trait TotalNewListCalculatable
             }
         }
         return $data;
-    }
-
-    private function calculateCalledNew(string $rankData): int
-    {
-        if (is_string($rankData)) {
-            $rankData = json_decode($rankData, true);
-        }
-
-        if (!is_array($rankData)) {
-            return 0;
-        }
-
-        $lastRank = 0;
-
-        foreach ($rankData as $range) {
-            $end = (int) ($range->end ?? $range['end'] ?? 0);
-
-            $lastRank = max($lastRank, $end);
-        }
-
-        return $lastRank;
     }
 }

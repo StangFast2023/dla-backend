@@ -122,17 +122,14 @@ class Tab3Service
                                     'data_round' => []
                                 ];
                             }
-                            $last_end = 0;
                             $prev_total = null;
                             foreach ($position['detail_round'] as $key_round => $rounds) {
                                 $total = (int)($rounds['total'] ?? 0);
-                                $ranks = $rounds['list_new_status'] ? collect($rounds['rank'] ?? [])->map(fn($item) => (array) $item)->all() : null;
+                                $ranks = $rounds['call_status'] ? collect($rounds['rank'] ?? [])->map(fn($item) => (array) $item)->all() : null;
                                 if (!isset($array[$full_key_province]['data_round'][$key_round])) {
                                     $array[$full_key_province]['data_round'][$key_round] = [
                                         'round' => $key_round,
                                         'total' => $rounds['total'],
-                                        'start' => 0,
-                                        'end' => 0,
                                         'start_end' => null,
                                         'list_new_status' => $rounds['list_new_status'],
                                         'call_status' => $rounds['call_status'],
@@ -140,22 +137,15 @@ class Tab3Service
                                         'is_cross_region' => $rounds['is_cross_region'],
                                         'crossed_region' => $rounds['crossed_region'],
                                         'crossed_zone' => $rounds['crossed_zone'],
+                                        'datetime' => $rounds['datetime'],
+                                        'report_date' => $rounds['report_thai_short'],
                                         'call_date' => $rounds['thai_short'],
                                         'status_work' => Carbon::parse($rounds['datetime'])->startOfDay()->lte(now()->startOfDay()) ? 'completed' : 'waiting',
                                         'percent_change' => 0,
-                                        'proportion_used' => ($rounds['call_status'] && $position['account_status'] && $position['listed_new'] > 0) ? ($rounds['total'] / $position['listed_new']) * 100 : 0,
+                                        'proportion_used' => ($rounds['call_status'] && $position['listed_new'] > 0) ? ($rounds['total'] / $position['listed_new']) * 100 : 0,
                                     ];
                                 }
-                                if ($rounds['list_new_status'] === false && $rounds['call_status'] === true) {
-                                    $start = $last_end + 1;
-                                    $end = $start + $total - 1;
-                                    if ($total > 0) {
-                                        $array[$full_key_province]['data_round'][$key_round]['start'] = $start;
-                                        $array[$full_key_province]['data_round'][$key_round]['end'] = $end;
-                                        $array[$full_key_province]['data_round'][$key_round]['start_end'][] = $total > 1 ? $start . '-' . $end : $start;
-                                    }
-                                    $last_end = ($total > 0) ? $end : $last_end;
-                                } elseif ($rounds['list_new_status'] === true && $rounds['call_status'] === true) {
+                                if ($ranks) {
                                     foreach ($ranks as $rank) {
                                         $st_n = $rank['start'];
                                         $ed_n = $rank['end'];
