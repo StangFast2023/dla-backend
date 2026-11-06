@@ -1,8 +1,8 @@
 <?php
 
-// header('Access-Control-Allow-Origin: https://st-dla-dashboard-2568.vercel.app');
-// header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-// header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Access-Control-Allow-Origin: https://st-dla-dashboard-2568.vercel.app');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
