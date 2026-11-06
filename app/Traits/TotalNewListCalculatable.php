@@ -201,6 +201,7 @@ trait TotalNewListCalculatable
             ->select('call.*', 'type.id as id_type')
             ->get();
 
+
         foreach ($calling_dla as $call) {
             $id_main    = $call->id_main_province;
             $id_sub     = $call->id_sub_province;
@@ -273,9 +274,10 @@ trait TotalNewListCalculatable
                         $data['data'][$id_main][$name_called] += $total;
                         $data[$name_called] += $total;
                     } else {
-                        $data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post][$name_called] += $total;
-                        $data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post]['called_total'] += $total;
-                        $data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post]['remaining'] -= $total;
+                        $called_new = $call_status ? $this->calculateCalledNew($call->rank) : 0;
+                        $data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post][$name_called] += $called_new;
+                        $data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post]['called_total'] += $called_new;
+                        $data['data'][$id_main]['data'][$id_sub]['data'][$id_type]['data'][$id_post]['remaining'] -= $called_new;
                     }
                 }
 
@@ -357,6 +359,8 @@ trait TotalNewListCalculatable
 
         $data['called_diff'] = $data['called_old'] - $data['called_new'];
 
+        $adjustmentTotal = 0;
+
         foreach ($data['data'] as $key1 => $region) {
             foreach ($region['data'] as $key2 => $zone) {
                 foreach ($zone['data'] as $key3 => $type) {
@@ -401,5 +405,22 @@ trait TotalNewListCalculatable
             }
         }
         return $data;
+    }
+
+
+    private function calculateCalledNew(string $rankData): int
+    {
+        if (is_string($rankData)) {
+            $rankData = json_decode($rankData, true);
+        }
+        if (!is_array($rankData)) {
+            return 0;
+        }
+        $lastRank = 0;
+        foreach ($rankData as $range) {
+            $end = (int) ($range->end ?? $range['end'] ?? 0);
+            $lastRank = max($lastRank, $end);
+        }
+        return $lastRank;
     }
 }

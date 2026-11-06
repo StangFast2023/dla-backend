@@ -2569,7 +2569,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 3,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 1,
@@ -4242,7 +4241,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 3,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 2,
@@ -5915,7 +5913,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 3,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 3,
@@ -7016,7 +7013,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 3,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 1,
@@ -7963,7 +7959,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 3,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 2,
@@ -8734,7 +8729,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 3,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 3,
@@ -9747,7 +9741,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 3,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 4,
                 'id_sub_province'   => 1,
@@ -11156,7 +11149,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 5,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 4,
                 'id_sub_province'   => 2,
@@ -13208,7 +13200,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 5,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 1,
                 'id_sub_province'   => 2,
@@ -14639,7 +14630,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 5,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 1,
@@ -16312,7 +16302,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 5,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 2,
@@ -17985,7 +17974,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 5,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 3,
@@ -19086,7 +19074,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 5,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 1,
@@ -20033,7 +20020,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 5,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 2,
@@ -20804,7 +20790,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 5,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 3,
@@ -21817,7 +21802,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 5,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 4,
                 'id_sub_province'   => 1,
@@ -23226,7 +23210,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 6,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 4,
                 'id_sub_province'   => 2,
@@ -25277,7 +25260,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 6,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 1,
                 'id_sub_province'   => 2,
@@ -26708,7 +26690,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 6,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 1,
@@ -28381,7 +28362,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 6,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 2,
@@ -30054,7 +30034,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 6,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 3,
@@ -31155,7 +31134,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 6,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 1,
@@ -32102,7 +32080,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 6,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 2,
@@ -32873,7 +32850,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 6,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 3,
@@ -33886,7 +33862,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 6,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 4,
                 'id_sub_province'   => 1,
@@ -35295,7 +35270,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 10,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 4,
                 'id_sub_province'   => 2,
@@ -37346,7 +37320,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 10,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 1,
                 'id_sub_province'   => 2,
@@ -38777,7 +38750,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 10,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 1,
@@ -40450,7 +40422,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 10,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 2,
@@ -42123,7 +42094,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 10,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 2,
                 'id_sub_province'   => 3,
@@ -43224,7 +43194,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 10,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 1,
@@ -44172,7 +44141,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 10,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 2,
@@ -44943,7 +44911,6 @@ class CallingSeeder extends Seeder
                 'reported_month'    => 10,
                 'reported_year'     => 2026,
             ],
-
             [
                 'id_main_province'  => 3,
                 'id_sub_province'   => 3,
