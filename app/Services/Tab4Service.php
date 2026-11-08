@@ -162,7 +162,6 @@ class Tab4Service
                                         ];
                                     }
 
-                                    $last_end = 0;
                                     $prev_total = null;
                                     foreach ($position['detail_round'] as $key_rd => $round) {
                                         $total = (int)($round['total'] ?? 0);
@@ -194,7 +193,7 @@ class Tab4Service
                                         }
                                         $array_new[$key_r]['pro_sub'][$key_z]['data_type_position'][$key_t]['total_each_round'][$key_rd]['total'] += $total;
 
-                                        $ranks = $round['list_new_status'] ? collect($round['rank'] ?? [])->map(fn($item) => (array) $item)->all() : null;
+                                        $ranks = collect($round['rank'] ?? [])->map(fn($item) => (array) $item)->all();
                                         if (!isset($array_new[$key_r]['pro_sub'][$key_z]['data_type_position'][$key_t]['data_position'][$key_p]['data_call_round'][$key_rd])) {
                                             $array_new[$key_r]['pro_sub'][$key_z]['data_type_position'][$key_t]['data_position'][$key_p]['data_call_round'][$key_rd] = [
                                                 'round'             =>  $key_rd,
@@ -207,22 +206,14 @@ class Tab4Service
                                                 'status_cross'      =>  $round['is_cross_region'],
                                                 'crossed_region'    =>  $round['crossed_region'],
                                                 'crossed_zone'      =>  $round['crossed_zone'],
+                                                'report_date'       =>  $round['report_thai_short'],
                                                 'date'              =>  $round['thai_short'],
                                                 'status'            =>  Carbon::parse($round['datetime'])->startOfDay()->lte(now()->startOfDay()) ? 'completed' : 'waiting',
                                                 'list_new_status'   =>  $round['list_new_status'],
                                                 'start_end'         =>  null
                                             ];
                                         }
-                                        if ($round['list_new_status'] === false && $round['call_status'] === true) {
-                                            $start = $last_end + 1;
-                                            $end = $start + $total - 1;
-                                            if ($total > 0) {
-                                                $array_new[$key_r]['pro_sub'][$key_z]['data_type_position'][$key_t]['data_position'][$key_p]['data_call_round'][$key_rd]['start'] = $start;
-                                                $array_new[$key_r]['pro_sub'][$key_z]['data_type_position'][$key_t]['data_position'][$key_p]['data_call_round'][$key_rd]['end'] = $end;
-                                                $array_new[$key_r]['pro_sub'][$key_z]['data_type_position'][$key_t]['data_position'][$key_p]['data_call_round'][$key_rd]['start_end'][] = $total > 1 ? $start . '-' . $end : $start;
-                                            }
-                                            $last_end = ($total > 0) ? $end : $last_end;
-                                        } elseif ($round['list_new_status'] === true && $round['call_status'] === true) {
+                                        if ($round['call_status'] === true) {
                                             foreach ($ranks as $rank) {
                                                 $st_n = $rank['start'];
                                                 $ed_n = $rank['end'];
