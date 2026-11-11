@@ -359,17 +359,17 @@ trait TotalNewListCalculatable
 
         $data['called_diff'] = $data['called_old'] - $data['called_new'];
 
-        $adjustmentTotal = 0;
-
         foreach ($data['data'] as $key1 => $region) {
             foreach ($region['data'] as $key2 => $zone) {
-                foreach ($zone['data'] as $key3 => $type) {
+                foreach ($region['data'][$key2]['data'] as $key3 => $type) {
                     foreach ($type['data'] as $key4 => $position) {
                         $remaining = $position['remaining'];
                         $listed_old_exhausted = $position['listed_old'] > 0 && $position['called_old'] >= $position['listed_old'];
                         $has_new_list = $position['listed_new'] > 0;
                         $new_list_not_called = $position['called_new'] == 0;
-                        $account_status = $remaining <= 0 || ($listed_old_exhausted && $has_new_list && $new_list_not_called);
+                        $old_calls_exceed_new_list = $position['called_old'] >= $position['listed_new'] && $position['listed_new'] > 0;
+                        $remain_status = $remaining <= 0;
+                        $account_status = $remain_status || ($listed_old_exhausted && $has_new_list && $new_list_not_called) || ($old_calls_exceed_new_list && $new_list_not_called);
                         $data['data'][$key1]['data'][$key2]['data'][$key3]['data'][$key4]['account_status'] = $account_status;
                     }
                 }
@@ -383,9 +383,8 @@ trait TotalNewListCalculatable
                         if (
                             $position['account_status'] === true &&
                             $position['called_new'] == 0 &&
-                            $position['listed_old'] > 0 &&
-                            $position['called_old'] >= $position['listed_old'] &&
-                            $position['listed_new'] > 0
+                            $position['listed_new'] > 0 &&
+                            $position['called_old'] >= $position['listed_new']
                         ) {
                             $adjusted_total = $position['listed_new'];
                             $data['data'][$key1]['data'][$key2]['data'][$key3]['data'][$key4]['called_total'] += $adjusted_total;

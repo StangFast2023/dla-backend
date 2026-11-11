@@ -29,7 +29,6 @@ class Tab4Service
     public function Tab4_Part1_Filter()
     {
         return Cache::remember('tab4_filter_data', 600, function () {
-            // $data_new = $this->getNewTotal();
             $prov = ProvincesDla::all();
             $region = [];
             foreach ($prov as $pr) {
